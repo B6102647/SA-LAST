@@ -91,93 +91,10 @@ func IDLTE(id int) predicate.Role {
 	})
 }
 
-// ROLEID applies equality check predicate on the "ROLE_ID" field. It's identical to ROLEIDEQ.
-func ROLEID(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldROLEID), v))
-	})
-}
-
 // ROLENAME applies equality check predicate on the "ROLE_NAME" field. It's identical to ROLENAMEEQ.
 func ROLENAME(v string) predicate.Role {
 	return predicate.Role(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldROLENAME), v))
-	})
-}
-
-// ROLEIDEQ applies the EQ predicate on the "ROLE_ID" field.
-func ROLEIDEQ(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldROLEID), v))
-	})
-}
-
-// ROLEIDNEQ applies the NEQ predicate on the "ROLE_ID" field.
-func ROLEIDNEQ(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldROLEID), v))
-	})
-}
-
-// ROLEIDIn applies the In predicate on the "ROLE_ID" field.
-func ROLEIDIn(vs ...int) predicate.Role {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Role(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldROLEID), v...))
-	})
-}
-
-// ROLEIDNotIn applies the NotIn predicate on the "ROLE_ID" field.
-func ROLEIDNotIn(vs ...int) predicate.Role {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Role(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldROLEID), v...))
-	})
-}
-
-// ROLEIDGT applies the GT predicate on the "ROLE_ID" field.
-func ROLEIDGT(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldROLEID), v))
-	})
-}
-
-// ROLEIDGTE applies the GTE predicate on the "ROLE_ID" field.
-func ROLEIDGTE(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldROLEID), v))
-	})
-}
-
-// ROLEIDLT applies the LT predicate on the "ROLE_ID" field.
-func ROLEIDLT(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldROLEID), v))
-	})
-}
-
-// ROLEIDLTE applies the LTE predicate on the "ROLE_ID" field.
-func ROLEIDLTE(v int) predicate.Role {
-	return predicate.Role(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldROLEID), v))
 	})
 }
 
@@ -292,7 +209,7 @@ func ROLENAMEContainsFold(v string) predicate.Role {
 	})
 }
 
-// HasRole applies the HasEdge predicate on the "Role" edge.
+// HasRole applies the HasEdge predicate on the "role" edge.
 func HasRole() predicate.Role {
 	return predicate.Role(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
@@ -304,7 +221,7 @@ func HasRole() predicate.Role {
 	})
 }
 
-// HasRoleWith applies the HasEdge predicate on the "Role" edge with a given conditions (other predicates).
+// HasRoleWith applies the HasEdge predicate on the "role" edge with a given conditions (other predicates).
 func HasRoleWith(preds ...predicate.User) predicate.Role {
 	return predicate.Role(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(

@@ -4,7 +4,6 @@ package ent
 
 import (
 	"github.com/B6102647/app/ent/book"
-	"github.com/B6102647/app/ent/bookborrow"
 	"github.com/B6102647/app/ent/purpose"
 	"github.com/B6102647/app/ent/role"
 	"github.com/B6102647/app/ent/schema"
@@ -17,52 +16,30 @@ import (
 func init() {
 	bookFields := schema.Book{}.Fields()
 	_ = bookFields
-	// bookDescBOOKID is the schema descriptor for BOOK_ID field.
-	bookDescBOOKID := bookFields[0].Descriptor()
-	// book.BOOKIDValidator is a validator for the "BOOK_ID" field. It is called by the builders before save.
-	book.BOOKIDValidator = bookDescBOOKID.Validators[0].(func(int) error)
 	// bookDescBOOKNAME is the schema descriptor for BOOK_NAME field.
-	bookDescBOOKNAME := bookFields[1].Descriptor()
+	bookDescBOOKNAME := bookFields[0].Descriptor()
 	// book.BOOKNAMEValidator is a validator for the "BOOK_NAME" field. It is called by the builders before save.
 	book.BOOKNAMEValidator = bookDescBOOKNAME.Validators[0].(func(string) error)
-	bookborrowFields := schema.BookBorrow{}.Fields()
-	_ = bookborrowFields
-	// bookborrowDescBOOKBORROWID is the schema descriptor for BOOKBORROW_ID field.
-	bookborrowDescBOOKBORROWID := bookborrowFields[0].Descriptor()
-	// bookborrow.BOOKBORROWIDValidator is a validator for the "BOOKBORROW_ID" field. It is called by the builders before save.
-	bookborrow.BOOKBORROWIDValidator = bookborrowDescBOOKBORROWID.Validators[0].(func(int) error)
 	purposeFields := schema.Purpose{}.Fields()
 	_ = purposeFields
-	// purposeDescPURPOSEID is the schema descriptor for PURPOSE_ID field.
-	purposeDescPURPOSEID := purposeFields[0].Descriptor()
-	// purpose.PURPOSEIDValidator is a validator for the "PURPOSE_ID" field. It is called by the builders before save.
-	purpose.PURPOSEIDValidator = purposeDescPURPOSEID.Validators[0].(func(int) error)
 	// purposeDescPURPOSENAME is the schema descriptor for PURPOSE_NAME field.
-	purposeDescPURPOSENAME := purposeFields[1].Descriptor()
+	purposeDescPURPOSENAME := purposeFields[0].Descriptor()
 	// purpose.PURPOSENAMEValidator is a validator for the "PURPOSE_NAME" field. It is called by the builders before save.
 	purpose.PURPOSENAMEValidator = purposeDescPURPOSENAME.Validators[0].(func(string) error)
 	roleFields := schema.Role{}.Fields()
 	_ = roleFields
-	// roleDescROLEID is the schema descriptor for ROLE_ID field.
-	roleDescROLEID := roleFields[0].Descriptor()
-	// role.ROLEIDValidator is a validator for the "ROLE_ID" field. It is called by the builders before save.
-	role.ROLEIDValidator = roleDescROLEID.Validators[0].(func(int) error)
 	// roleDescROLENAME is the schema descriptor for ROLE_NAME field.
-	roleDescROLENAME := roleFields[1].Descriptor()
+	roleDescROLENAME := roleFields[0].Descriptor()
 	// role.ROLENAMEValidator is a validator for the "ROLE_NAME" field. It is called by the builders before save.
 	role.ROLENAMEValidator = roleDescROLENAME.Validators[0].(func(string) error)
 	userFields := schema.User{}.Fields()
 	_ = userFields
-	// userDescUSERID is the schema descriptor for USER_ID field.
-	userDescUSERID := userFields[0].Descriptor()
-	// user.USERIDValidator is a validator for the "USER_ID" field. It is called by the builders before save.
-	user.USERIDValidator = userDescUSERID.Validators[0].(func(int) error)
 	// userDescUSEREMAIL is the schema descriptor for USER_EMAIL field.
-	userDescUSEREMAIL := userFields[1].Descriptor()
+	userDescUSEREMAIL := userFields[0].Descriptor()
 	// user.USEREMAILValidator is a validator for the "USER_EMAIL" field. It is called by the builders before save.
 	user.USEREMAILValidator = userDescUSEREMAIL.Validators[0].(func(string) error)
 	// userDescUSERNAME is the schema descriptor for USER_NAME field.
-	userDescUSERNAME := userFields[2].Descriptor()
+	userDescUSERNAME := userFields[1].Descriptor()
 	// user.USERNAMEValidator is a validator for the "USER_NAME" field. It is called by the builders before save.
 	user.USERNAMEValidator = userDescUSERNAME.Validators[0].(func(string) error)
 }

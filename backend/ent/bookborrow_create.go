@@ -23,12 +23,6 @@ type BookBorrowCreate struct {
 	hooks    []Hook
 }
 
-// SetBOOKBORROWID sets the BOOKBORROW_ID field.
-func (bbc *BookBorrowCreate) SetBOOKBORROWID(i int) *BookBorrowCreate {
-	bbc.mutation.SetBOOKBORROWID(i)
-	return bbc
-}
-
 // SetADDEDTIME sets the ADDED_TIME field.
 func (bbc *BookBorrowCreate) SetADDEDTIME(t time.Time) *BookBorrowCreate {
 	bbc.mutation.SetADDEDTIME(t)
@@ -99,14 +93,6 @@ func (bbc *BookBorrowCreate) Mutation() *BookBorrowMutation {
 
 // Save creates the BookBorrow in the database.
 func (bbc *BookBorrowCreate) Save(ctx context.Context) (*BookBorrow, error) {
-	if _, ok := bbc.mutation.BOOKBORROWID(); !ok {
-		return nil, &ValidationError{Name: "BOOKBORROW_ID", err: errors.New("ent: missing required field \"BOOKBORROW_ID\"")}
-	}
-	if v, ok := bbc.mutation.BOOKBORROWID(); ok {
-		if err := bookborrow.BOOKBORROWIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "BOOKBORROW_ID", err: fmt.Errorf("ent: validator failed for field \"BOOKBORROW_ID\": %w", err)}
-		}
-	}
 	if _, ok := bbc.mutation.ADDEDTIME(); !ok {
 		return nil, &ValidationError{Name: "ADDED_TIME", err: errors.New("ent: missing required field \"ADDED_TIME\"")}
 	}
@@ -170,14 +156,6 @@ func (bbc *BookBorrowCreate) createSpec() (*BookBorrow, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := bbc.mutation.BOOKBORROWID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: bookborrow.FieldBOOKBORROWID,
-		})
-		bb.BOOKBORROWID = value
-	}
 	if value, ok := bbc.mutation.ADDEDTIME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,

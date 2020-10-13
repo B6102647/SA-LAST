@@ -28,7 +28,7 @@ type UserQuery struct {
 	predicates []predicate.User
 	// eager-loading edges.
 	withBooklist *BookBorrowQuery
-	withRole     *RoleQuery
+	withRolePlay *RoleQuery
 	withFKs      bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -77,8 +77,8 @@ func (uq *UserQuery) QueryBooklist() *BookBorrowQuery {
 	return query
 }
 
-// QueryRole chains the current query on the Role edge.
-func (uq *UserQuery) QueryRole() *RoleQuery {
+// QueryRolePlay chains the current query on the RolePlay edge.
+func (uq *UserQuery) QueryRolePlay() *RoleQuery {
 	query := &RoleQuery{config: uq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -87,7 +87,7 @@ func (uq *UserQuery) QueryRole() *RoleQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, uq.sqlQuery()),
 			sqlgraph.To(role.Table, role.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, user.RoleTable, user.RoleColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, user.RolePlayTable, user.RolePlayColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -285,14 +285,14 @@ func (uq *UserQuery) WithBooklist(opts ...func(*BookBorrowQuery)) *UserQuery {
 	return uq
 }
 
-//  WithRole tells the query-builder to eager-loads the nodes that are connected to
-// the "Role" edge. The optional arguments used to configure the query builder of the edge.
-func (uq *UserQuery) WithRole(opts ...func(*RoleQuery)) *UserQuery {
+//  WithRolePlay tells the query-builder to eager-loads the nodes that are connected to
+// the "RolePlay" edge. The optional arguments used to configure the query builder of the edge.
+func (uq *UserQuery) WithRolePlay(opts ...func(*RoleQuery)) *UserQuery {
 	query := &RoleQuery{config: uq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withRole = query
+	uq.withRolePlay = query
 	return uq
 }
 
@@ -302,12 +302,12 @@ func (uq *UserQuery) WithRole(opts ...func(*RoleQuery)) *UserQuery {
 // Example:
 //
 //	var v []struct {
-//		USERID int `json:"USER_ID,omitempty"`
+//		USEREMAIL string `json:"USER_EMAIL,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.User.Query().
-//		GroupBy(user.FieldUSERID).
+//		GroupBy(user.FieldUSEREMAIL).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -328,11 +328,11 @@ func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 // Example:
 //
 //	var v []struct {
-//		USERID int `json:"USER_ID,omitempty"`
+//		USEREMAIL string `json:"USER_EMAIL,omitempty"`
 //	}
 //
 //	client.User.Query().
-//		Select(user.FieldUSERID).
+//		Select(user.FieldUSEREMAIL).
 //		Scan(ctx, &v)
 //
 func (uq *UserQuery) Select(field string, fields ...string) *UserSelect {
@@ -365,10 +365,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		_spec       = uq.querySpec()
 		loadedTypes = [2]bool{
 			uq.withBooklist != nil,
-			uq.withRole != nil,
+			uq.withRolePlay != nil,
 		}
 	)
-	if uq.withRole != nil {
+	if uq.withRolePlay != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -426,11 +426,11 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		}
 	}
 
-	if query := uq.withRole; query != nil {
+	if query := uq.withRolePlay; query != nil {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*User)
 		for i := range nodes {
-			if fk := nodes[i].role_role; fk != nil {
+			if fk := nodes[i].ROLE_ID; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -443,10 +443,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "role_role" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "ROLE_ID" returned %v`, n.ID)
 			}
 			for i := range nodes {
-				nodes[i].Edges.Role = n
+				nodes[i].Edges.RolePlay = n
 			}
 		}
 	}

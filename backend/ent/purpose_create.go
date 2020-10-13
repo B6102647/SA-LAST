@@ -20,12 +20,6 @@ type PurposeCreate struct {
 	hooks    []Hook
 }
 
-// SetPURPOSEID sets the PURPOSE_ID field.
-func (pc *PurposeCreate) SetPURPOSEID(i int) *PurposeCreate {
-	pc.mutation.SetPURPOSEID(i)
-	return pc
-}
-
 // SetPURPOSENAME sets the PURPOSE_NAME field.
 func (pc *PurposeCreate) SetPURPOSENAME(s string) *PurposeCreate {
 	pc.mutation.SetPURPOSENAME(s)
@@ -54,14 +48,6 @@ func (pc *PurposeCreate) Mutation() *PurposeMutation {
 
 // Save creates the Purpose in the database.
 func (pc *PurposeCreate) Save(ctx context.Context) (*Purpose, error) {
-	if _, ok := pc.mutation.PURPOSEID(); !ok {
-		return nil, &ValidationError{Name: "PURPOSE_ID", err: errors.New("ent: missing required field \"PURPOSE_ID\"")}
-	}
-	if v, ok := pc.mutation.PURPOSEID(); ok {
-		if err := purpose.PURPOSEIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "PURPOSE_ID", err: fmt.Errorf("ent: validator failed for field \"PURPOSE_ID\": %w", err)}
-		}
-	}
 	if _, ok := pc.mutation.PURPOSENAME(); !ok {
 		return nil, &ValidationError{Name: "PURPOSE_NAME", err: errors.New("ent: missing required field \"PURPOSE_NAME\"")}
 	}
@@ -130,14 +116,6 @@ func (pc *PurposeCreate) createSpec() (*Purpose, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := pc.mutation.PURPOSEID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: purpose.FieldPURPOSEID,
-		})
-		pu.PURPOSEID = value
-	}
 	if value, ok := pc.mutation.PURPOSENAME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

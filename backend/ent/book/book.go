@@ -7,8 +7,6 @@ const (
 	Label = "book"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldBOOKID holds the string denoting the book_id field in the database.
-	FieldBOOKID = "book_id"
 	// FieldBOOKNAME holds the string denoting the book_name field in the database.
 	FieldBOOKNAME = "book_name"
 	// FieldAuthor holds the string denoting the author field in the database.
@@ -31,14 +29,11 @@ const (
 // Columns holds all SQL columns for book fields.
 var Columns = []string{
 	FieldID,
-	FieldBOOKID,
 	FieldBOOKNAME,
 	FieldAuthor,
 }
 
 var (
-	// BOOKIDValidator is a validator for the "BOOK_ID" field. It is called by the builders before save.
-	BOOKIDValidator func(int) error
 	// BOOKNAMEValidator is a validator for the "BOOK_NAME" field. It is called by the builders before save.
 	BOOKNAMEValidator func(string) error
 )

@@ -15,8 +15,6 @@ type Role struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// ROLEID holds the value of the "ROLE_ID" field.
-	ROLEID int `json:"ROLE_ID,omitempty"`
 	// ROLENAME holds the value of the "ROLE_NAME" field.
 	ROLENAME string `json:"ROLE_NAME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -26,7 +24,7 @@ type Role struct {
 
 // RoleEdges holds the relations/edges for other nodes in the graph.
 type RoleEdges struct {
-	// Role holds the value of the Role edge.
+	// Role holds the value of the role edge.
 	Role []*User
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
@@ -39,14 +37,13 @@ func (e RoleEdges) RoleOrErr() ([]*User, error) {
 	if e.loadedTypes[0] {
 		return e.Role, nil
 	}
-	return nil, &NotLoadedError{edge: "Role"}
+	return nil, &NotLoadedError{edge: "role"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Role) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullInt64{},  // ROLE_ID
 		&sql.NullString{}, // ROLE_NAME
 	}
 }
@@ -63,20 +60,15 @@ func (r *Role) assignValues(values ...interface{}) error {
 	}
 	r.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field ROLE_ID", values[0])
-	} else if value.Valid {
-		r.ROLEID = int(value.Int64)
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field ROLE_NAME", values[1])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field ROLE_NAME", values[0])
 	} else if value.Valid {
 		r.ROLENAME = value.String
 	}
 	return nil
 }
 
-// QueryRole queries the Role edge of the Role.
+// QueryRole queries the role edge of the Role.
 func (r *Role) QueryRole() *UserQuery {
 	return (&RoleClient{config: r.config}).QueryRole(r)
 }
@@ -104,8 +96,6 @@ func (r *Role) String() string {
 	var builder strings.Builder
 	builder.WriteString("Role(")
 	builder.WriteString(fmt.Sprintf("id=%v", r.ID))
-	builder.WriteString(", ROLE_ID=")
-	builder.WriteString(fmt.Sprintf("%v", r.ROLEID))
 	builder.WriteString(", ROLE_NAME=")
 	builder.WriteString(r.ROLENAME)
 	builder.WriteByte(')')

@@ -15,8 +15,6 @@ type Book struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// BOOKID holds the value of the "BOOK_ID" field.
-	BOOKID int `json:"BOOK_ID,omitempty"`
 	// BOOKNAME holds the value of the "BOOK_NAME" field.
 	BOOKNAME string `json:"BOOK_NAME,omitempty"`
 	// Author holds the value of the "Author" field.
@@ -48,7 +46,6 @@ func (e BookEdges) BooklistOrErr() ([]*BookBorrow, error) {
 func (*Book) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullInt64{},  // BOOK_ID
 		&sql.NullString{}, // BOOK_NAME
 		&sql.NullString{}, // Author
 	}
@@ -66,18 +63,13 @@ func (b *Book) assignValues(values ...interface{}) error {
 	}
 	b.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field BOOK_ID", values[0])
-	} else if value.Valid {
-		b.BOOKID = int(value.Int64)
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field BOOK_NAME", values[1])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field BOOK_NAME", values[0])
 	} else if value.Valid {
 		b.BOOKNAME = value.String
 	}
-	if value, ok := values[2].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field Author", values[2])
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Author", values[1])
 	} else if value.Valid {
 		b.Author = value.String
 	}
@@ -112,8 +104,6 @@ func (b *Book) String() string {
 	var builder strings.Builder
 	builder.WriteString("Book(")
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
-	builder.WriteString(", BOOK_ID=")
-	builder.WriteString(fmt.Sprintf("%v", b.BOOKID))
 	builder.WriteString(", BOOK_NAME=")
 	builder.WriteString(b.BOOKNAME)
 	builder.WriteString(", Author=")

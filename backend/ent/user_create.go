@@ -21,12 +21,6 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetUSERID sets the USER_ID field.
-func (uc *UserCreate) SetUSERID(i int) *UserCreate {
-	uc.mutation.SetUSERID(i)
-	return uc
-}
-
 // SetUSEREMAIL sets the USER_EMAIL field.
 func (uc *UserCreate) SetUSEREMAIL(s string) *UserCreate {
 	uc.mutation.SetUSEREMAIL(s)
@@ -54,23 +48,23 @@ func (uc *UserCreate) AddBooklist(b ...*BookBorrow) *UserCreate {
 	return uc.AddBooklistIDs(ids...)
 }
 
-// SetRoleID sets the Role edge to Role by id.
-func (uc *UserCreate) SetRoleID(id int) *UserCreate {
-	uc.mutation.SetRoleID(id)
+// SetRolePlayID sets the RolePlay edge to Role by id.
+func (uc *UserCreate) SetRolePlayID(id int) *UserCreate {
+	uc.mutation.SetRolePlayID(id)
 	return uc
 }
 
-// SetNillableRoleID sets the Role edge to Role by id if the given value is not nil.
-func (uc *UserCreate) SetNillableRoleID(id *int) *UserCreate {
+// SetNillableRolePlayID sets the RolePlay edge to Role by id if the given value is not nil.
+func (uc *UserCreate) SetNillableRolePlayID(id *int) *UserCreate {
 	if id != nil {
-		uc = uc.SetRoleID(*id)
+		uc = uc.SetRolePlayID(*id)
 	}
 	return uc
 }
 
-// SetRole sets the Role edge to Role.
-func (uc *UserCreate) SetRole(r *Role) *UserCreate {
-	return uc.SetRoleID(r.ID)
+// SetRolePlay sets the RolePlay edge to Role.
+func (uc *UserCreate) SetRolePlay(r *Role) *UserCreate {
+	return uc.SetRolePlayID(r.ID)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -80,14 +74,6 @@ func (uc *UserCreate) Mutation() *UserMutation {
 
 // Save creates the User in the database.
 func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
-	if _, ok := uc.mutation.USERID(); !ok {
-		return nil, &ValidationError{Name: "USER_ID", err: errors.New("ent: missing required field \"USER_ID\"")}
-	}
-	if v, ok := uc.mutation.USERID(); ok {
-		if err := user.USERIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "USER_ID", err: fmt.Errorf("ent: validator failed for field \"USER_ID\": %w", err)}
-		}
-	}
 	if _, ok := uc.mutation.USEREMAIL(); !ok {
 		return nil, &ValidationError{Name: "USER_EMAIL", err: errors.New("ent: missing required field \"USER_EMAIL\"")}
 	}
@@ -164,14 +150,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := uc.mutation.USERID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: user.FieldUSERID,
-		})
-		u.USERID = value
-	}
 	if value, ok := uc.mutation.USEREMAIL(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -207,12 +185,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := uc.mutation.RoleIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.RolePlayIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   user.RoleTable,
-			Columns: []string{user.RoleColumn},
+			Table:   user.RolePlayTable,
+			Columns: []string{user.RolePlayColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

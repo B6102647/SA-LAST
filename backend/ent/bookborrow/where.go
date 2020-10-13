@@ -93,93 +93,10 @@ func IDLTE(id int) predicate.BookBorrow {
 	})
 }
 
-// BOOKBORROWID applies equality check predicate on the "BOOKBORROW_ID" field. It's identical to BOOKBORROWIDEQ.
-func BOOKBORROWID(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
 // ADDEDTIME applies equality check predicate on the "ADDED_TIME" field. It's identical to ADDEDTIMEEQ.
 func ADDEDTIME(v time.Time) predicate.BookBorrow {
 	return predicate.BookBorrow(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldADDEDTIME), v))
-	})
-}
-
-// BOOKBORROWIDEQ applies the EQ predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDEQ(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
-// BOOKBORROWIDNEQ applies the NEQ predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDNEQ(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
-// BOOKBORROWIDIn applies the In predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDIn(vs ...int) predicate.BookBorrow {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldBOOKBORROWID), v...))
-	})
-}
-
-// BOOKBORROWIDNotIn applies the NotIn predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDNotIn(vs ...int) predicate.BookBorrow {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldBOOKBORROWID), v...))
-	})
-}
-
-// BOOKBORROWIDGT applies the GT predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDGT(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
-// BOOKBORROWIDGTE applies the GTE predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDGTE(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
-// BOOKBORROWIDLT applies the LT predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDLT(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldBOOKBORROWID), v))
-	})
-}
-
-// BOOKBORROWIDLTE applies the LTE predicate on the "BOOKBORROW_ID" field.
-func BOOKBORROWIDLTE(v int) predicate.BookBorrow {
-	return predicate.BookBorrow(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldBOOKBORROWID), v))
 	})
 }
 

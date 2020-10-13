@@ -11,7 +11,6 @@ var (
 	// BooksColumns holds the columns for the "books" table.
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "book_id", Type: field.TypeInt, Unique: true},
 		{Name: "book_name", Type: field.TypeString},
 		{Name: "author", Type: field.TypeString},
 	}
@@ -25,7 +24,6 @@ var (
 	// BookBorrowsColumns holds the columns for the "book_borrows" table.
 	BookBorrowsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "bookborrow_id", Type: field.TypeInt},
 		{Name: "added_time", Type: field.TypeTime},
 		{Name: "book_booklist", Type: field.TypeInt, Nullable: true},
 		{Name: "purpose_booklist", Type: field.TypeInt, Nullable: true},
@@ -39,21 +37,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "book_borrows_books_Booklist",
-				Columns: []*schema.Column{BookBorrowsColumns[3]},
+				Columns: []*schema.Column{BookBorrowsColumns[2]},
 
 				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "book_borrows_purposes_Booklist",
-				Columns: []*schema.Column{BookBorrowsColumns[4]},
+				Columns: []*schema.Column{BookBorrowsColumns[3]},
 
 				RefColumns: []*schema.Column{PurposesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "book_borrows_users_Booklist",
-				Columns: []*schema.Column{BookBorrowsColumns[5]},
+				Columns: []*schema.Column{BookBorrowsColumns[4]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -63,7 +61,6 @@ var (
 	// PurposesColumns holds the columns for the "purposes" table.
 	PurposesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "purpose_id", Type: field.TypeInt, Unique: true},
 		{Name: "purpose_name", Type: field.TypeString},
 	}
 	// PurposesTable holds the schema information for the "purposes" table.
@@ -76,8 +73,7 @@ var (
 	// RolesColumns holds the columns for the "roles" table.
 	RolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "role_id", Type: field.TypeInt, Unique: true},
-		{Name: "role_name", Type: field.TypeString},
+		{Name: "role_name", Type: field.TypeString, Unique: true},
 	}
 	// RolesTable holds the schema information for the "roles" table.
 	RolesTable = &schema.Table{
@@ -89,10 +85,9 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt, Unique: true},
 		{Name: "user_email", Type: field.TypeString},
 		{Name: "user_name", Type: field.TypeString},
-		{Name: "role_role", Type: field.TypeInt, Nullable: true},
+		{Name: "ROLE_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -101,8 +96,8 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:  "users_roles_Role",
-				Columns: []*schema.Column{UsersColumns[4]},
+				Symbol:  "users_roles_role",
+				Columns: []*schema.Column{UsersColumns[3]},
 
 				RefColumns: []*schema.Column{RolesColumns[0]},
 				OnDelete:   schema.SetNull,

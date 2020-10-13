@@ -270,12 +270,12 @@ func (pq *PurposeQuery) WithBooklist(opts ...func(*BookBorrowQuery)) *PurposeQue
 // Example:
 //
 //	var v []struct {
-//		PURPOSEID int `json:"PURPOSE_ID,omitempty"`
+//		PURPOSENAME string `json:"PURPOSE_NAME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Purpose.Query().
-//		GroupBy(purpose.FieldPURPOSEID).
+//		GroupBy(purpose.FieldPURPOSENAME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +296,11 @@ func (pq *PurposeQuery) GroupBy(field string, fields ...string) *PurposeGroupBy 
 // Example:
 //
 //	var v []struct {
-//		PURPOSEID int `json:"PURPOSE_ID,omitempty"`
+//		PURPOSENAME string `json:"PURPOSE_NAME,omitempty"`
 //	}
 //
 //	client.Purpose.Query().
-//		Select(purpose.FieldPURPOSEID).
+//		Select(purpose.FieldPURPOSENAME).
 //		Scan(ctx, &v)
 //
 func (pq *PurposeQuery) Select(field string, fields ...string) *PurposeSelect {

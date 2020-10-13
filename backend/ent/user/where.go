@@ -91,13 +91,6 @@ func IDLTE(id int) predicate.User {
 	})
 }
 
-// USERID applies equality check predicate on the "USER_ID" field. It's identical to USERIDEQ.
-func USERID(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUSERID), v))
-	})
-}
-
 // USEREMAIL applies equality check predicate on the "USER_EMAIL" field. It's identical to USEREMAILEQ.
 func USEREMAIL(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -109,82 +102,6 @@ func USEREMAIL(v string) predicate.User {
 func USERNAME(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldUSERNAME), v))
-	})
-}
-
-// USERIDEQ applies the EQ predicate on the "USER_ID" field.
-func USERIDEQ(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUSERID), v))
-	})
-}
-
-// USERIDNEQ applies the NEQ predicate on the "USER_ID" field.
-func USERIDNEQ(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUSERID), v))
-	})
-}
-
-// USERIDIn applies the In predicate on the "USER_ID" field.
-func USERIDIn(vs ...int) predicate.User {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.User(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldUSERID), v...))
-	})
-}
-
-// USERIDNotIn applies the NotIn predicate on the "USER_ID" field.
-func USERIDNotIn(vs ...int) predicate.User {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.User(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldUSERID), v...))
-	})
-}
-
-// USERIDGT applies the GT predicate on the "USER_ID" field.
-func USERIDGT(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUSERID), v))
-	})
-}
-
-// USERIDGTE applies the GTE predicate on the "USER_ID" field.
-func USERIDGTE(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUSERID), v))
-	})
-}
-
-// USERIDLT applies the LT predicate on the "USER_ID" field.
-func USERIDLT(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUSERID), v))
-	})
-}
-
-// USERIDLTE applies the LTE predicate on the "USER_ID" field.
-func USERIDLTE(v int) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUSERID), v))
 	})
 }
 
@@ -438,25 +355,25 @@ func HasBooklistWith(preds ...predicate.BookBorrow) predicate.User {
 	})
 }
 
-// HasRole applies the HasEdge predicate on the "Role" edge.
-func HasRole() predicate.User {
+// HasRolePlay applies the HasEdge predicate on the "RolePlay" edge.
+func HasRolePlay() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RoleTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, RoleTable, RoleColumn),
+			sqlgraph.To(RolePlayTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RolePlayTable, RolePlayColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasRoleWith applies the HasEdge predicate on the "Role" edge with a given conditions (other predicates).
-func HasRoleWith(preds ...predicate.Role) predicate.User {
+// HasRolePlayWith applies the HasEdge predicate on the "RolePlay" edge with a given conditions (other predicates).
+func HasRolePlayWith(preds ...predicate.Role) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RoleInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, RoleTable, RoleColumn),
+			sqlgraph.To(RolePlayInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RolePlayTable, RolePlayColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

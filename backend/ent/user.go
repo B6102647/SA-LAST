@@ -16,24 +16,22 @@ type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// USERID holds the value of the "USER_ID" field.
-	USERID int `json:"USER_ID,omitempty"`
 	// USEREMAIL holds the value of the "USER_EMAIL" field.
 	USEREMAIL string `json:"USER_EMAIL,omitempty"`
 	// USERNAME holds the value of the "USER_NAME" field.
 	USERNAME string `json:"USER_NAME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
-	Edges     UserEdges `json:"edges"`
-	role_role *int
+	Edges   UserEdges `json:"edges"`
+	ROLE_ID *int
 }
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
 	// Booklist holds the value of the Booklist edge.
 	Booklist []*BookBorrow
-	// Role holds the value of the Role edge.
-	Role *Role
+	// RolePlay holds the value of the RolePlay edge.
+	RolePlay *Role
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [2]bool
@@ -48,25 +46,24 @@ func (e UserEdges) BooklistOrErr() ([]*BookBorrow, error) {
 	return nil, &NotLoadedError{edge: "Booklist"}
 }
 
-// RoleOrErr returns the Role value or an error if the edge
+// RolePlayOrErr returns the RolePlay value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e UserEdges) RoleOrErr() (*Role, error) {
+func (e UserEdges) RolePlayOrErr() (*Role, error) {
 	if e.loadedTypes[1] {
-		if e.Role == nil {
-			// The edge Role was loaded in eager-loading,
+		if e.RolePlay == nil {
+			// The edge RolePlay was loaded in eager-loading,
 			// but was not found.
 			return nil, &NotFoundError{label: role.Label}
 		}
-		return e.Role, nil
+		return e.RolePlay, nil
 	}
-	return nil, &NotLoadedError{edge: "Role"}
+	return nil, &NotLoadedError{edge: "RolePlay"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
 func (*User) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullInt64{},  // USER_ID
 		&sql.NullString{}, // USER_EMAIL
 		&sql.NullString{}, // USER_NAME
 	}
@@ -75,7 +72,7 @@ func (*User) scanValues() []interface{} {
 // fkValues returns the types for scanning foreign-keys values from sql.Rows.
 func (*User) fkValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // role_role
+		&sql.NullInt64{}, // ROLE_ID
 	}
 }
 
@@ -91,28 +88,23 @@ func (u *User) assignValues(values ...interface{}) error {
 	}
 	u.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field USER_ID", values[0])
-	} else if value.Valid {
-		u.USERID = int(value.Int64)
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field USER_EMAIL", values[1])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field USER_EMAIL", values[0])
 	} else if value.Valid {
 		u.USEREMAIL = value.String
 	}
-	if value, ok := values[2].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field USER_NAME", values[2])
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field USER_NAME", values[1])
 	} else if value.Valid {
 		u.USERNAME = value.String
 	}
-	values = values[3:]
+	values = values[2:]
 	if len(values) == len(user.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field role_role", value)
+			return fmt.Errorf("unexpected type %T for edge-field ROLE_ID", value)
 		} else if value.Valid {
-			u.role_role = new(int)
-			*u.role_role = int(value.Int64)
+			u.ROLE_ID = new(int)
+			*u.ROLE_ID = int(value.Int64)
 		}
 	}
 	return nil
@@ -123,9 +115,9 @@ func (u *User) QueryBooklist() *BookBorrowQuery {
 	return (&UserClient{config: u.config}).QueryBooklist(u)
 }
 
-// QueryRole queries the Role edge of the User.
-func (u *User) QueryRole() *RoleQuery {
-	return (&UserClient{config: u.config}).QueryRole(u)
+// QueryRolePlay queries the RolePlay edge of the User.
+func (u *User) QueryRolePlay() *RoleQuery {
+	return (&UserClient{config: u.config}).QueryRolePlay(u)
 }
 
 // Update returns a builder for updating this User.
@@ -151,8 +143,6 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
-	builder.WriteString(", USER_ID=")
-	builder.WriteString(fmt.Sprintf("%v", u.USERID))
 	builder.WriteString(", USER_EMAIL=")
 	builder.WriteString(u.USEREMAIL)
 	builder.WriteString(", USER_NAME=")

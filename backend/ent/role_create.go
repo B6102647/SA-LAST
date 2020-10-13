@@ -20,25 +20,19 @@ type RoleCreate struct {
 	hooks    []Hook
 }
 
-// SetROLEID sets the ROLE_ID field.
-func (rc *RoleCreate) SetROLEID(i int) *RoleCreate {
-	rc.mutation.SetROLEID(i)
-	return rc
-}
-
 // SetROLENAME sets the ROLE_NAME field.
 func (rc *RoleCreate) SetROLENAME(s string) *RoleCreate {
 	rc.mutation.SetROLENAME(s)
 	return rc
 }
 
-// AddRoleIDs adds the Role edge to User by ids.
+// AddRoleIDs adds the role edge to User by ids.
 func (rc *RoleCreate) AddRoleIDs(ids ...int) *RoleCreate {
 	rc.mutation.AddRoleIDs(ids...)
 	return rc
 }
 
-// AddRole adds the Role edges to User.
+// AddRole adds the role edges to User.
 func (rc *RoleCreate) AddRole(u ...*User) *RoleCreate {
 	ids := make([]int, len(u))
 	for i := range u {
@@ -54,14 +48,6 @@ func (rc *RoleCreate) Mutation() *RoleMutation {
 
 // Save creates the Role in the database.
 func (rc *RoleCreate) Save(ctx context.Context) (*Role, error) {
-	if _, ok := rc.mutation.ROLEID(); !ok {
-		return nil, &ValidationError{Name: "ROLE_ID", err: errors.New("ent: missing required field \"ROLE_ID\"")}
-	}
-	if v, ok := rc.mutation.ROLEID(); ok {
-		if err := role.ROLEIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "ROLE_ID", err: fmt.Errorf("ent: validator failed for field \"ROLE_ID\": %w", err)}
-		}
-	}
 	if _, ok := rc.mutation.ROLENAME(); !ok {
 		return nil, &ValidationError{Name: "ROLE_NAME", err: errors.New("ent: missing required field \"ROLE_NAME\"")}
 	}
@@ -130,14 +116,6 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := rc.mutation.ROLEID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: role.FieldROLEID,
-		})
-		r.ROLEID = value
-	}
 	if value, ok := rc.mutation.ROLENAME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

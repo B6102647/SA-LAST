@@ -14,7 +14,6 @@ type Book struct {
 // Fields of the Book.
 func (Book) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("BOOK_ID").Positive().Unique(),
 		field.String("BOOK_NAME").NotEmpty(),
 		field.String("Author"),
 	}

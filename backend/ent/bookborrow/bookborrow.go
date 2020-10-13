@@ -7,8 +7,6 @@ const (
 	Label = "book_borrow"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldBOOKBORROWID holds the string denoting the bookborrow_id field in the database.
-	FieldBOOKBORROWID = "bookborrow_id"
 	// FieldADDEDTIME holds the string denoting the added_time field in the database.
 	FieldADDEDTIME = "added_time"
 
@@ -47,7 +45,6 @@ const (
 // Columns holds all SQL columns for bookborrow fields.
 var Columns = []string{
 	FieldID,
-	FieldBOOKBORROWID,
 	FieldADDEDTIME,
 }
 
@@ -57,8 +54,3 @@ var ForeignKeys = []string{
 	"purpose_booklist",
 	"user_booklist",
 }
-
-var (
-	// BOOKBORROWIDValidator is a validator for the "BOOKBORROW_ID" field. It is called by the builders before save.
-	BOOKBORROWIDValidator func(int) error
-)

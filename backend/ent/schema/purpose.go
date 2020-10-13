@@ -14,7 +14,6 @@ type Purpose struct {
 // Fields of the Purpose.
 func (Purpose) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("PURPOSE_ID").Positive().Unique(),
 		field.String("PURPOSE_NAME").NotEmpty(),
 	}
 }

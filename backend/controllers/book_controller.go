@@ -38,7 +38,6 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 
 	bk, err := ctl.client.Book.
 		Create().
-		SetBOOKID(obj.BOOKID).
 		SetBOOKNAME(obj.BOOKNAME).
 		SetAuthor(obj.Author).
 		Save(context.Background())

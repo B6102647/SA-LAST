@@ -5,9 +5,6 @@ definitions:
       Author:
         description: Author holds the value of the "Author" field.
         type: string
-      BOOK_ID:
-        description: BOOKID holds the value of the "BOOK_ID" field.
-        type: integer
       BOOK_NAME:
         description: BOOKNAME holds the value of the "BOOK_NAME" field.
         type: string
@@ -26,9 +23,6 @@ definitions:
       ADDED_TIME:
         description: ADDEDTIME holds the value of the "ADDED_TIME" field.
         type: string
-      BOOKBORROW_ID:
-        description: BOOKBORROWID holds the value of the "BOOKBORROW_ID" field.
-        type: integer
       edges:
         $ref: '#/definitions/ent.BookBorrowEdges'
         description: |-
@@ -64,9 +58,6 @@ definitions:
     type: object
   ent.Purpose:
     properties:
-      PURPOSE_ID:
-        description: PURPOSEID holds the value of the "PURPOSE_ID" field.
-        type: integer
       PURPOSE_NAME:
         description: PURPOSENAME holds the value of the "PURPOSE_NAME" field.
         type: string
@@ -90,9 +81,6 @@ definitions:
     type: object
   ent.Role:
     properties:
-      ROLE_ID:
-        description: ROLEID holds the value of the "ROLE_ID" field.
-        type: integer
       ROLE_NAME:
         description: ROLENAME holds the value of the "ROLE_NAME" field.
         type: string
@@ -109,7 +97,7 @@ definitions:
   ent.RoleEdges:
     properties:
       role:
-        description: Role holds the value of the Role edge.
+        description: Role holds the value of the role edge.
         items:
           $ref: '#/definitions/ent.User'
         type: array
@@ -119,9 +107,6 @@ definitions:
       USER_EMAIL:
         description: USEREMAIL holds the value of the "USER_EMAIL" field.
         type: string
-      USER_ID:
-        description: USERID holds the value of the "USER_ID" field.
-        type: integer
       USER_NAME:
         description: USERNAME holds the value of the "USER_NAME" field.
         type: string
@@ -134,6 +119,8 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      role_ID:
+        type: integer
     type: object
   ent.UserEdges:
     properties:
@@ -142,9 +129,9 @@ definitions:
         items:
           $ref: '#/definitions/ent.BookBorrow'
         type: array
-      role:
+      rolePlay:
         $ref: '#/definitions/ent.Role'
-        description: Role holds the value of the Role edge.
+        description: RolePlay holds the value of the RolePlay edge.
         type: object
     type: object
   gin.H:
@@ -619,10 +606,10 @@ paths:
           schema:
             $ref: '#/definitions/gin.H'
       summary: Get a Purpose entity by ID
-  /Role:
+  /roles:
     get:
-      description: list Role entities
-      operationId: list-Role
+      description: list role entities
+      operationId: list-role
       parameters:
       - description: Limit
         in: query
@@ -649,16 +636,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: List Role entities
+      summary: List role entities
     post:
       consumes:
       - application/json
-      description: Create Role
-      operationId: create-Role
+      description: Create role
+      operationId: create-role
       parameters:
       - description: Role entity
         in: body
-        name: Role
+        name: role
         required: true
         schema:
           $ref: '#/definitions/ent.Role'
@@ -677,11 +664,11 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Create Role
-  /Role/{id}:
+      summary: Create role
+  /roles/{id}:
     delete:
-      description: get Role by ID
-      operationId: delete-PRole
+      description: get role by ID
+      operationId: delete-role
       parameters:
       - description: Role ID
         in: path
@@ -707,12 +694,41 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Delete a Role entity by ID
+      summary: Delete a role entity by ID
+    get:
+      description: get role by ID
+      operationId: get-role
+      parameters:
+      - description: Role ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Role'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a role entity by ID
     put:
       consumes:
       - application/json
-      description: update Role by ID
-      operationId: update-Role
+      description: update role by ID
+      operationId: update-role
       parameters:
       - description: Role ID
         in: path
@@ -721,7 +737,7 @@ paths:
         type: integer
       - description: Role entity
         in: body
-        name: Role
+        name: role
         required: true
         schema:
           $ref: '#/definitions/ent.Role'
@@ -740,37 +756,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Update a Role entity by ID
-  /Roles/{id}:
-    get:
-      description: get Role by ID
-      operationId: get-Role
-      parameters:
-      - description: Role ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Role'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a Role entity by ID
+      summary: Update a role entity by ID
   /users:
     get:
       description: list user entities

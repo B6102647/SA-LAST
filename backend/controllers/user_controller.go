@@ -58,10 +58,9 @@ func (ctl *UserController) CreateUser(c *gin.Context) {
 
 	u, err := ctl.client.User.
 		Create().
-		SetUSERID(obj.UserID).
 		SetUSERNAME(obj.UserName).
 		SetUSEREMAIL(obj.UserEmail).
-		SetRole(ro).
+		SetRolePlay(ro).
 		Save(context.Background())
 
 	fmt.Println(err)

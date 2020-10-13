@@ -19,8 +19,6 @@ type BookBorrow struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// BOOKBORROWID holds the value of the "BOOKBORROW_ID" field.
-	BOOKBORROWID int `json:"BOOKBORROW_ID,omitempty"`
 	// ADDEDTIME holds the value of the "ADDED_TIME" field.
 	ADDEDTIME time.Time `json:"ADDED_TIME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -90,7 +88,6 @@ func (e BookBorrowEdges) PURPOSEOrErr() (*Purpose, error) {
 func (*BookBorrow) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
-		&sql.NullInt64{}, // BOOKBORROW_ID
 		&sql.NullTime{},  // ADDED_TIME
 	}
 }
@@ -116,17 +113,12 @@ func (bb *BookBorrow) assignValues(values ...interface{}) error {
 	}
 	bb.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field BOOKBORROW_ID", values[0])
-	} else if value.Valid {
-		bb.BOOKBORROWID = int(value.Int64)
-	}
-	if value, ok := values[1].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field ADDED_TIME", values[1])
+	if value, ok := values[0].(*sql.NullTime); !ok {
+		return fmt.Errorf("unexpected type %T for field ADDED_TIME", values[0])
 	} else if value.Valid {
 		bb.ADDEDTIME = value.Time
 	}
-	values = values[2:]
+	values = values[1:]
 	if len(values) == len(bookborrow.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field book_booklist", value)
@@ -188,8 +180,6 @@ func (bb *BookBorrow) String() string {
 	var builder strings.Builder
 	builder.WriteString("BookBorrow(")
 	builder.WriteString(fmt.Sprintf("id=%v", bb.ID))
-	builder.WriteString(", BOOKBORROW_ID=")
-	builder.WriteString(fmt.Sprintf("%v", bb.BOOKBORROWID))
 	builder.WriteString(", ADDED_TIME=")
 	builder.WriteString(bb.ADDEDTIME.Format(time.ANSIC))
 	builder.WriteByte(')')

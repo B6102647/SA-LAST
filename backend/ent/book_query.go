@@ -270,12 +270,12 @@ func (bq *BookQuery) WithBooklist(opts ...func(*BookBorrowQuery)) *BookQuery {
 // Example:
 //
 //	var v []struct {
-//		BOOKID int `json:"BOOK_ID,omitempty"`
+//		BOOKNAME string `json:"BOOK_NAME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Book.Query().
-//		GroupBy(book.FieldBOOKID).
+//		GroupBy(book.FieldBOOKNAME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +296,11 @@ func (bq *BookQuery) GroupBy(field string, fields ...string) *BookGroupBy {
 // Example:
 //
 //	var v []struct {
-//		BOOKID int `json:"BOOK_ID,omitempty"`
+//		BOOKNAME string `json:"BOOK_NAME,omitempty"`
 //	}
 //
 //	client.Book.Query().
-//		Select(book.FieldBOOKID).
+//		Select(book.FieldBOOKNAME).
 //		Scan(ctx, &v)
 //
 func (bq *BookQuery) Select(field string, fields ...string) *BookSelect {

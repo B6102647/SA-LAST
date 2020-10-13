@@ -91,13 +91,6 @@ func IDLTE(id int) predicate.Book {
 	})
 }
 
-// BOOKID applies equality check predicate on the "BOOK_ID" field. It's identical to BOOKIDEQ.
-func BOOKID(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBOOKID), v))
-	})
-}
-
 // BOOKNAME applies equality check predicate on the "BOOK_NAME" field. It's identical to BOOKNAMEEQ.
 func BOOKNAME(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -109,82 +102,6 @@ func BOOKNAME(v string) predicate.Book {
 func Author(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAuthor), v))
-	})
-}
-
-// BOOKIDEQ applies the EQ predicate on the "BOOK_ID" field.
-func BOOKIDEQ(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBOOKID), v))
-	})
-}
-
-// BOOKIDNEQ applies the NEQ predicate on the "BOOK_ID" field.
-func BOOKIDNEQ(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldBOOKID), v))
-	})
-}
-
-// BOOKIDIn applies the In predicate on the "BOOK_ID" field.
-func BOOKIDIn(vs ...int) predicate.Book {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Book(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldBOOKID), v...))
-	})
-}
-
-// BOOKIDNotIn applies the NotIn predicate on the "BOOK_ID" field.
-func BOOKIDNotIn(vs ...int) predicate.Book {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Book(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldBOOKID), v...))
-	})
-}
-
-// BOOKIDGT applies the GT predicate on the "BOOK_ID" field.
-func BOOKIDGT(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldBOOKID), v))
-	})
-}
-
-// BOOKIDGTE applies the GTE predicate on the "BOOK_ID" field.
-func BOOKIDGTE(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldBOOKID), v))
-	})
-}
-
-// BOOKIDLT applies the LT predicate on the "BOOK_ID" field.
-func BOOKIDLT(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldBOOKID), v))
-	})
-}
-
-// BOOKIDLTE applies the LTE predicate on the "BOOK_ID" field.
-func BOOKIDLTE(v int) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldBOOKID), v))
 	})
 }
 

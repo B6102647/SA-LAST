@@ -29,19 +29,6 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return uu
 }
 
-// SetUSERID sets the USER_ID field.
-func (uu *UserUpdate) SetUSERID(i int) *UserUpdate {
-	uu.mutation.ResetUSERID()
-	uu.mutation.SetUSERID(i)
-	return uu
-}
-
-// AddUSERID adds i to USER_ID.
-func (uu *UserUpdate) AddUSERID(i int) *UserUpdate {
-	uu.mutation.AddUSERID(i)
-	return uu
-}
-
 // SetUSEREMAIL sets the USER_EMAIL field.
 func (uu *UserUpdate) SetUSEREMAIL(s string) *UserUpdate {
 	uu.mutation.SetUSEREMAIL(s)
@@ -69,23 +56,23 @@ func (uu *UserUpdate) AddBooklist(b ...*BookBorrow) *UserUpdate {
 	return uu.AddBooklistIDs(ids...)
 }
 
-// SetRoleID sets the Role edge to Role by id.
-func (uu *UserUpdate) SetRoleID(id int) *UserUpdate {
-	uu.mutation.SetRoleID(id)
+// SetRolePlayID sets the RolePlay edge to Role by id.
+func (uu *UserUpdate) SetRolePlayID(id int) *UserUpdate {
+	uu.mutation.SetRolePlayID(id)
 	return uu
 }
 
-// SetNillableRoleID sets the Role edge to Role by id if the given value is not nil.
-func (uu *UserUpdate) SetNillableRoleID(id *int) *UserUpdate {
+// SetNillableRolePlayID sets the RolePlay edge to Role by id if the given value is not nil.
+func (uu *UserUpdate) SetNillableRolePlayID(id *int) *UserUpdate {
 	if id != nil {
-		uu = uu.SetRoleID(*id)
+		uu = uu.SetRolePlayID(*id)
 	}
 	return uu
 }
 
-// SetRole sets the Role edge to Role.
-func (uu *UserUpdate) SetRole(r *Role) *UserUpdate {
-	return uu.SetRoleID(r.ID)
+// SetRolePlay sets the RolePlay edge to Role.
+func (uu *UserUpdate) SetRolePlay(r *Role) *UserUpdate {
+	return uu.SetRolePlayID(r.ID)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -108,19 +95,14 @@ func (uu *UserUpdate) RemoveBooklist(b ...*BookBorrow) *UserUpdate {
 	return uu.RemoveBooklistIDs(ids...)
 }
 
-// ClearRole clears the Role edge to Role.
-func (uu *UserUpdate) ClearRole() *UserUpdate {
-	uu.mutation.ClearRole()
+// ClearRolePlay clears the RolePlay edge to Role.
+func (uu *UserUpdate) ClearRolePlay() *UserUpdate {
+	uu.mutation.ClearRolePlay()
 	return uu
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := uu.mutation.USERID(); ok {
-		if err := user.USERIDValidator(v); err != nil {
-			return 0, &ValidationError{Name: "USER_ID", err: fmt.Errorf("ent: validator failed for field \"USER_ID\": %w", err)}
-		}
-	}
 	if v, ok := uu.mutation.USEREMAIL(); ok {
 		if err := user.USEREMAILValidator(v); err != nil {
 			return 0, &ValidationError{Name: "USER_EMAIL", err: fmt.Errorf("ent: validator failed for field \"USER_EMAIL\": %w", err)}
@@ -199,20 +181,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := uu.mutation.USERID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: user.FieldUSERID,
-		})
-	}
-	if value, ok := uu.mutation.AddedUSERID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: user.FieldUSERID,
-		})
-	}
 	if value, ok := uu.mutation.USEREMAIL(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -265,12 +233,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uu.mutation.RoleCleared() {
+	if uu.mutation.RolePlayCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   user.RoleTable,
-			Columns: []string{user.RoleColumn},
+			Table:   user.RolePlayTable,
+			Columns: []string{user.RolePlayColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -281,12 +249,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.RoleIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.RolePlayIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   user.RoleTable,
-			Columns: []string{user.RoleColumn},
+			Table:   user.RolePlayTable,
+			Columns: []string{user.RolePlayColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -318,19 +286,6 @@ type UserUpdateOne struct {
 	mutation *UserMutation
 }
 
-// SetUSERID sets the USER_ID field.
-func (uuo *UserUpdateOne) SetUSERID(i int) *UserUpdateOne {
-	uuo.mutation.ResetUSERID()
-	uuo.mutation.SetUSERID(i)
-	return uuo
-}
-
-// AddUSERID adds i to USER_ID.
-func (uuo *UserUpdateOne) AddUSERID(i int) *UserUpdateOne {
-	uuo.mutation.AddUSERID(i)
-	return uuo
-}
-
 // SetUSEREMAIL sets the USER_EMAIL field.
 func (uuo *UserUpdateOne) SetUSEREMAIL(s string) *UserUpdateOne {
 	uuo.mutation.SetUSEREMAIL(s)
@@ -358,23 +313,23 @@ func (uuo *UserUpdateOne) AddBooklist(b ...*BookBorrow) *UserUpdateOne {
 	return uuo.AddBooklistIDs(ids...)
 }
 
-// SetRoleID sets the Role edge to Role by id.
-func (uuo *UserUpdateOne) SetRoleID(id int) *UserUpdateOne {
-	uuo.mutation.SetRoleID(id)
+// SetRolePlayID sets the RolePlay edge to Role by id.
+func (uuo *UserUpdateOne) SetRolePlayID(id int) *UserUpdateOne {
+	uuo.mutation.SetRolePlayID(id)
 	return uuo
 }
 
-// SetNillableRoleID sets the Role edge to Role by id if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableRoleID(id *int) *UserUpdateOne {
+// SetNillableRolePlayID sets the RolePlay edge to Role by id if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableRolePlayID(id *int) *UserUpdateOne {
 	if id != nil {
-		uuo = uuo.SetRoleID(*id)
+		uuo = uuo.SetRolePlayID(*id)
 	}
 	return uuo
 }
 
-// SetRole sets the Role edge to Role.
-func (uuo *UserUpdateOne) SetRole(r *Role) *UserUpdateOne {
-	return uuo.SetRoleID(r.ID)
+// SetRolePlay sets the RolePlay edge to Role.
+func (uuo *UserUpdateOne) SetRolePlay(r *Role) *UserUpdateOne {
+	return uuo.SetRolePlayID(r.ID)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -397,19 +352,14 @@ func (uuo *UserUpdateOne) RemoveBooklist(b ...*BookBorrow) *UserUpdateOne {
 	return uuo.RemoveBooklistIDs(ids...)
 }
 
-// ClearRole clears the Role edge to Role.
-func (uuo *UserUpdateOne) ClearRole() *UserUpdateOne {
-	uuo.mutation.ClearRole()
+// ClearRolePlay clears the RolePlay edge to Role.
+func (uuo *UserUpdateOne) ClearRolePlay() *UserUpdateOne {
+	uuo.mutation.ClearRolePlay()
 	return uuo
 }
 
 // Save executes the query and returns the updated entity.
 func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
-	if v, ok := uuo.mutation.USERID(); ok {
-		if err := user.USERIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "USER_ID", err: fmt.Errorf("ent: validator failed for field \"USER_ID\": %w", err)}
-		}
-	}
 	if v, ok := uuo.mutation.USEREMAIL(); ok {
 		if err := user.USEREMAILValidator(v); err != nil {
 			return nil, &ValidationError{Name: "USER_EMAIL", err: fmt.Errorf("ent: validator failed for field \"USER_EMAIL\": %w", err)}
@@ -486,20 +436,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing User.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := uuo.mutation.USERID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: user.FieldUSERID,
-		})
-	}
-	if value, ok := uuo.mutation.AddedUSERID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: user.FieldUSERID,
-		})
-	}
 	if value, ok := uuo.mutation.USEREMAIL(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -552,12 +488,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if uuo.mutation.RoleCleared() {
+	if uuo.mutation.RolePlayCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   user.RoleTable,
-			Columns: []string{user.RoleColumn},
+			Table:   user.RolePlayTable,
+			Columns: []string{user.RolePlayColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -568,12 +504,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.RoleIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.RolePlayIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   user.RoleTable,
-			Columns: []string{user.RoleColumn},
+			Table:   user.RolePlayTable,
+			Columns: []string{user.RolePlayColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

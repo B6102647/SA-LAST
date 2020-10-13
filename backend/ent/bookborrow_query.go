@@ -332,12 +332,12 @@ func (bbq *BookBorrowQuery) WithPURPOSE(opts ...func(*PurposeQuery)) *BookBorrow
 // Example:
 //
 //	var v []struct {
-//		BOOKBORROWID int `json:"BOOKBORROW_ID,omitempty"`
+//		ADDEDTIME time.Time `json:"ADDED_TIME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.BookBorrow.Query().
-//		GroupBy(bookborrow.FieldBOOKBORROWID).
+//		GroupBy(bookborrow.FieldADDEDTIME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -358,11 +358,11 @@ func (bbq *BookBorrowQuery) GroupBy(field string, fields ...string) *BookBorrowG
 // Example:
 //
 //	var v []struct {
-//		BOOKBORROWID int `json:"BOOKBORROW_ID,omitempty"`
+//		ADDEDTIME time.Time `json:"ADDED_TIME,omitempty"`
 //	}
 //
 //	client.BookBorrow.Query().
-//		Select(bookborrow.FieldBOOKBORROWID).
+//		Select(bookborrow.FieldADDEDTIME).
 //		Scan(ctx, &v)
 //
 func (bbq *BookBorrowQuery) Select(field string, fields ...string) *BookBorrowSelect {

@@ -56,7 +56,7 @@ func (rq *RoleQuery) Order(o ...OrderFunc) *RoleQuery {
 	return rq
 }
 
-// QueryRole chains the current query on the Role edge.
+// QueryRole chains the current query on the role edge.
 func (rq *RoleQuery) QueryRole() *UserQuery {
 	query := &UserQuery{config: rq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
@@ -254,7 +254,7 @@ func (rq *RoleQuery) Clone() *RoleQuery {
 }
 
 //  WithRole tells the query-builder to eager-loads the nodes that are connected to
-// the "Role" edge. The optional arguments used to configure the query builder of the edge.
+// the "role" edge. The optional arguments used to configure the query builder of the edge.
 func (rq *RoleQuery) WithRole(opts ...func(*UserQuery)) *RoleQuery {
 	query := &UserQuery{config: rq.config}
 	for _, opt := range opts {
@@ -270,12 +270,12 @@ func (rq *RoleQuery) WithRole(opts ...func(*UserQuery)) *RoleQuery {
 // Example:
 //
 //	var v []struct {
-//		ROLEID int `json:"ROLE_ID,omitempty"`
+//		ROLENAME string `json:"ROLE_NAME,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		GroupBy(role.FieldROLEID).
+//		GroupBy(role.FieldROLENAME).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -296,11 +296,11 @@ func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
 // Example:
 //
 //	var v []struct {
-//		ROLEID int `json:"ROLE_ID,omitempty"`
+//		ROLENAME string `json:"ROLE_NAME,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		Select(role.FieldROLEID).
+//		Select(role.FieldROLENAME).
 //		Scan(ctx, &v)
 //
 func (rq *RoleQuery) Select(field string, fields ...string) *RoleSelect {
@@ -371,13 +371,13 @@ func (rq *RoleQuery) sqlAll(ctx context.Context) ([]*Role, error) {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.role_role
+			fk := n.ROLE_ID
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "role_role" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "ROLE_ID" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "role_role" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "ROLE_ID" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Role = append(node.Edges.Role, n)
 		}

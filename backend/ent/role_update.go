@@ -28,32 +28,19 @@ func (ru *RoleUpdate) Where(ps ...predicate.Role) *RoleUpdate {
 	return ru
 }
 
-// SetROLEID sets the ROLE_ID field.
-func (ru *RoleUpdate) SetROLEID(i int) *RoleUpdate {
-	ru.mutation.ResetROLEID()
-	ru.mutation.SetROLEID(i)
-	return ru
-}
-
-// AddROLEID adds i to ROLE_ID.
-func (ru *RoleUpdate) AddROLEID(i int) *RoleUpdate {
-	ru.mutation.AddROLEID(i)
-	return ru
-}
-
 // SetROLENAME sets the ROLE_NAME field.
 func (ru *RoleUpdate) SetROLENAME(s string) *RoleUpdate {
 	ru.mutation.SetROLENAME(s)
 	return ru
 }
 
-// AddRoleIDs adds the Role edge to User by ids.
+// AddRoleIDs adds the role edge to User by ids.
 func (ru *RoleUpdate) AddRoleIDs(ids ...int) *RoleUpdate {
 	ru.mutation.AddRoleIDs(ids...)
 	return ru
 }
 
-// AddRole adds the Role edges to User.
+// AddRole adds the role edges to User.
 func (ru *RoleUpdate) AddRole(u ...*User) *RoleUpdate {
 	ids := make([]int, len(u))
 	for i := range u {
@@ -67,13 +54,13 @@ func (ru *RoleUpdate) Mutation() *RoleMutation {
 	return ru.mutation
 }
 
-// RemoveRoleIDs removes the Role edge to User by ids.
+// RemoveRoleIDs removes the role edge to User by ids.
 func (ru *RoleUpdate) RemoveRoleIDs(ids ...int) *RoleUpdate {
 	ru.mutation.RemoveRoleIDs(ids...)
 	return ru
 }
 
-// RemoveRole removes Role edges to User.
+// RemoveRole removes role edges to User.
 func (ru *RoleUpdate) RemoveRole(u ...*User) *RoleUpdate {
 	ids := make([]int, len(u))
 	for i := range u {
@@ -84,11 +71,6 @@ func (ru *RoleUpdate) RemoveRole(u ...*User) *RoleUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (ru *RoleUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := ru.mutation.ROLEID(); ok {
-		if err := role.ROLEIDValidator(v); err != nil {
-			return 0, &ValidationError{Name: "ROLE_ID", err: fmt.Errorf("ent: validator failed for field \"ROLE_ID\": %w", err)}
-		}
-	}
 	if v, ok := ru.mutation.ROLENAME(); ok {
 		if err := role.ROLENAMEValidator(v); err != nil {
 			return 0, &ValidationError{Name: "ROLE_NAME", err: fmt.Errorf("ent: validator failed for field \"ROLE_NAME\": %w", err)}
@@ -162,20 +144,6 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := ru.mutation.ROLEID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: role.FieldROLEID,
-		})
-	}
-	if value, ok := ru.mutation.AddedROLEID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: role.FieldROLEID,
-		})
-	}
 	if value, ok := ru.mutation.ROLENAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -239,32 +207,19 @@ type RoleUpdateOne struct {
 	mutation *RoleMutation
 }
 
-// SetROLEID sets the ROLE_ID field.
-func (ruo *RoleUpdateOne) SetROLEID(i int) *RoleUpdateOne {
-	ruo.mutation.ResetROLEID()
-	ruo.mutation.SetROLEID(i)
-	return ruo
-}
-
-// AddROLEID adds i to ROLE_ID.
-func (ruo *RoleUpdateOne) AddROLEID(i int) *RoleUpdateOne {
-	ruo.mutation.AddROLEID(i)
-	return ruo
-}
-
 // SetROLENAME sets the ROLE_NAME field.
 func (ruo *RoleUpdateOne) SetROLENAME(s string) *RoleUpdateOne {
 	ruo.mutation.SetROLENAME(s)
 	return ruo
 }
 
-// AddRoleIDs adds the Role edge to User by ids.
+// AddRoleIDs adds the role edge to User by ids.
 func (ruo *RoleUpdateOne) AddRoleIDs(ids ...int) *RoleUpdateOne {
 	ruo.mutation.AddRoleIDs(ids...)
 	return ruo
 }
 
-// AddRole adds the Role edges to User.
+// AddRole adds the role edges to User.
 func (ruo *RoleUpdateOne) AddRole(u ...*User) *RoleUpdateOne {
 	ids := make([]int, len(u))
 	for i := range u {
@@ -278,13 +233,13 @@ func (ruo *RoleUpdateOne) Mutation() *RoleMutation {
 	return ruo.mutation
 }
 
-// RemoveRoleIDs removes the Role edge to User by ids.
+// RemoveRoleIDs removes the role edge to User by ids.
 func (ruo *RoleUpdateOne) RemoveRoleIDs(ids ...int) *RoleUpdateOne {
 	ruo.mutation.RemoveRoleIDs(ids...)
 	return ruo
 }
 
-// RemoveRole removes Role edges to User.
+// RemoveRole removes role edges to User.
 func (ruo *RoleUpdateOne) RemoveRole(u ...*User) *RoleUpdateOne {
 	ids := make([]int, len(u))
 	for i := range u {
@@ -295,11 +250,6 @@ func (ruo *RoleUpdateOne) RemoveRole(u ...*User) *RoleUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (ruo *RoleUpdateOne) Save(ctx context.Context) (*Role, error) {
-	if v, ok := ruo.mutation.ROLEID(); ok {
-		if err := role.ROLEIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "ROLE_ID", err: fmt.Errorf("ent: validator failed for field \"ROLE_ID\": %w", err)}
-		}
-	}
 	if v, ok := ruo.mutation.ROLENAME(); ok {
 		if err := role.ROLENAMEValidator(v); err != nil {
 			return nil, &ValidationError{Name: "ROLE_NAME", err: fmt.Errorf("ent: validator failed for field \"ROLE_NAME\": %w", err)}
@@ -371,20 +321,6 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (r *Role, err error) {
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Role.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := ruo.mutation.ROLEID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: role.FieldROLEID,
-		})
-	}
-	if value, ok := ruo.mutation.AddedROLEID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: role.FieldROLEID,
-		})
-	}
 	if value, ok := ruo.mutation.ROLENAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

@@ -14,7 +14,6 @@ type BookBorrow struct {
 // Fields of the BookBorrow.
 func (BookBorrow) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("BOOKBORROW_ID").Positive(),
 		field.Time("ADDED_TIME"),
 	}
 }

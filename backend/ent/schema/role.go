@@ -1,27 +1,28 @@
 package schema
 
 import (
-	"github.com/facebookincubator/ent"
-	"github.com/facebookincubator/ent/schema/edge"
-	"github.com/facebookincubator/ent/schema/field"
+    "github.com/facebookincubator/ent"
+    "github.com/facebookincubator/ent/schema/edge"
+    "github.com/facebookincubator/ent/schema/field"
 )
-
 // Role holds the schema definition for the Role entity.
 type Role struct {
-	ent.Schema
+    ent.Schema
 }
 
-// Fields of the Purpose.
+// Fields of the Role.
 func (Role) Fields() []ent.Field {
-	return []ent.Field{
-		field.Int("ROLE_ID").Positive().Unique(),
-		field.String("ROLE_NAME").NotEmpty(),
-	}
+    return []ent.Field{
+        field.String("ROLE_NAME").
+            Unique().
+            NotEmpty(),
+    }
 }
 
-// Edges of the Purpose.
+// Edges of the Role.
 func (Role) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("Role", User.Type),
-	}
+    return []ent.Edge{
+        edge.To("role", User.Type).
+            StorageKey(edge.Column("ROLE_ID")),
+    }
 }

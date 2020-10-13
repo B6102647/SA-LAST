@@ -91,93 +91,10 @@ func IDLTE(id int) predicate.Purpose {
 	})
 }
 
-// PURPOSEID applies equality check predicate on the "PURPOSE_ID" field. It's identical to PURPOSEIDEQ.
-func PURPOSEID(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPURPOSEID), v))
-	})
-}
-
 // PURPOSENAME applies equality check predicate on the "PURPOSE_NAME" field. It's identical to PURPOSENAMEEQ.
 func PURPOSENAME(v string) predicate.Purpose {
 	return predicate.Purpose(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldPURPOSENAME), v))
-	})
-}
-
-// PURPOSEIDEQ applies the EQ predicate on the "PURPOSE_ID" field.
-func PURPOSEIDEQ(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPURPOSEID), v))
-	})
-}
-
-// PURPOSEIDNEQ applies the NEQ predicate on the "PURPOSE_ID" field.
-func PURPOSEIDNEQ(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPURPOSEID), v))
-	})
-}
-
-// PURPOSEIDIn applies the In predicate on the "PURPOSE_ID" field.
-func PURPOSEIDIn(vs ...int) predicate.Purpose {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Purpose(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldPURPOSEID), v...))
-	})
-}
-
-// PURPOSEIDNotIn applies the NotIn predicate on the "PURPOSE_ID" field.
-func PURPOSEIDNotIn(vs ...int) predicate.Purpose {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Purpose(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldPURPOSEID), v...))
-	})
-}
-
-// PURPOSEIDGT applies the GT predicate on the "PURPOSE_ID" field.
-func PURPOSEIDGT(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPURPOSEID), v))
-	})
-}
-
-// PURPOSEIDGTE applies the GTE predicate on the "PURPOSE_ID" field.
-func PURPOSEIDGTE(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPURPOSEID), v))
-	})
-}
-
-// PURPOSEIDLT applies the LT predicate on the "PURPOSE_ID" field.
-func PURPOSEIDLT(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPURPOSEID), v))
-	})
-}
-
-// PURPOSEIDLTE applies the LTE predicate on the "PURPOSE_ID" field.
-func PURPOSEIDLTE(v int) predicate.Purpose {
-	return predicate.Purpose(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPURPOSEID), v))
 	})
 }
 

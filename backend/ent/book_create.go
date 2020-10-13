@@ -20,12 +20,6 @@ type BookCreate struct {
 	hooks    []Hook
 }
 
-// SetBOOKID sets the BOOK_ID field.
-func (bc *BookCreate) SetBOOKID(i int) *BookCreate {
-	bc.mutation.SetBOOKID(i)
-	return bc
-}
-
 // SetBOOKNAME sets the BOOK_NAME field.
 func (bc *BookCreate) SetBOOKNAME(s string) *BookCreate {
 	bc.mutation.SetBOOKNAME(s)
@@ -60,14 +54,6 @@ func (bc *BookCreate) Mutation() *BookMutation {
 
 // Save creates the Book in the database.
 func (bc *BookCreate) Save(ctx context.Context) (*Book, error) {
-	if _, ok := bc.mutation.BOOKID(); !ok {
-		return nil, &ValidationError{Name: "BOOK_ID", err: errors.New("ent: missing required field \"BOOK_ID\"")}
-	}
-	if v, ok := bc.mutation.BOOKID(); ok {
-		if err := book.BOOKIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "BOOK_ID", err: fmt.Errorf("ent: validator failed for field \"BOOK_ID\": %w", err)}
-		}
-	}
 	if _, ok := bc.mutation.BOOKNAME(); !ok {
 		return nil, &ValidationError{Name: "BOOK_NAME", err: errors.New("ent: missing required field \"BOOK_NAME\"")}
 	}
@@ -139,14 +125,6 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := bc.mutation.BOOKID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: book.FieldBOOKID,
-		})
-		b.BOOKID = value
-	}
 	if value, ok := bc.mutation.BOOKNAME(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

@@ -28,19 +28,6 @@ func (pu *PurposeUpdate) Where(ps ...predicate.Purpose) *PurposeUpdate {
 	return pu
 }
 
-// SetPURPOSEID sets the PURPOSE_ID field.
-func (pu *PurposeUpdate) SetPURPOSEID(i int) *PurposeUpdate {
-	pu.mutation.ResetPURPOSEID()
-	pu.mutation.SetPURPOSEID(i)
-	return pu
-}
-
-// AddPURPOSEID adds i to PURPOSE_ID.
-func (pu *PurposeUpdate) AddPURPOSEID(i int) *PurposeUpdate {
-	pu.mutation.AddPURPOSEID(i)
-	return pu
-}
-
 // SetPURPOSENAME sets the PURPOSE_NAME field.
 func (pu *PurposeUpdate) SetPURPOSENAME(s string) *PurposeUpdate {
 	pu.mutation.SetPURPOSENAME(s)
@@ -84,11 +71,6 @@ func (pu *PurposeUpdate) RemoveBooklist(b ...*BookBorrow) *PurposeUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (pu *PurposeUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := pu.mutation.PURPOSEID(); ok {
-		if err := purpose.PURPOSEIDValidator(v); err != nil {
-			return 0, &ValidationError{Name: "PURPOSE_ID", err: fmt.Errorf("ent: validator failed for field \"PURPOSE_ID\": %w", err)}
-		}
-	}
 	if v, ok := pu.mutation.PURPOSENAME(); ok {
 		if err := purpose.PURPOSENAMEValidator(v); err != nil {
 			return 0, &ValidationError{Name: "PURPOSE_NAME", err: fmt.Errorf("ent: validator failed for field \"PURPOSE_NAME\": %w", err)}
@@ -162,20 +144,6 @@ func (pu *PurposeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := pu.mutation.PURPOSEID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: purpose.FieldPURPOSEID,
-		})
-	}
-	if value, ok := pu.mutation.AddedPURPOSEID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: purpose.FieldPURPOSEID,
-		})
-	}
 	if value, ok := pu.mutation.PURPOSENAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -239,19 +207,6 @@ type PurposeUpdateOne struct {
 	mutation *PurposeMutation
 }
 
-// SetPURPOSEID sets the PURPOSE_ID field.
-func (puo *PurposeUpdateOne) SetPURPOSEID(i int) *PurposeUpdateOne {
-	puo.mutation.ResetPURPOSEID()
-	puo.mutation.SetPURPOSEID(i)
-	return puo
-}
-
-// AddPURPOSEID adds i to PURPOSE_ID.
-func (puo *PurposeUpdateOne) AddPURPOSEID(i int) *PurposeUpdateOne {
-	puo.mutation.AddPURPOSEID(i)
-	return puo
-}
-
 // SetPURPOSENAME sets the PURPOSE_NAME field.
 func (puo *PurposeUpdateOne) SetPURPOSENAME(s string) *PurposeUpdateOne {
 	puo.mutation.SetPURPOSENAME(s)
@@ -295,11 +250,6 @@ func (puo *PurposeUpdateOne) RemoveBooklist(b ...*BookBorrow) *PurposeUpdateOne 
 
 // Save executes the query and returns the updated entity.
 func (puo *PurposeUpdateOne) Save(ctx context.Context) (*Purpose, error) {
-	if v, ok := puo.mutation.PURPOSEID(); ok {
-		if err := purpose.PURPOSEIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "PURPOSE_ID", err: fmt.Errorf("ent: validator failed for field \"PURPOSE_ID\": %w", err)}
-		}
-	}
 	if v, ok := puo.mutation.PURPOSENAME(); ok {
 		if err := purpose.PURPOSENAMEValidator(v); err != nil {
 			return nil, &ValidationError{Name: "PURPOSE_NAME", err: fmt.Errorf("ent: validator failed for field \"PURPOSE_NAME\": %w", err)}
@@ -371,20 +321,6 @@ func (puo *PurposeUpdateOne) sqlSave(ctx context.Context) (pu *Purpose, err erro
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Purpose.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := puo.mutation.PURPOSEID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: purpose.FieldPURPOSEID,
-		})
-	}
-	if value, ok := puo.mutation.AddedPURPOSEID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: purpose.FieldPURPOSEID,
-		})
-	}
 	if value, ok := puo.mutation.PURPOSENAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

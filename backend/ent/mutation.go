@@ -40,8 +40,6 @@ type BookMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	_BOOK_ID         *int
-	add_BOOK_ID      *int
 	_BOOK_NAME       *string
 	_Author          *string
 	clearedFields    map[string]struct{}
@@ -128,63 +126,6 @@ func (m *BookMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetBOOKID sets the BOOK_ID field.
-func (m *BookMutation) SetBOOKID(i int) {
-	m._BOOK_ID = &i
-	m.add_BOOK_ID = nil
-}
-
-// BOOKID returns the BOOK_ID value in the mutation.
-func (m *BookMutation) BOOKID() (r int, exists bool) {
-	v := m._BOOK_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBOOKID returns the old BOOK_ID value of the Book.
-// If the Book object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *BookMutation) OldBOOKID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldBOOKID is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldBOOKID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBOOKID: %w", err)
-	}
-	return oldValue.BOOKID, nil
-}
-
-// AddBOOKID adds i to BOOK_ID.
-func (m *BookMutation) AddBOOKID(i int) {
-	if m.add_BOOK_ID != nil {
-		*m.add_BOOK_ID += i
-	} else {
-		m.add_BOOK_ID = &i
-	}
-}
-
-// AddedBOOKID returns the value that was added to the BOOK_ID field in this mutation.
-func (m *BookMutation) AddedBOOKID() (r int, exists bool) {
-	v := m.add_BOOK_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetBOOKID reset all changes of the "BOOK_ID" field.
-func (m *BookMutation) ResetBOOKID() {
-	m._BOOK_ID = nil
-	m.add_BOOK_ID = nil
 }
 
 // SetBOOKNAME sets the BOOK_NAME field.
@@ -317,10 +258,7 @@ func (m *BookMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m._BOOK_ID != nil {
-		fields = append(fields, book.FieldBOOKID)
-	}
+	fields := make([]string, 0, 2)
 	if m._BOOK_NAME != nil {
 		fields = append(fields, book.FieldBOOKNAME)
 	}
@@ -335,8 +273,6 @@ func (m *BookMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *BookMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case book.FieldBOOKID:
-		return m.BOOKID()
 	case book.FieldBOOKNAME:
 		return m.BOOKNAME()
 	case book.FieldAuthor:
@@ -350,8 +286,6 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case book.FieldBOOKID:
-		return m.OldBOOKID(ctx)
 	case book.FieldBOOKNAME:
 		return m.OldBOOKNAME(ctx)
 	case book.FieldAuthor:
@@ -365,13 +299,6 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type mismatch the field type.
 func (m *BookMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case book.FieldBOOKID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBOOKID(v)
-		return nil
 	case book.FieldBOOKNAME:
 		v, ok := value.(string)
 		if !ok {
@@ -393,21 +320,13 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *BookMutation) AddedFields() []string {
-	var fields []string
-	if m.add_BOOK_ID != nil {
-		fields = append(fields, book.FieldBOOKID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *BookMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case book.FieldBOOKID:
-		return m.AddedBOOKID()
-	}
 	return nil, false
 }
 
@@ -416,13 +335,6 @@ func (m *BookMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *BookMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case book.FieldBOOKID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddBOOKID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Book numeric field %s", name)
 }
@@ -451,9 +363,6 @@ func (m *BookMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *BookMutation) ResetField(name string) error {
 	switch name {
-	case book.FieldBOOKID:
-		m.ResetBOOKID()
-		return nil
 	case book.FieldBOOKNAME:
 		m.ResetBOOKNAME()
 		return nil
@@ -551,21 +460,19 @@ func (m *BookMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type BookBorrowMutation struct {
 	config
-	op                Op
-	typ               string
-	id                *int
-	_BOOKBORROW_ID    *int
-	add_BOOKBORROW_ID *int
-	_ADDED_TIME       *time.Time
-	clearedFields     map[string]struct{}
-	_Owner            *int
-	cleared_Owner     bool
-	_BOOK             *int
-	cleared_BOOK      bool
-	_PURPOSE          *int
-	cleared_PURPOSE   bool
-	done              bool
-	oldValue          func(context.Context) (*BookBorrow, error)
+	op              Op
+	typ             string
+	id              *int
+	_ADDED_TIME     *time.Time
+	clearedFields   map[string]struct{}
+	_Owner          *int
+	cleared_Owner   bool
+	_BOOK           *int
+	cleared_BOOK    bool
+	_PURPOSE        *int
+	cleared_PURPOSE bool
+	done            bool
+	oldValue        func(context.Context) (*BookBorrow, error)
 }
 
 var _ ent.Mutation = (*BookBorrowMutation)(nil)
@@ -645,63 +552,6 @@ func (m *BookBorrowMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetBOOKBORROWID sets the BOOKBORROW_ID field.
-func (m *BookBorrowMutation) SetBOOKBORROWID(i int) {
-	m._BOOKBORROW_ID = &i
-	m.add_BOOKBORROW_ID = nil
-}
-
-// BOOKBORROWID returns the BOOKBORROW_ID value in the mutation.
-func (m *BookBorrowMutation) BOOKBORROWID() (r int, exists bool) {
-	v := m._BOOKBORROW_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldBOOKBORROWID returns the old BOOKBORROW_ID value of the BookBorrow.
-// If the BookBorrow object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *BookBorrowMutation) OldBOOKBORROWID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldBOOKBORROWID is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldBOOKBORROWID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBOOKBORROWID: %w", err)
-	}
-	return oldValue.BOOKBORROWID, nil
-}
-
-// AddBOOKBORROWID adds i to BOOKBORROW_ID.
-func (m *BookBorrowMutation) AddBOOKBORROWID(i int) {
-	if m.add_BOOKBORROW_ID != nil {
-		*m.add_BOOKBORROW_ID += i
-	} else {
-		m.add_BOOKBORROW_ID = &i
-	}
-}
-
-// AddedBOOKBORROWID returns the value that was added to the BOOKBORROW_ID field in this mutation.
-func (m *BookBorrowMutation) AddedBOOKBORROWID() (r int, exists bool) {
-	v := m.add_BOOKBORROW_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetBOOKBORROWID reset all changes of the "BOOKBORROW_ID" field.
-func (m *BookBorrowMutation) ResetBOOKBORROWID() {
-	m._BOOKBORROW_ID = nil
-	m.add_BOOKBORROW_ID = nil
 }
 
 // SetADDEDTIME sets the ADDED_TIME field.
@@ -872,10 +722,7 @@ func (m *BookBorrowMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookBorrowMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m._BOOKBORROW_ID != nil {
-		fields = append(fields, bookborrow.FieldBOOKBORROWID)
-	}
+	fields := make([]string, 0, 1)
 	if m._ADDED_TIME != nil {
 		fields = append(fields, bookborrow.FieldADDEDTIME)
 	}
@@ -887,8 +734,6 @@ func (m *BookBorrowMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *BookBorrowMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		return m.BOOKBORROWID()
 	case bookborrow.FieldADDEDTIME:
 		return m.ADDEDTIME()
 	}
@@ -900,8 +745,6 @@ func (m *BookBorrowMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *BookBorrowMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		return m.OldBOOKBORROWID(ctx)
 	case bookborrow.FieldADDEDTIME:
 		return m.OldADDEDTIME(ctx)
 	}
@@ -913,13 +756,6 @@ func (m *BookBorrowMutation) OldField(ctx context.Context, name string) (ent.Val
 // type mismatch the field type.
 func (m *BookBorrowMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetBOOKBORROWID(v)
-		return nil
 	case bookborrow.FieldADDEDTIME:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -934,21 +770,13 @@ func (m *BookBorrowMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *BookBorrowMutation) AddedFields() []string {
-	var fields []string
-	if m.add_BOOKBORROW_ID != nil {
-		fields = append(fields, bookborrow.FieldBOOKBORROWID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *BookBorrowMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		return m.AddedBOOKBORROWID()
-	}
 	return nil, false
 }
 
@@ -957,13 +785,6 @@ func (m *BookBorrowMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *BookBorrowMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddBOOKBORROWID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown BookBorrow numeric field %s", name)
 }
@@ -992,9 +813,6 @@ func (m *BookBorrowMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *BookBorrowMutation) ResetField(name string) error {
 	switch name {
-	case bookborrow.FieldBOOKBORROWID:
-		m.ResetBOOKBORROWID()
-		return nil
 	case bookborrow.FieldADDEDTIME:
 		m.ResetADDEDTIME()
 		return nil
@@ -1125,8 +943,6 @@ type PurposeMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	_PURPOSE_ID      *int
-	add_PURPOSE_ID   *int
 	_PURPOSE_NAME    *string
 	clearedFields    map[string]struct{}
 	_Booklist        map[int]struct{}
@@ -1212,63 +1028,6 @@ func (m *PurposeMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetPURPOSEID sets the PURPOSE_ID field.
-func (m *PurposeMutation) SetPURPOSEID(i int) {
-	m._PURPOSE_ID = &i
-	m.add_PURPOSE_ID = nil
-}
-
-// PURPOSEID returns the PURPOSE_ID value in the mutation.
-func (m *PurposeMutation) PURPOSEID() (r int, exists bool) {
-	v := m._PURPOSE_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPURPOSEID returns the old PURPOSE_ID value of the Purpose.
-// If the Purpose object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *PurposeMutation) OldPURPOSEID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldPURPOSEID is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldPURPOSEID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPURPOSEID: %w", err)
-	}
-	return oldValue.PURPOSEID, nil
-}
-
-// AddPURPOSEID adds i to PURPOSE_ID.
-func (m *PurposeMutation) AddPURPOSEID(i int) {
-	if m.add_PURPOSE_ID != nil {
-		*m.add_PURPOSE_ID += i
-	} else {
-		m.add_PURPOSE_ID = &i
-	}
-}
-
-// AddedPURPOSEID returns the value that was added to the PURPOSE_ID field in this mutation.
-func (m *PurposeMutation) AddedPURPOSEID() (r int, exists bool) {
-	v := m.add_PURPOSE_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetPURPOSEID reset all changes of the "PURPOSE_ID" field.
-func (m *PurposeMutation) ResetPURPOSEID() {
-	m._PURPOSE_ID = nil
-	m.add_PURPOSE_ID = nil
 }
 
 // SetPURPOSENAME sets the PURPOSE_NAME field.
@@ -1364,10 +1123,7 @@ func (m *PurposeMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *PurposeMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m._PURPOSE_ID != nil {
-		fields = append(fields, purpose.FieldPURPOSEID)
-	}
+	fields := make([]string, 0, 1)
 	if m._PURPOSE_NAME != nil {
 		fields = append(fields, purpose.FieldPURPOSENAME)
 	}
@@ -1379,8 +1135,6 @@ func (m *PurposeMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *PurposeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case purpose.FieldPURPOSEID:
-		return m.PURPOSEID()
 	case purpose.FieldPURPOSENAME:
 		return m.PURPOSENAME()
 	}
@@ -1392,8 +1146,6 @@ func (m *PurposeMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *PurposeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case purpose.FieldPURPOSEID:
-		return m.OldPURPOSEID(ctx)
 	case purpose.FieldPURPOSENAME:
 		return m.OldPURPOSENAME(ctx)
 	}
@@ -1405,13 +1157,6 @@ func (m *PurposeMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type mismatch the field type.
 func (m *PurposeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case purpose.FieldPURPOSEID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPURPOSEID(v)
-		return nil
 	case purpose.FieldPURPOSENAME:
 		v, ok := value.(string)
 		if !ok {
@@ -1426,21 +1171,13 @@ func (m *PurposeMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *PurposeMutation) AddedFields() []string {
-	var fields []string
-	if m.add_PURPOSE_ID != nil {
-		fields = append(fields, purpose.FieldPURPOSEID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *PurposeMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case purpose.FieldPURPOSEID:
-		return m.AddedPURPOSEID()
-	}
 	return nil, false
 }
 
@@ -1449,13 +1186,6 @@ func (m *PurposeMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *PurposeMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case purpose.FieldPURPOSEID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddPURPOSEID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Purpose numeric field %s", name)
 }
@@ -1484,9 +1214,6 @@ func (m *PurposeMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *PurposeMutation) ResetField(name string) error {
 	switch name {
-	case purpose.FieldPURPOSEID:
-		m.ResetPURPOSEID()
-		return nil
 	case purpose.FieldPURPOSENAME:
 		m.ResetPURPOSENAME()
 		return nil
@@ -1584,12 +1311,10 @@ type RoleMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	_ROLE_ID      *int
-	add_ROLE_ID   *int
 	_ROLE_NAME    *string
 	clearedFields map[string]struct{}
-	_Role         map[int]struct{}
-	removed_Role  map[int]struct{}
+	role          map[int]struct{}
+	removedrole   map[int]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Role, error)
 }
@@ -1673,63 +1398,6 @@ func (m *RoleMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-// SetROLEID sets the ROLE_ID field.
-func (m *RoleMutation) SetROLEID(i int) {
-	m._ROLE_ID = &i
-	m.add_ROLE_ID = nil
-}
-
-// ROLEID returns the ROLE_ID value in the mutation.
-func (m *RoleMutation) ROLEID() (r int, exists bool) {
-	v := m._ROLE_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldROLEID returns the old ROLE_ID value of the Role.
-// If the Role object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *RoleMutation) OldROLEID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldROLEID is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldROLEID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldROLEID: %w", err)
-	}
-	return oldValue.ROLEID, nil
-}
-
-// AddROLEID adds i to ROLE_ID.
-func (m *RoleMutation) AddROLEID(i int) {
-	if m.add_ROLE_ID != nil {
-		*m.add_ROLE_ID += i
-	} else {
-		m.add_ROLE_ID = &i
-	}
-}
-
-// AddedROLEID returns the value that was added to the ROLE_ID field in this mutation.
-func (m *RoleMutation) AddedROLEID() (r int, exists bool) {
-	v := m.add_ROLE_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetROLEID reset all changes of the "ROLE_ID" field.
-func (m *RoleMutation) ResetROLEID() {
-	m._ROLE_ID = nil
-	m.add_ROLE_ID = nil
-}
-
 // SetROLENAME sets the ROLE_NAME field.
 func (m *RoleMutation) SetROLENAME(s string) {
 	m._ROLE_NAME = &s
@@ -1767,46 +1435,46 @@ func (m *RoleMutation) ResetROLENAME() {
 	m._ROLE_NAME = nil
 }
 
-// AddRoleIDs adds the Role edge to User by ids.
+// AddRoleIDs adds the role edge to User by ids.
 func (m *RoleMutation) AddRoleIDs(ids ...int) {
-	if m._Role == nil {
-		m._Role = make(map[int]struct{})
+	if m.role == nil {
+		m.role = make(map[int]struct{})
 	}
 	for i := range ids {
-		m._Role[ids[i]] = struct{}{}
+		m.role[ids[i]] = struct{}{}
 	}
 }
 
-// RemoveRoleIDs removes the Role edge to User by ids.
+// RemoveRoleIDs removes the role edge to User by ids.
 func (m *RoleMutation) RemoveRoleIDs(ids ...int) {
-	if m.removed_Role == nil {
-		m.removed_Role = make(map[int]struct{})
+	if m.removedrole == nil {
+		m.removedrole = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.removed_Role[ids[i]] = struct{}{}
+		m.removedrole[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedRole returns the removed ids of Role.
+// RemovedRole returns the removed ids of role.
 func (m *RoleMutation) RemovedRoleIDs() (ids []int) {
-	for id := range m.removed_Role {
+	for id := range m.removedrole {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// RoleIDs returns the Role ids in the mutation.
+// RoleIDs returns the role ids in the mutation.
 func (m *RoleMutation) RoleIDs() (ids []int) {
-	for id := range m._Role {
+	for id := range m.role {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetRole reset all changes of the "Role" edge.
+// ResetRole reset all changes of the "role" edge.
 func (m *RoleMutation) ResetRole() {
-	m._Role = nil
-	m.removed_Role = nil
+	m.role = nil
+	m.removedrole = nil
 }
 
 // Op returns the operation name.
@@ -1823,10 +1491,7 @@ func (m *RoleMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *RoleMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m._ROLE_ID != nil {
-		fields = append(fields, role.FieldROLEID)
-	}
+	fields := make([]string, 0, 1)
 	if m._ROLE_NAME != nil {
 		fields = append(fields, role.FieldROLENAME)
 	}
@@ -1838,8 +1503,6 @@ func (m *RoleMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case role.FieldROLEID:
-		return m.ROLEID()
 	case role.FieldROLENAME:
 		return m.ROLENAME()
 	}
@@ -1851,8 +1514,6 @@ func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case role.FieldROLEID:
-		return m.OldROLEID(ctx)
 	case role.FieldROLENAME:
 		return m.OldROLENAME(ctx)
 	}
@@ -1864,13 +1525,6 @@ func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type mismatch the field type.
 func (m *RoleMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case role.FieldROLEID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetROLEID(v)
-		return nil
 	case role.FieldROLENAME:
 		v, ok := value.(string)
 		if !ok {
@@ -1885,21 +1539,13 @@ func (m *RoleMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *RoleMutation) AddedFields() []string {
-	var fields []string
-	if m.add_ROLE_ID != nil {
-		fields = append(fields, role.FieldROLEID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *RoleMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case role.FieldROLEID:
-		return m.AddedROLEID()
-	}
 	return nil, false
 }
 
@@ -1908,13 +1554,6 @@ func (m *RoleMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *RoleMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case role.FieldROLEID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddROLEID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Role numeric field %s", name)
 }
@@ -1943,9 +1582,6 @@ func (m *RoleMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *RoleMutation) ResetField(name string) error {
 	switch name {
-	case role.FieldROLEID:
-		m.ResetROLEID()
-		return nil
 	case role.FieldROLENAME:
 		m.ResetROLENAME()
 		return nil
@@ -1957,7 +1593,7 @@ func (m *RoleMutation) ResetField(name string) error {
 // mutation.
 func (m *RoleMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m._Role != nil {
+	if m.role != nil {
 		edges = append(edges, role.EdgeRole)
 	}
 	return edges
@@ -1968,8 +1604,8 @@ func (m *RoleMutation) AddedEdges() []string {
 func (m *RoleMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case role.EdgeRole:
-		ids := make([]ent.Value, 0, len(m._Role))
-		for id := range m._Role {
+		ids := make([]ent.Value, 0, len(m.role))
+		for id := range m.role {
 			ids = append(ids, id)
 		}
 		return ids
@@ -1981,7 +1617,7 @@ func (m *RoleMutation) AddedIDs(name string) []ent.Value {
 // mutation.
 func (m *RoleMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removed_Role != nil {
+	if m.removedrole != nil {
 		edges = append(edges, role.EdgeRole)
 	}
 	return edges
@@ -1992,8 +1628,8 @@ func (m *RoleMutation) RemovedEdges() []string {
 func (m *RoleMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
 	case role.EdgeRole:
-		ids := make([]ent.Value, 0, len(m.removed_Role))
-		for id := range m.removed_Role {
+		ids := make([]ent.Value, 0, len(m.removedrole))
+		for id := range m.removedrole {
 			ids = append(ids, id)
 		}
 		return ids
@@ -2043,15 +1679,13 @@ type UserMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	_USER_ID         *int
-	add_USER_ID      *int
 	_USER_EMAIL      *string
 	_USER_NAME       *string
 	clearedFields    map[string]struct{}
 	_Booklist        map[int]struct{}
 	removed_Booklist map[int]struct{}
-	_Role            *int
-	cleared_Role     bool
+	_RolePlay        *int
+	cleared_RolePlay bool
 	done             bool
 	oldValue         func(context.Context) (*User, error)
 }
@@ -2133,63 +1767,6 @@ func (m *UserMutation) ID() (id int, exists bool) {
 		return
 	}
 	return *m.id, true
-}
-
-// SetUSERID sets the USER_ID field.
-func (m *UserMutation) SetUSERID(i int) {
-	m._USER_ID = &i
-	m.add_USER_ID = nil
-}
-
-// USERID returns the USER_ID value in the mutation.
-func (m *UserMutation) USERID() (r int, exists bool) {
-	v := m._USER_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUSERID returns the old USER_ID value of the User.
-// If the User object wasn't provided to the builder, the object is fetched
-// from the database.
-// An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *UserMutation) OldUSERID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldUSERID is allowed only on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldUSERID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUSERID: %w", err)
-	}
-	return oldValue.USERID, nil
-}
-
-// AddUSERID adds i to USER_ID.
-func (m *UserMutation) AddUSERID(i int) {
-	if m.add_USER_ID != nil {
-		*m.add_USER_ID += i
-	} else {
-		m.add_USER_ID = &i
-	}
-}
-
-// AddedUSERID returns the value that was added to the USER_ID field in this mutation.
-func (m *UserMutation) AddedUSERID() (r int, exists bool) {
-	v := m.add_USER_ID
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUSERID reset all changes of the "USER_ID" field.
-func (m *UserMutation) ResetUSERID() {
-	m._USER_ID = nil
-	m.add_USER_ID = nil
 }
 
 // SetUSEREMAIL sets the USER_EMAIL field.
@@ -2308,43 +1885,43 @@ func (m *UserMutation) ResetBooklist() {
 	m.removed_Booklist = nil
 }
 
-// SetRoleID sets the Role edge to Role by id.
-func (m *UserMutation) SetRoleID(id int) {
-	m._Role = &id
+// SetRolePlayID sets the RolePlay edge to Role by id.
+func (m *UserMutation) SetRolePlayID(id int) {
+	m._RolePlay = &id
 }
 
-// ClearRole clears the Role edge to Role.
-func (m *UserMutation) ClearRole() {
-	m.cleared_Role = true
+// ClearRolePlay clears the RolePlay edge to Role.
+func (m *UserMutation) ClearRolePlay() {
+	m.cleared_RolePlay = true
 }
 
-// RoleCleared returns if the edge Role was cleared.
-func (m *UserMutation) RoleCleared() bool {
-	return m.cleared_Role
+// RolePlayCleared returns if the edge RolePlay was cleared.
+func (m *UserMutation) RolePlayCleared() bool {
+	return m.cleared_RolePlay
 }
 
-// RoleID returns the Role id in the mutation.
-func (m *UserMutation) RoleID() (id int, exists bool) {
-	if m._Role != nil {
-		return *m._Role, true
+// RolePlayID returns the RolePlay id in the mutation.
+func (m *UserMutation) RolePlayID() (id int, exists bool) {
+	if m._RolePlay != nil {
+		return *m._RolePlay, true
 	}
 	return
 }
 
-// RoleIDs returns the Role ids in the mutation.
+// RolePlayIDs returns the RolePlay ids in the mutation.
 // Note that ids always returns len(ids) <= 1 for unique edges, and you should use
-// RoleID instead. It exists only for internal usage by the builders.
-func (m *UserMutation) RoleIDs() (ids []int) {
-	if id := m._Role; id != nil {
+// RolePlayID instead. It exists only for internal usage by the builders.
+func (m *UserMutation) RolePlayIDs() (ids []int) {
+	if id := m._RolePlay; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetRole reset all changes of the "Role" edge.
-func (m *UserMutation) ResetRole() {
-	m._Role = nil
-	m.cleared_Role = false
+// ResetRolePlay reset all changes of the "RolePlay" edge.
+func (m *UserMutation) ResetRolePlay() {
+	m._RolePlay = nil
+	m.cleared_RolePlay = false
 }
 
 // Op returns the operation name.
@@ -2361,10 +1938,7 @@ func (m *UserMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m._USER_ID != nil {
-		fields = append(fields, user.FieldUSERID)
-	}
+	fields := make([]string, 0, 2)
 	if m._USER_EMAIL != nil {
 		fields = append(fields, user.FieldUSEREMAIL)
 	}
@@ -2379,8 +1953,6 @@ func (m *UserMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case user.FieldUSERID:
-		return m.USERID()
 	case user.FieldUSEREMAIL:
 		return m.USEREMAIL()
 	case user.FieldUSERNAME:
@@ -2394,8 +1966,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case user.FieldUSERID:
-		return m.OldUSERID(ctx)
 	case user.FieldUSEREMAIL:
 		return m.OldUSEREMAIL(ctx)
 	case user.FieldUSERNAME:
@@ -2409,13 +1979,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type mismatch the field type.
 func (m *UserMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case user.FieldUSERID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUSERID(v)
-		return nil
 	case user.FieldUSEREMAIL:
 		v, ok := value.(string)
 		if !ok {
@@ -2437,21 +2000,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *UserMutation) AddedFields() []string {
-	var fields []string
-	if m.add_USER_ID != nil {
-		fields = append(fields, user.FieldUSERID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case user.FieldUSERID:
-		return m.AddedUSERID()
-	}
 	return nil, false
 }
 
@@ -2460,13 +2015,6 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *UserMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case user.FieldUSERID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUSERID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
 }
@@ -2495,9 +2043,6 @@ func (m *UserMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *UserMutation) ResetField(name string) error {
 	switch name {
-	case user.FieldUSERID:
-		m.ResetUSERID()
-		return nil
 	case user.FieldUSEREMAIL:
 		m.ResetUSEREMAIL()
 		return nil
@@ -2515,8 +2060,8 @@ func (m *UserMutation) AddedEdges() []string {
 	if m._Booklist != nil {
 		edges = append(edges, user.EdgeBooklist)
 	}
-	if m._Role != nil {
-		edges = append(edges, user.EdgeRole)
+	if m._RolePlay != nil {
+		edges = append(edges, user.EdgeRolePlay)
 	}
 	return edges
 }
@@ -2531,8 +2076,8 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeRole:
-		if id := m._Role; id != nil {
+	case user.EdgeRolePlay:
+		if id := m._RolePlay; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -2567,8 +2112,8 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 // mutation.
 func (m *UserMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.cleared_Role {
-		edges = append(edges, user.EdgeRole)
+	if m.cleared_RolePlay {
+		edges = append(edges, user.EdgeRolePlay)
 	}
 	return edges
 }
@@ -2577,8 +2122,8 @@ func (m *UserMutation) ClearedEdges() []string {
 // cleared in this mutation.
 func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
-	case user.EdgeRole:
-		return m.cleared_Role
+	case user.EdgeRolePlay:
+		return m.cleared_RolePlay
 	}
 	return false
 }
@@ -2587,8 +2132,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 // error if the edge name is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
-	case user.EdgeRole:
-		m.ClearRole()
+	case user.EdgeRolePlay:
+		m.ClearRolePlay()
 		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
@@ -2602,8 +2147,8 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgeBooklist:
 		m.ResetBooklist()
 		return nil
-	case user.EdgeRole:
-		m.ResetRole()
+	case user.EdgeRolePlay:
+		m.ResetRolePlay()
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)

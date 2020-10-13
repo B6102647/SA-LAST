@@ -15,8 +15,6 @@ type Purpose struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// PURPOSEID holds the value of the "PURPOSE_ID" field.
-	PURPOSEID int `json:"PURPOSE_ID,omitempty"`
 	// PURPOSENAME holds the value of the "PURPOSE_NAME" field.
 	PURPOSENAME string `json:"PURPOSE_NAME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -46,7 +44,6 @@ func (e PurposeEdges) BooklistOrErr() ([]*BookBorrow, error) {
 func (*Purpose) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
-		&sql.NullInt64{},  // PURPOSE_ID
 		&sql.NullString{}, // PURPOSE_NAME
 	}
 }
@@ -63,13 +60,8 @@ func (pu *Purpose) assignValues(values ...interface{}) error {
 	}
 	pu.ID = int(value.Int64)
 	values = values[1:]
-	if value, ok := values[0].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field PURPOSE_ID", values[0])
-	} else if value.Valid {
-		pu.PURPOSEID = int(value.Int64)
-	}
-	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field PURPOSE_NAME", values[1])
+	if value, ok := values[0].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field PURPOSE_NAME", values[0])
 	} else if value.Valid {
 		pu.PURPOSENAME = value.String
 	}
@@ -104,8 +96,6 @@ func (pu *Purpose) String() string {
 	var builder strings.Builder
 	builder.WriteString("Purpose(")
 	builder.WriteString(fmt.Sprintf("id=%v", pu.ID))
-	builder.WriteString(", PURPOSE_ID=")
-	builder.WriteString(fmt.Sprintf("%v", pu.PURPOSEID))
 	builder.WriteString(", PURPOSE_NAME=")
 	builder.WriteString(pu.PURPOSENAME)
 	builder.WriteByte(')')

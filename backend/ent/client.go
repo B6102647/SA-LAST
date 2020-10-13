@@ -552,7 +552,7 @@ func (c *RoleClient) GetX(ctx context.Context, id int) *Role {
 	return r
 }
 
-// QueryRole queries the Role edge of a Role.
+// QueryRole queries the role edge of a Role.
 func (c *RoleClient) QueryRole(r *Role) *UserQuery {
 	query := &UserQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
@@ -667,15 +667,15 @@ func (c *UserClient) QueryBooklist(u *User) *BookBorrowQuery {
 	return query
 }
 
-// QueryRole queries the Role edge of a User.
-func (c *UserClient) QueryRole(u *User) *RoleQuery {
+// QueryRolePlay queries the RolePlay edge of a User.
+func (c *UserClient) QueryRolePlay(u *User) *RoleQuery {
 	query := &RoleQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(role.Table, role.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, user.RoleTable, user.RoleColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, user.RolePlayTable, user.RolePlayColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

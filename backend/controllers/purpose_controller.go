@@ -38,7 +38,6 @@ func (ctl *PurposeController) CreatePurpose(c *gin.Context) {
 
 	pp, err := ctl.client.Purpose.
 		Create().
-		SetPURPOSEID(obj.PURPOSEID).
 		SetPURPOSENAME(obj.PURPOSENAME).
 		Save(context.Background())
 	if err != nil {

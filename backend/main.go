@@ -43,7 +43,7 @@ type Purpose struct {
 }
 
 type Roles struct {
-	Book []Book
+	Role []Role
 }
 
 type Role struct {
@@ -112,34 +112,6 @@ func main() {
 	controllers.NewBookBorrowController(v1, client)
 	controllers.NewRoleController(v1, client)
 
-	// Set Users Data
-	users := Users{
-		User: []User{
-			User{"ManusChanok Srikhrueadong", "Manuschanok@gmail.com", 1},
-			User{"Sridong Manus", "B6102647@example.com", 1},
-		},
-	}
-
-	for _, u := range users.User {
-
-		ro, err := client.Role.
-			Query().
-			Where(role.IDEQ(int(u.Role))).
-			Only(context.Background())
-
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-
-		client.User.
-			Create().
-			SetUSERNAME(u.Name).
-			SetUSEREMAIL(u.Email).
-			SetRole(ro).
-			Save(context.Background())
-	}
-
 	// Set Books Data
 	books := Books{
 		Book: []Book{
@@ -177,6 +149,34 @@ func main() {
 		client.Role.
 			Create().
 			SetROLENAME(ro).
+			Save(context.Background())
+	}
+
+	// Set Users Data
+	users := Users{
+		User: []User{
+			User{"ManusChanok Srikhrueadong", "Manuschanok@gmail.com", 1},
+			User{"Sridong Manus", "B6102647@example.com", 1},
+		},
+	}
+
+	for _, u := range users.User {
+
+		ro, err := client.Role.
+			Query().
+			Where(role.IDEQ(int(u.Role))).
+			Only(context.Background())
+
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		client.User.
+			Create().
+			SetUSERNAME(u.Name).
+			SetUSEREMAIL(u.Email).
+			SetRolePlay(ro).
 			Save(context.Background())
 	}
 

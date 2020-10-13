@@ -28,19 +28,6 @@ func (bu *BookUpdate) Where(ps ...predicate.Book) *BookUpdate {
 	return bu
 }
 
-// SetBOOKID sets the BOOK_ID field.
-func (bu *BookUpdate) SetBOOKID(i int) *BookUpdate {
-	bu.mutation.ResetBOOKID()
-	bu.mutation.SetBOOKID(i)
-	return bu
-}
-
-// AddBOOKID adds i to BOOK_ID.
-func (bu *BookUpdate) AddBOOKID(i int) *BookUpdate {
-	bu.mutation.AddBOOKID(i)
-	return bu
-}
-
 // SetBOOKNAME sets the BOOK_NAME field.
 func (bu *BookUpdate) SetBOOKNAME(s string) *BookUpdate {
 	bu.mutation.SetBOOKNAME(s)
@@ -90,11 +77,6 @@ func (bu *BookUpdate) RemoveBooklist(b ...*BookBorrow) *BookUpdate {
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (bu *BookUpdate) Save(ctx context.Context) (int, error) {
-	if v, ok := bu.mutation.BOOKID(); ok {
-		if err := book.BOOKIDValidator(v); err != nil {
-			return 0, &ValidationError{Name: "BOOK_ID", err: fmt.Errorf("ent: validator failed for field \"BOOK_ID\": %w", err)}
-		}
-	}
 	if v, ok := bu.mutation.BOOKNAME(); ok {
 		if err := book.BOOKNAMEValidator(v); err != nil {
 			return 0, &ValidationError{Name: "BOOK_NAME", err: fmt.Errorf("ent: validator failed for field \"BOOK_NAME\": %w", err)}
@@ -168,20 +150,6 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := bu.mutation.BOOKID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: book.FieldBOOKID,
-		})
-	}
-	if value, ok := bu.mutation.AddedBOOKID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: book.FieldBOOKID,
-		})
-	}
 	if value, ok := bu.mutation.BOOKNAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -252,19 +220,6 @@ type BookUpdateOne struct {
 	mutation *BookMutation
 }
 
-// SetBOOKID sets the BOOK_ID field.
-func (buo *BookUpdateOne) SetBOOKID(i int) *BookUpdateOne {
-	buo.mutation.ResetBOOKID()
-	buo.mutation.SetBOOKID(i)
-	return buo
-}
-
-// AddBOOKID adds i to BOOK_ID.
-func (buo *BookUpdateOne) AddBOOKID(i int) *BookUpdateOne {
-	buo.mutation.AddBOOKID(i)
-	return buo
-}
-
 // SetBOOKNAME sets the BOOK_NAME field.
 func (buo *BookUpdateOne) SetBOOKNAME(s string) *BookUpdateOne {
 	buo.mutation.SetBOOKNAME(s)
@@ -314,11 +269,6 @@ func (buo *BookUpdateOne) RemoveBooklist(b ...*BookBorrow) *BookUpdateOne {
 
 // Save executes the query and returns the updated entity.
 func (buo *BookUpdateOne) Save(ctx context.Context) (*Book, error) {
-	if v, ok := buo.mutation.BOOKID(); ok {
-		if err := book.BOOKIDValidator(v); err != nil {
-			return nil, &ValidationError{Name: "BOOK_ID", err: fmt.Errorf("ent: validator failed for field \"BOOK_ID\": %w", err)}
-		}
-	}
 	if v, ok := buo.mutation.BOOKNAME(); ok {
 		if err := book.BOOKNAMEValidator(v); err != nil {
 			return nil, &ValidationError{Name: "BOOK_NAME", err: fmt.Errorf("ent: validator failed for field \"BOOK_NAME\": %w", err)}
@@ -390,20 +340,6 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (b *Book, err error) {
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Book.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := buo.mutation.BOOKID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: book.FieldBOOKID,
-		})
-	}
-	if value, ok := buo.mutation.AddedBOOKID(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: book.FieldBOOKID,
-		})
-	}
 	if value, ok := buo.mutation.BOOKNAME(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,

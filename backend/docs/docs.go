@@ -715,14 +715,14 @@ var doc = `{
                 }
             }
         },
-        "/Role": {
+        "/roles": {
             "get": {
-                "description": "list Role entities",
+                "description": "list role entities",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List Role entities",
-                "operationId": "list-Role",
+                "summary": "List role entities",
+                "operationId": "list-role",
                 "parameters": [
                     {
                         "type": "integer",
@@ -762,19 +762,19 @@ var doc = `{
                 }
             },
             "post": {
-                "description": "Create Role",
+                "description": "Create role",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create Role",
-                "operationId": "create-Role",
+                "summary": "Create role",
+                "operationId": "create-role",
                 "parameters": [
                     {
                         "description": "Role entity",
-                        "name": "Role",
+                        "name": "role",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -804,17 +804,60 @@ var doc = `{
                 }
             }
         },
-        "/Role/{id}": {
+        "/roles/{id}": {
+            "get": {
+                "description": "get role by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a role entity by ID",
+                "operationId": "get-role",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Role ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Role"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
             "put": {
-                "description": "update Role by ID",
+                "description": "update role by ID",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update a Role entity by ID",
-                "operationId": "update-Role",
+                "summary": "Update a role entity by ID",
+                "operationId": "update-role",
                 "parameters": [
                     {
                         "type": "integer",
@@ -825,7 +868,7 @@ var doc = `{
                     },
                     {
                         "description": "Role entity",
-                        "name": "Role",
+                        "name": "role",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -855,12 +898,12 @@ var doc = `{
                 }
             },
             "delete": {
-                "description": "get Role by ID",
+                "description": "get role by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete a Role entity by ID",
-                "operationId": "delete-PRole",
+                "summary": "Delete a role entity by ID",
+                "operationId": "delete-role",
                 "parameters": [
                     {
                         "type": "integer",
@@ -875,51 +918,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/Roles/{id}": {
-            "get": {
-                "description": "get Role by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a Role entity by ID",
-                "operationId": "get-Role",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Role ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Role"
                         }
                     },
                     "400": {
@@ -1178,10 +1176,6 @@ var doc = `{
                     "description": "Author holds the value of the \"Author\" field.",
                     "type": "string"
                 },
-                "BOOK_ID": {
-                    "description": "BOOKID holds the value of the \"BOOK_ID\" field.",
-                    "type": "integer"
-                },
                 "BOOK_NAME": {
                     "description": "BOOKNAME holds the value of the \"BOOK_NAME\" field.",
                     "type": "string"
@@ -1203,10 +1197,6 @@ var doc = `{
                 "ADDED_TIME": {
                     "description": "ADDEDTIME holds the value of the \"ADDED_TIME\" field.",
                     "type": "string"
-                },
-                "BOOKBORROW_ID": {
-                    "description": "BOOKBORROWID holds the value of the \"BOOKBORROW_ID\" field.",
-                    "type": "integer"
                 },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the BookBorrowQuery when eager-loading is set.",
@@ -1254,10 +1244,6 @@ var doc = `{
         "ent.Purpose": {
             "type": "object",
             "properties": {
-                "PURPOSE_ID": {
-                    "description": "PURPOSEID holds the value of the \"PURPOSE_ID\" field.",
-                    "type": "integer"
-                },
                 "PURPOSE_NAME": {
                     "description": "PURPOSENAME holds the value of the \"PURPOSE_NAME\" field.",
                     "type": "string"
@@ -1288,10 +1274,6 @@ var doc = `{
         "ent.Role": {
             "type": "object",
             "properties": {
-                "ROLE_ID": {
-                    "description": "ROLEID holds the value of the \"ROLE_ID\" field.",
-                    "type": "integer"
-                },
                 "ROLE_NAME": {
                     "description": "ROLENAME holds the value of the \"ROLE_NAME\" field.",
                     "type": "string"
@@ -1311,7 +1293,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "role": {
-                    "description": "Role holds the value of the Role edge.",
+                    "description": "Role holds the value of the role edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.User"
@@ -1326,10 +1308,6 @@ var doc = `{
                     "description": "USEREMAIL holds the value of the \"USER_EMAIL\" field.",
                     "type": "string"
                 },
-                "USER_ID": {
-                    "description": "USERID holds the value of the \"USER_ID\" field.",
-                    "type": "integer"
-                },
                 "USER_NAME": {
                     "description": "USERNAME holds the value of the \"USER_NAME\" field.",
                     "type": "string"
@@ -1341,6 +1319,9 @@ var doc = `{
                 },
                 "id": {
                     "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "role_ID": {
                     "type": "integer"
                 }
             }
@@ -1355,8 +1336,8 @@ var doc = `{
                         "$ref": "#/definitions/ent.BookBorrow"
                     }
                 },
-                "role": {
-                    "description": "Role holds the value of the Role edge.",
+                "rolePlay": {
+                    "description": "RolePlay holds the value of the RolePlay edge.",
                     "type": "object",
                     "$ref": "#/definitions/ent.Role"
                 }

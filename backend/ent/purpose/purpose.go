@@ -7,8 +7,6 @@ const (
 	Label = "purpose"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldPURPOSEID holds the string denoting the purpose_id field in the database.
-	FieldPURPOSEID = "purpose_id"
 	// FieldPURPOSENAME holds the string denoting the purpose_name field in the database.
 	FieldPURPOSENAME = "purpose_name"
 
@@ -29,13 +27,10 @@ const (
 // Columns holds all SQL columns for purpose fields.
 var Columns = []string{
 	FieldID,
-	FieldPURPOSEID,
 	FieldPURPOSENAME,
 }
 
 var (
-	// PURPOSEIDValidator is a validator for the "PURPOSE_ID" field. It is called by the builders before save.
-	PURPOSEIDValidator func(int) error
 	// PURPOSENAMEValidator is a validator for the "PURPOSE_NAME" field. It is called by the builders before save.
 	PURPOSENAMEValidator func(string) error
 )
