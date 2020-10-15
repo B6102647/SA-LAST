@@ -119,6 +119,8 @@ func main() {
 			Book{"Microprocessor for Beginner", "Mr.VC", "Availiable"},
 			Book{"System Analysis", "Mr.CW", "Availiable"},
 			Book{"Solo Leveling Novel", "JinWoo", "Availiable"},
+			Book{"Basic Math for Kids", "QG.", "Availiable"},
+			Book{"How to Sleep 5 hrs. in 3 hrs.", "Okay", "Availiable"},
 		},
 	}
 
@@ -159,6 +161,8 @@ func main() {
 		User: []User{
 			User{"Manuschanok Srikhrueadong", "Manuschanok@gmail.com", 1},
 			User{"Sridong Manus", "B6102647@example.com", 1},
+			User{"Dang Green", "DangDang@Yahoo.com", 1},
+			User{"Sorn Dee", "SornZaa55@gmail.com", 1},
 		},
 	}
 

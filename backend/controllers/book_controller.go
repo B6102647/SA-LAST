@@ -118,6 +118,7 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 
 	book, err := ctl.client.Book.
 		Query().
+		Where(book.Status("Availiable")).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
@@ -193,6 +194,7 @@ func (ctl *BookController) UpdateBook(c *gin.Context) {
 	obj.ID = int(id)
 	bk, err := ctl.client.Book.
 		UpdateOne(&obj).
+		SetStatus(obj.Status).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{"error": "update failed"})

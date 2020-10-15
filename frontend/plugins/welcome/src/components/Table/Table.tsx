@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { DefaultApi } from '../../api/apis';
-import { EntBookBorrow} from '../../api/models/EntBookBorrow';
+import { EntBookBorrow } from '../../api/models/EntBookBorrow';
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 export default function ComponentsTable() {
     const classes = useStyles();
     const api = new DefaultApi();
-    
+
     const [bookborrows, setBookBorrows] = useState<EntBookBorrow[]>(Array);
     const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,16 @@ export default function ComponentsTable() {
         };
         getUsers();
     }, [loading]);
-    
+
+    const deleteUsers = async (id: number,bid :number) => {
+        const book = {
+            status : "Availiable",
+          };
+        const res = await api.deleteBookborrow({ id: id });
+        const res2 = await api.updateBook({ id: bid ,book : book});
+        setLoading(true);
+    };
+
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
@@ -42,16 +51,29 @@ export default function ComponentsTable() {
                         <TableCell align="center">หนังสือ</TableCell>
                         <TableCell align="center">วัตถุประสงค์</TableCell>
                         <TableCell align="center">วันเวลาที่ยืม</TableCell>
+                        <TableCell align="center">Delete</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {bookborrows.map((item:any)  => (
+                    {bookborrows.map((item: any) => (
                         <TableRow key={item.id}>
                             <TableCell align="center">{item.id}</TableCell>
                             <TableCell align="center">{item.edges.user.uSERNAME}</TableCell>
-                            <TableCell align="center">{item.edges.book.bOOKNAME}</TableCell>
-                            <TableCell align="center">{item.edges.purpose.pURPOSENAME}</TableCell>
+                            <TableCell align="center">{item.edges?.book?.bOOKNAME}</TableCell>
+                            <TableCell align="center">{item.edges?.purpose?.pURPOSENAME}</TableCell>
                             <TableCell align="center">{item.aDDEDTIME}</TableCell>
+                            <TableCell align="center">
+                                <Button
+                                    onClick={() => {
+                                        deleteUsers(item.id,item.edges.book.id);
+                                    }}
+                                    style={{ marginLeft: 10 }}
+                                    variant="contained"
+                                    color="secondary"
+                                >
+                                    Delete
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

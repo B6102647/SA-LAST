@@ -4,10 +4,9 @@ import {
   Content,Header,Page,pageTheme,ContentHeader,
 } from '@backstage/core';
 import {
-  Table,TableBody,TableCell,TableRow,Typography,
-  TextField,Button,withStyles,makeStyles,
+  Typography,TextField,Button,makeStyles,
   Theme,FormControl,InputLabel,MenuItem,
-  FormHelperText,Select,createStyles,
+  Select,createStyles,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(3),
     },
     textField: {
-      width: '25ch',
+      width: '50ch',
     },
   }),
 );
@@ -92,7 +91,11 @@ const createBookBorrow = async () => {
     user : userID,
     purpose : purposeID,
   };
+  const book = {
+    status : "In Use",
+  };
   console.log(bookBorrow);
+  const res2: any = await api.updateBook({id:bookID,book : book})
   const res: any = await api.createBookborrow({ bookborrow : bookBorrow });
   setStatus(true);
     if (res.id != '') {
@@ -105,7 +108,7 @@ return (
   <Page theme={pageTheme.home}>
     <Header
       title={`${profile.givenName}`}
-    //subtitle="Some quick intro and links."
+      subtitle={<span style={{fontSize:'25px',color:'write'}}>{"ระบบยืมหนังสือ"}</span>}
     ></Header>
     <Content>
       <ContentHeader title="เพิ่มข้อมูลการยืมหนังสือ">
@@ -137,13 +140,13 @@ return (
               className={classes.margin}
               variant="outlined"
             >
-              <InputLabel id="book-label">หนังสือ</InputLabel>
+              <InputLabel id="book-label"><font size='5'>หนังสือ</font></InputLabel>
               <Select
                 labelId="book-label"
                 id="book"
                 value={bookID}
                 onChange={bookIDhandleChange}
-                style={{ width: 400 }}
+                style={{ width: 400 ,height: '7vh'}}
               >
               {books.map((item: EntBook) => (
                   <MenuItem value={item.id}>{item.bOOKNAME}</MenuItem>
@@ -155,13 +158,13 @@ return (
               className={classes.margin}
               variant="outlined"
             >
-              <InputLabel id="user-label">สมาชิกห้องสมุด</InputLabel>
+              <InputLabel id="user-label"><font size='5'>สมาชิกห้องสมุด</font></InputLabel>
               <Select
                 labelId="user-label"
                 id="user"
                 value={userID}
                 onChange={UserIDhandleChange}
-                style={{ width: 400 }}
+                style={{ width: 400 ,height: '7vh'}}
               >
               {users.map((item: EntUser) => (
                 <MenuItem value={item.id}>{item.uSERNAME}</MenuItem>
@@ -173,13 +176,13 @@ return (
             className={classes.margin}
             variant="outlined"
           >
-            <InputLabel id="purpose">วัตถุประสงค์</InputLabel>
+            <InputLabel id="purpose"><font size='5'>วัตถุประสงค์</font></InputLabel>
             <Select
               labelId="purpose"
               id="purpose"
               value={purposeID}
               onChange={PurposeIDhandleChange}
-              style={{ width: 200 }}
+              style={{ width: 400 ,height: '7vh'}}
             >
               {purposes.map((item: EntPurpose) => (
                 <MenuItem value={item.id}>{item.pURPOSENAME}</MenuItem>
@@ -191,9 +194,11 @@ return (
               className={classes.margin}
               variant="outlined"
             >
-              <TextField
+              
+              <TextField 
+                
                 id="deathtime"
-                label="ว/ด/ป เวลายืม"
+                label={<span style={{fontSize:'25px'}}>{"ว/ด/ป เวลายืม"}</span>}
                 type="datetime-local"
                 value={added}
                 onChange={AddedhandleChange}

@@ -37,8 +37,6 @@ const App: FC<{}> = () => (
     <AlertDisplay />
     <OAuthRequestDialog />
     <AppRouter>
-      <SidebarPage>
-        <AppSidebar />
         <Routes>
           <Navigate key="/" to="/welcome" />
           <Route
@@ -56,7 +54,6 @@ const App: FC<{}> = () => (
           />
           {deprecatedAppRoutes}
         </Routes>
-      </SidebarPage>
     </AppRouter>
   </AppProvider>
 );
