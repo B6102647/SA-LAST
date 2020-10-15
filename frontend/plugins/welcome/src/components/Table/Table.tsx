@@ -51,7 +51,7 @@ export default function ComponentsTable() {
                             <TableCell align="center">{item.edges.user.uSERNAME}</TableCell>
                             <TableCell align="center">{item.edges.book.bOOKNAME}</TableCell>
                             <TableCell align="center">{item.edges.purpose.pURPOSENAME}</TableCell>
-                            <TableCell align="center">{item.bOOKINGDATE}</TableCell>
+                            <TableCell align="center">{item.aDDEDTIME}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
