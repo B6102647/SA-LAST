@@ -33,197 +33,14 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/Book": {
+        "/bookborrows": {
             "get": {
-                "description": "list Book entities",
+                "description": "list bookborrow entities",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List Book entities",
-                "operationId": "list-Book",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ent.Book"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create Book",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create Book",
-                "operationId": "create-Book",
-                "parameters": [
-                    {
-                        "description": "Book entity",
-                        "name": "Book",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Book"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Book"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/Book/{id}": {
-            "put": {
-                "description": "update Book by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update a Book entity by ID",
-                "operationId": "update-Book",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Book entity",
-                        "name": "Book",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ent.Book"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Book"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "get Book by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete a Book entity by ID",
-                "operationId": "delete-Book",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Book ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/BookBorrow": {
-            "get": {
-                "description": "list BookBorrow entities",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List BookBorrow entities",
-                "operationId": "list-BookBorrow",
+                "summary": "List bookborrow entities",
+                "operationId": "list-bookborrow",
                 "parameters": [
                     {
                         "type": "integer",
@@ -263,23 +80,23 @@ var doc = `{
                 }
             },
             "post": {
-                "description": "Create BookBorrow",
+                "description": "Create bookborrow",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create BookBorrow",
-                "operationId": "create-BookBorrow",
+                "summary": "Create bookborrow",
+                "operationId": "create-bookborrow",
                 "parameters": [
                     {
                         "description": "BookBorrow entity",
-                        "name": "BookBorrow",
+                        "name": "bookborrow",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.BookBorrow"
+                            "$ref": "#/definitions/controllers.BookBorrow"
                         }
                     }
                 ],
@@ -305,14 +122,14 @@ var doc = `{
                 }
             }
         },
-        "/BookBorrow/{id}": {
+        "/bookborrows/{id}": {
             "get": {
-                "description": "get BookBorrow by ID",
+                "description": "get bookborrow by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a BookBorrow entity by ID",
-                "operationId": "get-BookBorrow",
+                "summary": "Get a bookborrow entity by ID",
+                "operationId": "get-bookborrow",
                 "parameters": [
                     {
                         "type": "integer",
@@ -350,15 +167,15 @@ var doc = `{
                 }
             },
             "put": {
-                "description": "update BookBorrow by ID",
+                "description": "update bookborrow by ID",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update a BookBorrow entity by ID",
-                "operationId": "update-BookBorrow",
+                "summary": "Update a bookborrow entity by ID",
+                "operationId": "update-bookborrow",
                 "parameters": [
                     {
                         "type": "integer",
@@ -369,7 +186,7 @@ var doc = `{
                     },
                     {
                         "description": "BookBorrow entity",
-                        "name": "BookBorrow",
+                        "name": "bookborrow",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -399,12 +216,12 @@ var doc = `{
                 }
             },
             "delete": {
-                "description": "get BookBorrow by ID",
+                "description": "get bookborrow by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete a BookBorrow entity by ID",
-                "operationId": "delete-BookBorrow",
+                "summary": "Delete a bookborrow entity by ID",
+                "operationId": "delete-bookborrow",
                 "parameters": [
                     {
                         "type": "integer",
@@ -442,14 +259,103 @@ var doc = `{
                 }
             }
         },
-        "/Books/{id}": {
+        "/books": {
             "get": {
-                "description": "get Book by ID",
+                "description": "list book entities",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a Book entity by ID",
-                "operationId": "get-Book",
+                "summary": "List book entities",
+                "operationId": "list-book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Book"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create book",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create book",
+                "operationId": "create-book",
+                "parameters": [
+                    {
+                        "description": "Book entity",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Book"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
+            "get": {
+                "description": "get book by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a book entity by ID",
+                "operationId": "get-book",
                 "parameters": [
                     {
                         "type": "integer",
@@ -485,16 +391,108 @@ var doc = `{
                         }
                     }
                 }
-            }
-        },
-        "/Purpose": {
-            "get": {
-                "description": "list Purpose entities",
+            },
+            "put": {
+                "description": "update book by ID",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List Purpose entities",
-                "operationId": "list-Purpose",
+                "summary": "Update a book entity by ID",
+                "operationId": "update-book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Book entity",
+                        "name": "Book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Book"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get book by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a book entity by ID",
+                "operationId": "delete-book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/purposes": {
+            "get": {
+                "description": "list purpose entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List purpose entities",
+                "operationId": "list-purpose",
                 "parameters": [
                     {
                         "type": "integer",
@@ -534,19 +532,19 @@ var doc = `{
                 }
             },
             "post": {
-                "description": "Create Purpose",
+                "description": "Create purpose",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create Purpose",
-                "operationId": "create-Purpose",
+                "summary": "Create purpose",
+                "operationId": "create-purpose",
                 "parameters": [
                     {
                         "description": "Purpose entity",
-                        "name": "Purpose",
+                        "name": "purpose",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -576,17 +574,60 @@ var doc = `{
                 }
             }
         },
-        "/Purpose/{id}": {
+        "/purposes/{id}": {
+            "get": {
+                "description": "get purpose by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a purpose entity by ID",
+                "operationId": "get-purpose",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Purpose ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Purpose"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
             "put": {
-                "description": "update Purpose by ID",
+                "description": "update purpose by ID",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update a Purpose entity by ID",
-                "operationId": "update-Purpose",
+                "summary": "Update a purpose entity by ID",
+                "operationId": "update-purpose",
                 "parameters": [
                     {
                         "type": "integer",
@@ -597,7 +638,7 @@ var doc = `{
                     },
                     {
                         "description": "Purpose entity",
-                        "name": "Purpose",
+                        "name": "purpose",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -627,12 +668,12 @@ var doc = `{
                 }
             },
             "delete": {
-                "description": "get Purpose by ID",
+                "description": "get purpose by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete a Purpose entity by ID",
-                "operationId": "delete-Purpose",
+                "summary": "Delete a purpose entity by ID",
+                "operationId": "delete-purpose",
                 "parameters": [
                     {
                         "type": "integer",
@@ -647,51 +688,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/gin.H"
-                        }
-                    }
-                }
-            }
-        },
-        "/Purposes/{id}": {
-            "get": {
-                "description": "get Purpose by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a Purpose entity by ID",
-                "operationId": "get-Purpose",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Purpose ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ent.Purpose"
                         }
                     },
                     "400": {
@@ -1169,6 +1165,23 @@ var doc = `{
         }
     },
     "definitions": {
+        "controllers.BookBorrow": {
+            "type": "object",
+            "properties": {
+                "added": {
+                    "type": "string"
+                },
+                "book": {
+                    "type": "integer"
+                },
+                "purpose": {
+                    "type": "integer"
+                },
+                "user": {
+                    "type": "integer"
+                }
+            }
+        },
         "ent.Book": {
             "type": "object",
             "properties": {
@@ -1178,6 +1191,10 @@ var doc = `{
                 },
                 "BOOK_NAME": {
                     "description": "BOOKNAME holds the value of the \"BOOK_NAME\" field.",
+                    "type": "string"
+                },
+                "Status": {
+                    "description": "Status holds the value of the \"Status\" field.",
                     "type": "string"
                 },
                 "edges": {
@@ -1198,6 +1215,9 @@ var doc = `{
                     "description": "ADDEDTIME holds the value of the \"ADDED_TIME\" field.",
                     "type": "string"
                 },
+                "book_ID": {
+                    "type": "integer"
+                },
                 "edges": {
                     "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the BookBorrowQuery when eager-loading is set.",
                     "type": "object",
@@ -1205,6 +1225,12 @@ var doc = `{
                 },
                 "id": {
                     "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "purpose_ID": {
+                    "type": "integer"
+                },
+                "user_ID": {
                     "type": "integer"
                 }
             }
@@ -1217,15 +1243,15 @@ var doc = `{
                     "type": "object",
                     "$ref": "#/definitions/ent.Book"
                 },
-                "owner": {
-                    "description": "Owner holds the value of the Owner edge.",
-                    "type": "object",
-                    "$ref": "#/definitions/ent.User"
-                },
                 "purpose": {
                     "description": "PURPOSE holds the value of the PURPOSE edge.",
                     "type": "object",
                     "$ref": "#/definitions/ent.Purpose"
+                },
+                "user": {
+                    "description": "USER holds the value of the USER edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.User"
                 }
             }
         },
@@ -1262,8 +1288,8 @@ var doc = `{
         "ent.PurposeEdges": {
             "type": "object",
             "properties": {
-                "booklist": {
-                    "description": "Booklist holds the value of the Booklist edge.",
+                "for": {
+                    "description": "For holds the value of the for edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.BookBorrow"
@@ -1329,8 +1355,8 @@ var doc = `{
         "ent.UserEdges": {
             "type": "object",
             "properties": {
-                "booklist": {
-                    "description": "Booklist holds the value of the Booklist edge.",
+                "borrow": {
+                    "description": "Borrow holds the value of the Borrow edge.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/ent.BookBorrow"

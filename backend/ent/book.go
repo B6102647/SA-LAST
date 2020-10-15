@@ -19,6 +19,8 @@ type Book struct {
 	BOOKNAME string `json:"BOOK_NAME,omitempty"`
 	// Author holds the value of the "Author" field.
 	Author string `json:"Author,omitempty"`
+	// Status holds the value of the "Status" field.
+	Status string `json:"Status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookQuery when eager-loading is set.
 	Edges BookEdges `json:"edges"`
@@ -48,6 +50,7 @@ func (*Book) scanValues() []interface{} {
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // BOOK_NAME
 		&sql.NullString{}, // Author
+		&sql.NullString{}, // Status
 	}
 }
 
@@ -72,6 +75,11 @@ func (b *Book) assignValues(values ...interface{}) error {
 		return fmt.Errorf("unexpected type %T for field Author", values[1])
 	} else if value.Valid {
 		b.Author = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Status", values[2])
+	} else if value.Valid {
+		b.Status = value.String
 	}
 	return nil
 }
@@ -108,6 +116,8 @@ func (b *Book) String() string {
 	builder.WriteString(b.BOOKNAME)
 	builder.WriteString(", Author=")
 	builder.WriteString(b.Author)
+	builder.WriteString(", Status=")
+	builder.WriteString(b.Status)
 	builder.WriteByte(')')
 	return builder.String()
 }

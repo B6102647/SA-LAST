@@ -21,8 +21,8 @@ func (BookBorrow) Fields() []ent.Field {
 // Edges of the BookBorrow.
 func (BookBorrow) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("Owner", User.Type).Ref("Booklist").Unique(),
+		edge.From("USER", User.Type).Ref("Borrow").Unique(),
 		edge.From("BOOK", Book.Type).Ref("Booklist").Unique(),
-		edge.From("PURPOSE", Purpose.Type).Ref("Booklist").Unique(),
+		edge.From("PURPOSE", Purpose.Type).Ref("for").Unique(),
 	}
 }

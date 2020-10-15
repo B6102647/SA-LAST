@@ -322,15 +322,15 @@ func (c *BookBorrowClient) GetX(ctx context.Context, id int) *BookBorrow {
 	return bb
 }
 
-// QueryOwner queries the Owner edge of a BookBorrow.
-func (c *BookBorrowClient) QueryOwner(bb *BookBorrow) *UserQuery {
+// QueryUSER queries the USER edge of a BookBorrow.
+func (c *BookBorrowClient) QueryUSER(bb *BookBorrow) *UserQuery {
 	query := &UserQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := bb.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.OwnerTable, bookborrow.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.USERTable, bookborrow.USERColumn),
 		)
 		fromV = sqlgraph.Neighbors(bb.driver.Dialect(), step)
 		return fromV, nil
@@ -453,15 +453,15 @@ func (c *PurposeClient) GetX(ctx context.Context, id int) *Purpose {
 	return pu
 }
 
-// QueryBooklist queries the Booklist edge of a Purpose.
-func (c *PurposeClient) QueryBooklist(pu *Purpose) *BookBorrowQuery {
+// QueryFor queries the for edge of a Purpose.
+func (c *PurposeClient) QueryFor(pu *Purpose) *BookBorrowQuery {
 	query := &BookBorrowQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := pu.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(purpose.Table, purpose.FieldID, id),
 			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, purpose.BooklistTable, purpose.BooklistColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, purpose.ForTable, purpose.ForColumn),
 		)
 		fromV = sqlgraph.Neighbors(pu.driver.Dialect(), step)
 		return fromV, nil
@@ -651,15 +651,15 @@ func (c *UserClient) GetX(ctx context.Context, id int) *User {
 	return u
 }
 
-// QueryBooklist queries the Booklist edge of a User.
-func (c *UserClient) QueryBooklist(u *User) *BookBorrowQuery {
+// QueryBorrow queries the Borrow edge of a User.
+func (c *UserClient) QueryBorrow(u *User) *BookBorrowQuery {
 	query := &BookBorrowQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.BooklistTable, user.BooklistColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.BorrowTable, user.BorrowColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil

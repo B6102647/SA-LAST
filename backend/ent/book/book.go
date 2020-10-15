@@ -11,6 +11,8 @@ const (
 	FieldBOOKNAME = "book_name"
 	// FieldAuthor holds the string denoting the author field in the database.
 	FieldAuthor = "author"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 
 	// EdgeBooklist holds the string denoting the booklist edge name in mutations.
 	EdgeBooklist = "Booklist"
@@ -23,7 +25,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "bookborrow" package.
 	BooklistInverseTable = "book_borrows"
 	// BooklistColumn is the table column denoting the Booklist relation/edge.
-	BooklistColumn = "book_booklist"
+	BooklistColumn = "BOOK_ID"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -31,6 +33,7 @@ var Columns = []string{
 	FieldID,
 	FieldBOOKNAME,
 	FieldAuthor,
+	FieldStatus,
 }
 
 var (

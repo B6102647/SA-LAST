@@ -327,25 +327,25 @@ func USERNAMEContainsFold(v string) predicate.User {
 	})
 }
 
-// HasBooklist applies the HasEdge predicate on the "Booklist" edge.
-func HasBooklist() predicate.User {
+// HasBorrow applies the HasEdge predicate on the "Borrow" edge.
+func HasBorrow() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(BooklistTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, BooklistTable, BooklistColumn),
+			sqlgraph.To(BorrowTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BorrowTable, BorrowColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasBooklistWith applies the HasEdge predicate on the "Booklist" edge with a given conditions (other predicates).
-func HasBooklistWith(preds ...predicate.BookBorrow) predicate.User {
+// HasBorrowWith applies the HasEdge predicate on the "Borrow" edge with a given conditions (other predicates).
+func HasBorrowWith(preds ...predicate.BookBorrow) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(BooklistInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, BooklistTable, BooklistColumn),
+			sqlgraph.To(BorrowInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BorrowTable, BorrowColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

@@ -37,23 +37,23 @@ func (bbu *BookBorrowUpdate) SetADDEDTIME(t time.Time) *BookBorrowUpdate {
 	return bbu
 }
 
-// SetOwnerID sets the Owner edge to User by id.
-func (bbu *BookBorrowUpdate) SetOwnerID(id int) *BookBorrowUpdate {
-	bbu.mutation.SetOwnerID(id)
+// SetUSERID sets the USER edge to User by id.
+func (bbu *BookBorrowUpdate) SetUSERID(id int) *BookBorrowUpdate {
+	bbu.mutation.SetUSERID(id)
 	return bbu
 }
 
-// SetNillableOwnerID sets the Owner edge to User by id if the given value is not nil.
-func (bbu *BookBorrowUpdate) SetNillableOwnerID(id *int) *BookBorrowUpdate {
+// SetNillableUSERID sets the USER edge to User by id if the given value is not nil.
+func (bbu *BookBorrowUpdate) SetNillableUSERID(id *int) *BookBorrowUpdate {
 	if id != nil {
-		bbu = bbu.SetOwnerID(*id)
+		bbu = bbu.SetUSERID(*id)
 	}
 	return bbu
 }
 
-// SetOwner sets the Owner edge to User.
-func (bbu *BookBorrowUpdate) SetOwner(u *User) *BookBorrowUpdate {
-	return bbu.SetOwnerID(u.ID)
+// SetUSER sets the USER edge to User.
+func (bbu *BookBorrowUpdate) SetUSER(u *User) *BookBorrowUpdate {
+	return bbu.SetUSERID(u.ID)
 }
 
 // SetBOOKID sets the BOOK edge to Book by id.
@@ -99,9 +99,9 @@ func (bbu *BookBorrowUpdate) Mutation() *BookBorrowMutation {
 	return bbu.mutation
 }
 
-// ClearOwner clears the Owner edge to User.
-func (bbu *BookBorrowUpdate) ClearOwner() *BookBorrowUpdate {
-	bbu.mutation.ClearOwner()
+// ClearUSER clears the USER edge to User.
+func (bbu *BookBorrowUpdate) ClearUSER() *BookBorrowUpdate {
+	bbu.mutation.ClearUSER()
 	return bbu
 }
 
@@ -194,12 +194,12 @@ func (bbu *BookBorrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: bookborrow.FieldADDEDTIME,
 		})
 	}
-	if bbu.mutation.OwnerCleared() {
+	if bbu.mutation.USERCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bookborrow.OwnerTable,
-			Columns: []string{bookborrow.OwnerColumn},
+			Table:   bookborrow.USERTable,
+			Columns: []string{bookborrow.USERColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -210,12 +210,12 @@ func (bbu *BookBorrowUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bbu.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := bbu.mutation.USERIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bookborrow.OwnerTable,
-			Columns: []string{bookborrow.OwnerColumn},
+			Table:   bookborrow.USERTable,
+			Columns: []string{bookborrow.USERColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -323,23 +323,23 @@ func (bbuo *BookBorrowUpdateOne) SetADDEDTIME(t time.Time) *BookBorrowUpdateOne 
 	return bbuo
 }
 
-// SetOwnerID sets the Owner edge to User by id.
-func (bbuo *BookBorrowUpdateOne) SetOwnerID(id int) *BookBorrowUpdateOne {
-	bbuo.mutation.SetOwnerID(id)
+// SetUSERID sets the USER edge to User by id.
+func (bbuo *BookBorrowUpdateOne) SetUSERID(id int) *BookBorrowUpdateOne {
+	bbuo.mutation.SetUSERID(id)
 	return bbuo
 }
 
-// SetNillableOwnerID sets the Owner edge to User by id if the given value is not nil.
-func (bbuo *BookBorrowUpdateOne) SetNillableOwnerID(id *int) *BookBorrowUpdateOne {
+// SetNillableUSERID sets the USER edge to User by id if the given value is not nil.
+func (bbuo *BookBorrowUpdateOne) SetNillableUSERID(id *int) *BookBorrowUpdateOne {
 	if id != nil {
-		bbuo = bbuo.SetOwnerID(*id)
+		bbuo = bbuo.SetUSERID(*id)
 	}
 	return bbuo
 }
 
-// SetOwner sets the Owner edge to User.
-func (bbuo *BookBorrowUpdateOne) SetOwner(u *User) *BookBorrowUpdateOne {
-	return bbuo.SetOwnerID(u.ID)
+// SetUSER sets the USER edge to User.
+func (bbuo *BookBorrowUpdateOne) SetUSER(u *User) *BookBorrowUpdateOne {
+	return bbuo.SetUSERID(u.ID)
 }
 
 // SetBOOKID sets the BOOK edge to Book by id.
@@ -385,9 +385,9 @@ func (bbuo *BookBorrowUpdateOne) Mutation() *BookBorrowMutation {
 	return bbuo.mutation
 }
 
-// ClearOwner clears the Owner edge to User.
-func (bbuo *BookBorrowUpdateOne) ClearOwner() *BookBorrowUpdateOne {
-	bbuo.mutation.ClearOwner()
+// ClearUSER clears the USER edge to User.
+func (bbuo *BookBorrowUpdateOne) ClearUSER() *BookBorrowUpdateOne {
+	bbuo.mutation.ClearUSER()
 	return bbuo
 }
 
@@ -478,12 +478,12 @@ func (bbuo *BookBorrowUpdateOne) sqlSave(ctx context.Context) (bb *BookBorrow, e
 			Column: bookborrow.FieldADDEDTIME,
 		})
 	}
-	if bbuo.mutation.OwnerCleared() {
+	if bbuo.mutation.USERCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bookborrow.OwnerTable,
-			Columns: []string{bookborrow.OwnerColumn},
+			Table:   bookborrow.USERTable,
+			Columns: []string{bookborrow.USERColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -494,12 +494,12 @@ func (bbuo *BookBorrowUpdateOne) sqlSave(ctx context.Context) (bb *BookBorrow, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bbuo.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := bbuo.mutation.USERIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bookborrow.OwnerTable,
-			Columns: []string{bookborrow.OwnerColumn},
+			Table:   bookborrow.USERTable,
+			Columns: []string{bookborrow.USERColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

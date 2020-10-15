@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  controllers.BookBorrow:
+    properties:
+      added:
+        type: string
+      book:
+        type: integer
+      purpose:
+        type: integer
+      user:
+        type: integer
+    type: object
   ent.Book:
     properties:
       Author:
@@ -7,6 +18,9 @@ definitions:
         type: string
       BOOK_NAME:
         description: BOOKNAME holds the value of the "BOOK_NAME" field.
+        type: string
+      Status:
+        description: Status holds the value of the "Status" field.
         type: string
       edges:
         $ref: '#/definitions/ent.BookEdges'
@@ -23,6 +37,8 @@ definitions:
       ADDED_TIME:
         description: ADDEDTIME holds the value of the "ADDED_TIME" field.
         type: string
+      book_ID:
+        type: integer
       edges:
         $ref: '#/definitions/ent.BookBorrowEdges'
         description: |-
@@ -32,6 +48,10 @@ definitions:
       id:
         description: ID of the ent.
         type: integer
+      purpose_ID:
+        type: integer
+      user_ID:
+        type: integer
     type: object
   ent.BookBorrowEdges:
     properties:
@@ -39,13 +59,13 @@ definitions:
         $ref: '#/definitions/ent.Book'
         description: BOOK holds the value of the BOOK edge.
         type: object
-      owner:
-        $ref: '#/definitions/ent.User'
-        description: Owner holds the value of the Owner edge.
-        type: object
       purpose:
         $ref: '#/definitions/ent.Purpose'
         description: PURPOSE holds the value of the PURPOSE edge.
+        type: object
+      user:
+        $ref: '#/definitions/ent.User'
+        description: USER holds the value of the USER edge.
         type: object
     type: object
   ent.BookEdges:
@@ -73,8 +93,8 @@ definitions:
     type: object
   ent.PurposeEdges:
     properties:
-      booklist:
-        description: Booklist holds the value of the Booklist edge.
+      for:
+        description: For holds the value of the for edge.
         items:
           $ref: '#/definitions/ent.BookBorrow'
         type: array
@@ -124,8 +144,8 @@ definitions:
     type: object
   ent.UserEdges:
     properties:
-      booklist:
-        description: Booklist holds the value of the Booklist edge.
+      borrow:
+        description: Borrow holds the value of the Borrow edge.
         items:
           $ref: '#/definitions/ent.BookBorrow'
         type: array
@@ -151,132 +171,10 @@ info:
   title: SUT SA Example API Playlist Vidoe
   version: "1.0"
 paths:
-  /Book:
+  /bookborrows:
     get:
-      description: list Book entities
-      operationId: list-Book
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ent.Book'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: List Book entities
-    post:
-      consumes:
-      - application/json
-      description: Create Book
-      operationId: create-Book
-      parameters:
-      - description: Book entity
-        in: body
-        name: Book
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Book'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Book'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Create Book
-  /Book/{id}:
-    delete:
-      description: get Book by ID
-      operationId: delete-Book
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/gin.H'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Delete a Book entity by ID
-    put:
-      consumes:
-      - application/json
-      description: update Book by ID
-      operationId: update-Book
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Book entity
-        in: body
-        name: Book
-        required: true
-        schema:
-          $ref: '#/definitions/ent.Book'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Book'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Update a Book entity by ID
-  /BookBorrow:
-    get:
-      description: list BookBorrow entities
-      operationId: list-BookBorrow
+      description: list bookborrow entities
+      operationId: list-bookborrow
       parameters:
       - description: Limit
         in: query
@@ -303,19 +201,19 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: List BookBorrow entities
+      summary: List bookborrow entities
     post:
       consumes:
       - application/json
-      description: Create BookBorrow
-      operationId: create-BookBorrow
+      description: Create bookborrow
+      operationId: create-bookborrow
       parameters:
       - description: BookBorrow entity
         in: body
-        name: BookBorrow
+        name: bookborrow
         required: true
         schema:
-          $ref: '#/definitions/ent.BookBorrow'
+          $ref: '#/definitions/controllers.BookBorrow'
       produces:
       - application/json
       responses:
@@ -331,11 +229,11 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Create BookBorrow
-  /BookBorrow/{id}:
+      summary: Create bookborrow
+  /bookborrows/{id}:
     delete:
-      description: get BookBorrow by ID
-      operationId: delete-BookBorrow
+      description: get bookborrow by ID
+      operationId: delete-bookborrow
       parameters:
       - description: BookBorrow ID
         in: path
@@ -361,10 +259,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Delete a BookBorrow entity by ID
+      summary: Delete a bookborrow entity by ID
     get:
-      description: get BookBorrow by ID
-      operationId: get-BookBorrow
+      description: get bookborrow by ID
+      operationId: get-bookborrow
       parameters:
       - description: BookBorrow ID
         in: path
@@ -390,12 +288,12 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Get a BookBorrow entity by ID
+      summary: Get a bookborrow entity by ID
     put:
       consumes:
       - application/json
-      description: update BookBorrow by ID
-      operationId: update-BookBorrow
+      description: update bookborrow by ID
+      operationId: update-bookborrow
       parameters:
       - description: BookBorrow ID
         in: path
@@ -404,7 +302,7 @@ paths:
         type: integer
       - description: BookBorrow entity
         in: body
-        name: BookBorrow
+        name: bookborrow
         required: true
         schema:
           $ref: '#/definitions/ent.BookBorrow'
@@ -423,11 +321,99 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Update a BookBorrow entity by ID
-  /Books/{id}:
+      summary: Update a bookborrow entity by ID
+  /books:
     get:
-      description: get Book by ID
-      operationId: get-Book
+      description: list book entities
+      operationId: list-book
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Book'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List book entities
+    post:
+      consumes:
+      - application/json
+      description: Create book
+      operationId: create-book
+      parameters:
+      - description: Book entity
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create book
+  /books/{id}:
+    delete:
+      description: get book by ID
+      operationId: delete-book
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a book entity by ID
+    get:
+      description: get book by ID
+      operationId: get-book
       parameters:
       - description: Book ID
         in: path
@@ -453,11 +439,44 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Get a Book entity by ID
-  /Purpose:
+      summary: Get a book entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update book by ID
+      operationId: update-book
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book entity
+        in: body
+        name: Book
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a book entity by ID
+  /purposes:
     get:
-      description: list Purpose entities
-      operationId: list-Purpose
+      description: list purpose entities
+      operationId: list-purpose
       parameters:
       - description: Limit
         in: query
@@ -484,16 +503,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: List Purpose entities
+      summary: List purpose entities
     post:
       consumes:
       - application/json
-      description: Create Purpose
-      operationId: create-Purpose
+      description: Create purpose
+      operationId: create-purpose
       parameters:
       - description: Purpose entity
         in: body
-        name: Purpose
+        name: purpose
         required: true
         schema:
           $ref: '#/definitions/ent.Purpose'
@@ -512,11 +531,11 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Create Purpose
-  /Purpose/{id}:
+      summary: Create purpose
+  /purposes/{id}:
     delete:
-      description: get Purpose by ID
-      operationId: delete-Purpose
+      description: get purpose by ID
+      operationId: delete-purpose
       parameters:
       - description: Purpose ID
         in: path
@@ -542,12 +561,41 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Delete a Purpose entity by ID
+      summary: Delete a purpose entity by ID
+    get:
+      description: get purpose by ID
+      operationId: get-purpose
+      parameters:
+      - description: Purpose ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Purpose'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a purpose entity by ID
     put:
       consumes:
       - application/json
-      description: update Purpose by ID
-      operationId: update-Purpose
+      description: update purpose by ID
+      operationId: update-purpose
       parameters:
       - description: Purpose ID
         in: path
@@ -556,7 +604,7 @@ paths:
         type: integer
       - description: Purpose entity
         in: body
-        name: Purpose
+        name: purpose
         required: true
         schema:
           $ref: '#/definitions/ent.Purpose'
@@ -575,37 +623,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/gin.H'
-      summary: Update a Purpose entity by ID
-  /Purposes/{id}:
-    get:
-      description: get Purpose by ID
-      operationId: get-Purpose
-      parameters:
-      - description: Purpose ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/ent.Purpose'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/gin.H'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/gin.H'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/gin.H'
-      summary: Get a Purpose entity by ID
+      summary: Update a purpose entity by ID
   /roles:
     get:
       description: list role entities

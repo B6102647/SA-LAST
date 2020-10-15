@@ -33,19 +33,19 @@ func (uc *UserCreate) SetUSERNAME(s string) *UserCreate {
 	return uc
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (uc *UserCreate) AddBooklistIDs(ids ...int) *UserCreate {
-	uc.mutation.AddBooklistIDs(ids...)
+// AddBorrowIDs adds the Borrow edge to BookBorrow by ids.
+func (uc *UserCreate) AddBorrowIDs(ids ...int) *UserCreate {
+	uc.mutation.AddBorrowIDs(ids...)
 	return uc
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (uc *UserCreate) AddBooklist(b ...*BookBorrow) *UserCreate {
+// AddBorrow adds the Borrow edges to BookBorrow.
+func (uc *UserCreate) AddBorrow(b ...*BookBorrow) *UserCreate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return uc.AddBooklistIDs(ids...)
+	return uc.AddBorrowIDs(ids...)
 }
 
 // SetRolePlayID sets the RolePlay edge to Role by id.
@@ -166,12 +166,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		})
 		u.USERNAME = value
 	}
-	if nodes := uc.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := uc.mutation.BorrowIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.BooklistTable,
-			Columns: []string{user.BooklistColumn},
+			Table:   user.BorrowTable,
+			Columns: []string{user.BorrowColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

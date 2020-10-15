@@ -11,8 +11,9 @@ var (
 	// BooksColumns holds the columns for the "books" table.
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "book_name", Type: field.TypeString},
+		{Name: "book_name", Type: field.TypeString, Unique: true},
 		{Name: "author", Type: field.TypeString},
+		{Name: "status", Type: field.TypeString},
 	}
 	// BooksTable holds the schema information for the "books" table.
 	BooksTable = &schema.Table{
@@ -25,9 +26,9 @@ var (
 	BookBorrowsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "added_time", Type: field.TypeTime},
-		{Name: "book_booklist", Type: field.TypeInt, Nullable: true},
-		{Name: "purpose_booklist", Type: field.TypeInt, Nullable: true},
-		{Name: "user_booklist", Type: field.TypeInt, Nullable: true},
+		{Name: "BOOK_ID", Type: field.TypeInt, Nullable: true},
+		{Name: "PURPOSE_ID", Type: field.TypeInt, Nullable: true},
+		{Name: "User_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BookBorrowsTable holds the schema information for the "book_borrows" table.
 	BookBorrowsTable = &schema.Table{
@@ -43,14 +44,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "book_borrows_purposes_Booklist",
+				Symbol:  "book_borrows_purposes_for",
 				Columns: []*schema.Column{BookBorrowsColumns[3]},
 
 				RefColumns: []*schema.Column{PurposesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:  "book_borrows_users_Booklist",
+				Symbol:  "book_borrows_users_Borrow",
 				Columns: []*schema.Column{BookBorrowsColumns[4]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
@@ -61,7 +62,7 @@ var (
 	// PurposesColumns holds the columns for the "purposes" table.
 	PurposesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "purpose_name", Type: field.TypeString},
+		{Name: "purpose_name", Type: field.TypeString, Unique: true},
 	}
 	// PurposesTable holds the schema information for the "purposes" table.
 	PurposesTable = &schema.Table{
@@ -85,7 +86,7 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_email", Type: field.TypeString},
+		{Name: "user_email", Type: field.TypeString, Unique: true},
 		{Name: "user_name", Type: field.TypeString},
 		{Name: "ROLE_ID", Type: field.TypeInt, Nullable: true},
 	}

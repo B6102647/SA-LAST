@@ -42,6 +42,7 @@ type BookMutation struct {
 	id               *int
 	_BOOK_NAME       *string
 	_Author          *string
+	_Status          *string
 	clearedFields    map[string]struct{}
 	_Booklist        map[int]struct{}
 	removed_Booklist map[int]struct{}
@@ -202,6 +203,43 @@ func (m *BookMutation) ResetAuthor() {
 	m._Author = nil
 }
 
+// SetStatus sets the Status field.
+func (m *BookMutation) SetStatus(s string) {
+	m._Status = &s
+}
+
+// Status returns the Status value in the mutation.
+func (m *BookMutation) Status() (r string, exists bool) {
+	v := m._Status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old Status value of the Book.
+// If the Book object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *BookMutation) OldStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldStatus is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus reset all changes of the "Status" field.
+func (m *BookMutation) ResetStatus() {
+	m._Status = nil
+}
+
 // AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
 func (m *BookMutation) AddBooklistIDs(ids ...int) {
 	if m._Booklist == nil {
@@ -258,12 +296,15 @@ func (m *BookMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *BookMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m._BOOK_NAME != nil {
 		fields = append(fields, book.FieldBOOKNAME)
 	}
 	if m._Author != nil {
 		fields = append(fields, book.FieldAuthor)
+	}
+	if m._Status != nil {
+		fields = append(fields, book.FieldStatus)
 	}
 	return fields
 }
@@ -277,6 +318,8 @@ func (m *BookMutation) Field(name string) (ent.Value, bool) {
 		return m.BOOKNAME()
 	case book.FieldAuthor:
 		return m.Author()
+	case book.FieldStatus:
+		return m.Status()
 	}
 	return nil, false
 }
@@ -290,6 +333,8 @@ func (m *BookMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldBOOKNAME(ctx)
 	case book.FieldAuthor:
 		return m.OldAuthor(ctx)
+	case book.FieldStatus:
+		return m.OldStatus(ctx)
 	}
 	return nil, fmt.Errorf("unknown Book field %s", name)
 }
@@ -312,6 +357,13 @@ func (m *BookMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAuthor(v)
+		return nil
+	case book.FieldStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Book field %s", name)
@@ -368,6 +420,9 @@ func (m *BookMutation) ResetField(name string) error {
 		return nil
 	case book.FieldAuthor:
 		m.ResetAuthor()
+		return nil
+	case book.FieldStatus:
+		m.ResetStatus()
 		return nil
 	}
 	return fmt.Errorf("unknown Book field %s", name)
@@ -465,8 +520,8 @@ type BookBorrowMutation struct {
 	id              *int
 	_ADDED_TIME     *time.Time
 	clearedFields   map[string]struct{}
-	_Owner          *int
-	cleared_Owner   bool
+	_USER           *int
+	cleared_USER    bool
 	_BOOK           *int
 	cleared_BOOK    bool
 	_PURPOSE        *int
@@ -591,43 +646,43 @@ func (m *BookBorrowMutation) ResetADDEDTIME() {
 	m._ADDED_TIME = nil
 }
 
-// SetOwnerID sets the Owner edge to User by id.
-func (m *BookBorrowMutation) SetOwnerID(id int) {
-	m._Owner = &id
+// SetUSERID sets the USER edge to User by id.
+func (m *BookBorrowMutation) SetUSERID(id int) {
+	m._USER = &id
 }
 
-// ClearOwner clears the Owner edge to User.
-func (m *BookBorrowMutation) ClearOwner() {
-	m.cleared_Owner = true
+// ClearUSER clears the USER edge to User.
+func (m *BookBorrowMutation) ClearUSER() {
+	m.cleared_USER = true
 }
 
-// OwnerCleared returns if the edge Owner was cleared.
-func (m *BookBorrowMutation) OwnerCleared() bool {
-	return m.cleared_Owner
+// USERCleared returns if the edge USER was cleared.
+func (m *BookBorrowMutation) USERCleared() bool {
+	return m.cleared_USER
 }
 
-// OwnerID returns the Owner id in the mutation.
-func (m *BookBorrowMutation) OwnerID() (id int, exists bool) {
-	if m._Owner != nil {
-		return *m._Owner, true
+// USERID returns the USER id in the mutation.
+func (m *BookBorrowMutation) USERID() (id int, exists bool) {
+	if m._USER != nil {
+		return *m._USER, true
 	}
 	return
 }
 
-// OwnerIDs returns the Owner ids in the mutation.
+// USERIDs returns the USER ids in the mutation.
 // Note that ids always returns len(ids) <= 1 for unique edges, and you should use
-// OwnerID instead. It exists only for internal usage by the builders.
-func (m *BookBorrowMutation) OwnerIDs() (ids []int) {
-	if id := m._Owner; id != nil {
+// USERID instead. It exists only for internal usage by the builders.
+func (m *BookBorrowMutation) USERIDs() (ids []int) {
+	if id := m._USER; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetOwner reset all changes of the "Owner" edge.
-func (m *BookBorrowMutation) ResetOwner() {
-	m._Owner = nil
-	m.cleared_Owner = false
+// ResetUSER reset all changes of the "USER" edge.
+func (m *BookBorrowMutation) ResetUSER() {
+	m._USER = nil
+	m.cleared_USER = false
 }
 
 // SetBOOKID sets the BOOK edge to Book by id.
@@ -824,8 +879,8 @@ func (m *BookBorrowMutation) ResetField(name string) error {
 // mutation.
 func (m *BookBorrowMutation) AddedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m._Owner != nil {
-		edges = append(edges, bookborrow.EdgeOwner)
+	if m._USER != nil {
+		edges = append(edges, bookborrow.EdgeUSER)
 	}
 	if m._BOOK != nil {
 		edges = append(edges, bookborrow.EdgeBOOK)
@@ -840,8 +895,8 @@ func (m *BookBorrowMutation) AddedEdges() []string {
 // the given edge name.
 func (m *BookBorrowMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case bookborrow.EdgeOwner:
-		if id := m._Owner; id != nil {
+	case bookborrow.EdgeUSER:
+		if id := m._USER; id != nil {
 			return []ent.Value{*id}
 		}
 	case bookborrow.EdgeBOOK:
@@ -875,8 +930,8 @@ func (m *BookBorrowMutation) RemovedIDs(name string) []ent.Value {
 // mutation.
 func (m *BookBorrowMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 3)
-	if m.cleared_Owner {
-		edges = append(edges, bookborrow.EdgeOwner)
+	if m.cleared_USER {
+		edges = append(edges, bookborrow.EdgeUSER)
 	}
 	if m.cleared_BOOK {
 		edges = append(edges, bookborrow.EdgeBOOK)
@@ -891,8 +946,8 @@ func (m *BookBorrowMutation) ClearedEdges() []string {
 // cleared in this mutation.
 func (m *BookBorrowMutation) EdgeCleared(name string) bool {
 	switch name {
-	case bookborrow.EdgeOwner:
-		return m.cleared_Owner
+	case bookborrow.EdgeUSER:
+		return m.cleared_USER
 	case bookborrow.EdgeBOOK:
 		return m.cleared_BOOK
 	case bookborrow.EdgePURPOSE:
@@ -905,8 +960,8 @@ func (m *BookBorrowMutation) EdgeCleared(name string) bool {
 // error if the edge name is not defined in the schema.
 func (m *BookBorrowMutation) ClearEdge(name string) error {
 	switch name {
-	case bookborrow.EdgeOwner:
-		m.ClearOwner()
+	case bookborrow.EdgeUSER:
+		m.ClearUSER()
 		return nil
 	case bookborrow.EdgeBOOK:
 		m.ClearBOOK()
@@ -923,8 +978,8 @@ func (m *BookBorrowMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *BookBorrowMutation) ResetEdge(name string) error {
 	switch name {
-	case bookborrow.EdgeOwner:
-		m.ResetOwner()
+	case bookborrow.EdgeUSER:
+		m.ResetUSER()
 		return nil
 	case bookborrow.EdgeBOOK:
 		m.ResetBOOK()
@@ -940,15 +995,15 @@ func (m *BookBorrowMutation) ResetEdge(name string) error {
 // nodes in the graph.
 type PurposeMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	_PURPOSE_NAME    *string
-	clearedFields    map[string]struct{}
-	_Booklist        map[int]struct{}
-	removed_Booklist map[int]struct{}
-	done             bool
-	oldValue         func(context.Context) (*Purpose, error)
+	op            Op
+	typ           string
+	id            *int
+	_PURPOSE_NAME *string
+	clearedFields map[string]struct{}
+	_for          map[int]struct{}
+	removed_for   map[int]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Purpose, error)
 }
 
 var _ ent.Mutation = (*PurposeMutation)(nil)
@@ -1067,46 +1122,46 @@ func (m *PurposeMutation) ResetPURPOSENAME() {
 	m._PURPOSE_NAME = nil
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (m *PurposeMutation) AddBooklistIDs(ids ...int) {
-	if m._Booklist == nil {
-		m._Booklist = make(map[int]struct{})
+// AddForIDs adds the for edge to BookBorrow by ids.
+func (m *PurposeMutation) AddForIDs(ids ...int) {
+	if m._for == nil {
+		m._for = make(map[int]struct{})
 	}
 	for i := range ids {
-		m._Booklist[ids[i]] = struct{}{}
+		m._for[ids[i]] = struct{}{}
 	}
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (m *PurposeMutation) RemoveBooklistIDs(ids ...int) {
-	if m.removed_Booklist == nil {
-		m.removed_Booklist = make(map[int]struct{})
+// RemoveForIDs removes the for edge to BookBorrow by ids.
+func (m *PurposeMutation) RemoveForIDs(ids ...int) {
+	if m.removed_for == nil {
+		m.removed_for = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.removed_Booklist[ids[i]] = struct{}{}
+		m.removed_for[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedBooklist returns the removed ids of Booklist.
-func (m *PurposeMutation) RemovedBooklistIDs() (ids []int) {
-	for id := range m.removed_Booklist {
+// RemovedFor returns the removed ids of for.
+func (m *PurposeMutation) RemovedForIDs() (ids []int) {
+	for id := range m.removed_for {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// BooklistIDs returns the Booklist ids in the mutation.
-func (m *PurposeMutation) BooklistIDs() (ids []int) {
-	for id := range m._Booklist {
+// ForIDs returns the for ids in the mutation.
+func (m *PurposeMutation) ForIDs() (ids []int) {
+	for id := range m._for {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetBooklist reset all changes of the "Booklist" edge.
-func (m *PurposeMutation) ResetBooklist() {
-	m._Booklist = nil
-	m.removed_Booklist = nil
+// ResetFor reset all changes of the "for" edge.
+func (m *PurposeMutation) ResetFor() {
+	m._for = nil
+	m.removed_for = nil
 }
 
 // Op returns the operation name.
@@ -1225,8 +1280,8 @@ func (m *PurposeMutation) ResetField(name string) error {
 // mutation.
 func (m *PurposeMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m._Booklist != nil {
-		edges = append(edges, purpose.EdgeBooklist)
+	if m._for != nil {
+		edges = append(edges, purpose.EdgeFor)
 	}
 	return edges
 }
@@ -1235,9 +1290,9 @@ func (m *PurposeMutation) AddedEdges() []string {
 // the given edge name.
 func (m *PurposeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case purpose.EdgeBooklist:
-		ids := make([]ent.Value, 0, len(m._Booklist))
-		for id := range m._Booklist {
+	case purpose.EdgeFor:
+		ids := make([]ent.Value, 0, len(m._for))
+		for id := range m._for {
 			ids = append(ids, id)
 		}
 		return ids
@@ -1249,8 +1304,8 @@ func (m *PurposeMutation) AddedIDs(name string) []ent.Value {
 // mutation.
 func (m *PurposeMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removed_Booklist != nil {
-		edges = append(edges, purpose.EdgeBooklist)
+	if m.removed_for != nil {
+		edges = append(edges, purpose.EdgeFor)
 	}
 	return edges
 }
@@ -1259,9 +1314,9 @@ func (m *PurposeMutation) RemovedEdges() []string {
 // the given edge name.
 func (m *PurposeMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case purpose.EdgeBooklist:
-		ids := make([]ent.Value, 0, len(m.removed_Booklist))
-		for id := range m.removed_Booklist {
+	case purpose.EdgeFor:
+		ids := make([]ent.Value, 0, len(m.removed_for))
+		for id := range m.removed_for {
 			ids = append(ids, id)
 		}
 		return ids
@@ -1297,8 +1352,8 @@ func (m *PurposeMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *PurposeMutation) ResetEdge(name string) error {
 	switch name {
-	case purpose.EdgeBooklist:
-		m.ResetBooklist()
+	case purpose.EdgeFor:
+		m.ResetFor()
 		return nil
 	}
 	return fmt.Errorf("unknown Purpose edge %s", name)
@@ -1682,8 +1737,8 @@ type UserMutation struct {
 	_USER_EMAIL      *string
 	_USER_NAME       *string
 	clearedFields    map[string]struct{}
-	_Booklist        map[int]struct{}
-	removed_Booklist map[int]struct{}
+	_Borrow          map[int]struct{}
+	removed_Borrow   map[int]struct{}
 	_RolePlay        *int
 	cleared_RolePlay bool
 	done             bool
@@ -1843,46 +1898,46 @@ func (m *UserMutation) ResetUSERNAME() {
 	m._USER_NAME = nil
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (m *UserMutation) AddBooklistIDs(ids ...int) {
-	if m._Booklist == nil {
-		m._Booklist = make(map[int]struct{})
+// AddBorrowIDs adds the Borrow edge to BookBorrow by ids.
+func (m *UserMutation) AddBorrowIDs(ids ...int) {
+	if m._Borrow == nil {
+		m._Borrow = make(map[int]struct{})
 	}
 	for i := range ids {
-		m._Booklist[ids[i]] = struct{}{}
+		m._Borrow[ids[i]] = struct{}{}
 	}
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (m *UserMutation) RemoveBooklistIDs(ids ...int) {
-	if m.removed_Booklist == nil {
-		m.removed_Booklist = make(map[int]struct{})
+// RemoveBorrowIDs removes the Borrow edge to BookBorrow by ids.
+func (m *UserMutation) RemoveBorrowIDs(ids ...int) {
+	if m.removed_Borrow == nil {
+		m.removed_Borrow = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.removed_Booklist[ids[i]] = struct{}{}
+		m.removed_Borrow[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedBooklist returns the removed ids of Booklist.
-func (m *UserMutation) RemovedBooklistIDs() (ids []int) {
-	for id := range m.removed_Booklist {
+// RemovedBorrow returns the removed ids of Borrow.
+func (m *UserMutation) RemovedBorrowIDs() (ids []int) {
+	for id := range m.removed_Borrow {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// BooklistIDs returns the Booklist ids in the mutation.
-func (m *UserMutation) BooklistIDs() (ids []int) {
-	for id := range m._Booklist {
+// BorrowIDs returns the Borrow ids in the mutation.
+func (m *UserMutation) BorrowIDs() (ids []int) {
+	for id := range m._Borrow {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetBooklist reset all changes of the "Booklist" edge.
-func (m *UserMutation) ResetBooklist() {
-	m._Booklist = nil
-	m.removed_Booklist = nil
+// ResetBorrow reset all changes of the "Borrow" edge.
+func (m *UserMutation) ResetBorrow() {
+	m._Borrow = nil
+	m.removed_Borrow = nil
 }
 
 // SetRolePlayID sets the RolePlay edge to Role by id.
@@ -2057,8 +2112,8 @@ func (m *UserMutation) ResetField(name string) error {
 // mutation.
 func (m *UserMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m._Booklist != nil {
-		edges = append(edges, user.EdgeBooklist)
+	if m._Borrow != nil {
+		edges = append(edges, user.EdgeBorrow)
 	}
 	if m._RolePlay != nil {
 		edges = append(edges, user.EdgeRolePlay)
@@ -2070,9 +2125,9 @@ func (m *UserMutation) AddedEdges() []string {
 // the given edge name.
 func (m *UserMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case user.EdgeBooklist:
-		ids := make([]ent.Value, 0, len(m._Booklist))
-		for id := range m._Booklist {
+	case user.EdgeBorrow:
+		ids := make([]ent.Value, 0, len(m._Borrow))
+		for id := range m._Borrow {
 			ids = append(ids, id)
 		}
 		return ids
@@ -2088,8 +2143,8 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 // mutation.
 func (m *UserMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 2)
-	if m.removed_Booklist != nil {
-		edges = append(edges, user.EdgeBooklist)
+	if m.removed_Borrow != nil {
+		edges = append(edges, user.EdgeBorrow)
 	}
 	return edges
 }
@@ -2098,9 +2153,9 @@ func (m *UserMutation) RemovedEdges() []string {
 // the given edge name.
 func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case user.EdgeBooklist:
-		ids := make([]ent.Value, 0, len(m.removed_Booklist))
-		for id := range m.removed_Booklist {
+	case user.EdgeBorrow:
+		ids := make([]ent.Value, 0, len(m.removed_Borrow))
+		for id := range m.removed_Borrow {
 			ids = append(ids, id)
 		}
 		return ids
@@ -2144,8 +2199,8 @@ func (m *UserMutation) ClearEdge(name string) error {
 // defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
 	switch name {
-	case user.EdgeBooklist:
-		m.ResetBooklist()
+	case user.EdgeBorrow:
+		m.ResetBorrow()
 		return nil
 	case user.EdgeRolePlay:
 		m.ResetRolePlay()

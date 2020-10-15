@@ -10,18 +10,18 @@ const (
 	// FieldPURPOSENAME holds the string denoting the purpose_name field in the database.
 	FieldPURPOSENAME = "purpose_name"
 
-	// EdgeBooklist holds the string denoting the booklist edge name in mutations.
-	EdgeBooklist = "Booklist"
+	// EdgeFor holds the string denoting the for edge name in mutations.
+	EdgeFor = "for"
 
 	// Table holds the table name of the purpose in the database.
 	Table = "purposes"
-	// BooklistTable is the table the holds the Booklist relation/edge.
-	BooklistTable = "book_borrows"
-	// BooklistInverseTable is the table name for the BookBorrow entity.
+	// ForTable is the table the holds the for relation/edge.
+	ForTable = "book_borrows"
+	// ForInverseTable is the table name for the BookBorrow entity.
 	// It exists in this package in order to avoid circular dependency with the "bookborrow" package.
-	BooklistInverseTable = "book_borrows"
-	// BooklistColumn is the table column denoting the Booklist relation/edge.
-	BooklistColumn = "purpose_booklist"
+	ForInverseTable = "book_borrows"
+	// ForColumn is the table column denoting the for relation/edge.
+	ForColumn = "PURPOSE_ID"
 )
 
 // Columns holds all SQL columns for purpose fields.

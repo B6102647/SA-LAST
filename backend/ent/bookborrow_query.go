@@ -27,7 +27,7 @@ type BookBorrowQuery struct {
 	unique     []string
 	predicates []predicate.BookBorrow
 	// eager-loading edges.
-	withOwner   *UserQuery
+	withUSER    *UserQuery
 	withBOOK    *BookQuery
 	withPURPOSE *PurposeQuery
 	withFKs     bool
@@ -60,8 +60,8 @@ func (bbq *BookBorrowQuery) Order(o ...OrderFunc) *BookBorrowQuery {
 	return bbq
 }
 
-// QueryOwner chains the current query on the Owner edge.
-func (bbq *BookBorrowQuery) QueryOwner() *UserQuery {
+// QueryUSER chains the current query on the USER edge.
+func (bbq *BookBorrowQuery) QueryUSER() *UserQuery {
 	query := &UserQuery{config: bbq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := bbq.prepareQuery(ctx); err != nil {
@@ -70,7 +70,7 @@ func (bbq *BookBorrowQuery) QueryOwner() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(bookborrow.Table, bookborrow.FieldID, bbq.sqlQuery()),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.OwnerTable, bookborrow.OwnerColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, bookborrow.USERTable, bookborrow.USERColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bbq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,14 +293,14 @@ func (bbq *BookBorrowQuery) Clone() *BookBorrowQuery {
 	}
 }
 
-//  WithOwner tells the query-builder to eager-loads the nodes that are connected to
-// the "Owner" edge. The optional arguments used to configure the query builder of the edge.
-func (bbq *BookBorrowQuery) WithOwner(opts ...func(*UserQuery)) *BookBorrowQuery {
+//  WithUSER tells the query-builder to eager-loads the nodes that are connected to
+// the "USER" edge. The optional arguments used to configure the query builder of the edge.
+func (bbq *BookBorrowQuery) WithUSER(opts ...func(*UserQuery)) *BookBorrowQuery {
 	query := &UserQuery{config: bbq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	bbq.withOwner = query
+	bbq.withUSER = query
 	return bbq
 }
 
@@ -394,12 +394,12 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		withFKs     = bbq.withFKs
 		_spec       = bbq.querySpec()
 		loadedTypes = [3]bool{
-			bbq.withOwner != nil,
+			bbq.withUSER != nil,
 			bbq.withBOOK != nil,
 			bbq.withPURPOSE != nil,
 		}
 	)
-	if bbq.withOwner != nil || bbq.withBOOK != nil || bbq.withPURPOSE != nil {
+	if bbq.withUSER != nil || bbq.withBOOK != nil || bbq.withPURPOSE != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -429,11 +429,11 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		return nodes, nil
 	}
 
-	if query := bbq.withOwner; query != nil {
+	if query := bbq.withUSER; query != nil {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*BookBorrow)
 		for i := range nodes {
-			if fk := nodes[i].user_booklist; fk != nil {
+			if fk := nodes[i].User_ID; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -446,10 +446,10 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "user_booklist" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "User_ID" returned %v`, n.ID)
 			}
 			for i := range nodes {
-				nodes[i].Edges.Owner = n
+				nodes[i].Edges.USER = n
 			}
 		}
 	}
@@ -458,7 +458,7 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*BookBorrow)
 		for i := range nodes {
-			if fk := nodes[i].book_booklist; fk != nil {
+			if fk := nodes[i].BOOK_ID; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -471,7 +471,7 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "book_booklist" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "BOOK_ID" returned %v`, n.ID)
 			}
 			for i := range nodes {
 				nodes[i].Edges.BOOK = n
@@ -483,7 +483,7 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		ids := make([]int, 0, len(nodes))
 		nodeids := make(map[int][]*BookBorrow)
 		for i := range nodes {
-			if fk := nodes[i].purpose_booklist; fk != nil {
+			if fk := nodes[i].PURPOSE_ID; fk != nil {
 				ids = append(ids, *fk)
 				nodeids[*fk] = append(nodeids[*fk], nodes[i])
 			}
@@ -496,7 +496,7 @@ func (bbq *BookBorrowQuery) sqlAll(ctx context.Context) ([]*BookBorrow, error) {
 		for _, n := range neighbors {
 			nodes, ok := nodeids[n.ID]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "purpose_booklist" returned %v`, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "PURPOSE_ID" returned %v`, n.ID)
 			}
 			for i := range nodes {
 				nodes[i].Edges.PURPOSE = n

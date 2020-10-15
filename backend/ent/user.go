@@ -28,8 +28,8 @@ type User struct {
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
-	// Booklist holds the value of the Booklist edge.
-	Booklist []*BookBorrow
+	// Borrow holds the value of the Borrow edge.
+	Borrow []*BookBorrow
 	// RolePlay holds the value of the RolePlay edge.
 	RolePlay *Role
 	// loadedTypes holds the information for reporting if a
@@ -37,13 +37,13 @@ type UserEdges struct {
 	loadedTypes [2]bool
 }
 
-// BooklistOrErr returns the Booklist value or an error if the edge
+// BorrowOrErr returns the Borrow value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) BooklistOrErr() ([]*BookBorrow, error) {
+func (e UserEdges) BorrowOrErr() ([]*BookBorrow, error) {
 	if e.loadedTypes[0] {
-		return e.Booklist, nil
+		return e.Borrow, nil
 	}
-	return nil, &NotLoadedError{edge: "Booklist"}
+	return nil, &NotLoadedError{edge: "Borrow"}
 }
 
 // RolePlayOrErr returns the RolePlay value or an error if the edge
@@ -110,9 +110,9 @@ func (u *User) assignValues(values ...interface{}) error {
 	return nil
 }
 
-// QueryBooklist queries the Booklist edge of the User.
-func (u *User) QueryBooklist() *BookBorrowQuery {
-	return (&UserClient{config: u.config}).QueryBooklist(u)
+// QueryBorrow queries the Borrow edge of the User.
+func (u *User) QueryBorrow() *BookBorrowQuery {
+	return (&UserClient{config: u.config}).QueryBorrow(u)
 }
 
 // QueryRolePlay queries the RolePlay edge of the User.

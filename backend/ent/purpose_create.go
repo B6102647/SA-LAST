@@ -26,19 +26,19 @@ func (pc *PurposeCreate) SetPURPOSENAME(s string) *PurposeCreate {
 	return pc
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (pc *PurposeCreate) AddBooklistIDs(ids ...int) *PurposeCreate {
-	pc.mutation.AddBooklistIDs(ids...)
+// AddForIDs adds the for edge to BookBorrow by ids.
+func (pc *PurposeCreate) AddForIDs(ids ...int) *PurposeCreate {
+	pc.mutation.AddForIDs(ids...)
 	return pc
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (pc *PurposeCreate) AddBooklist(b ...*BookBorrow) *PurposeCreate {
+// AddFor adds the for edges to BookBorrow.
+func (pc *PurposeCreate) AddFor(b ...*BookBorrow) *PurposeCreate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return pc.AddBooklistIDs(ids...)
+	return pc.AddForIDs(ids...)
 }
 
 // Mutation returns the PurposeMutation object of the builder.
@@ -124,12 +124,12 @@ func (pc *PurposeCreate) createSpec() (*Purpose, *sqlgraph.CreateSpec) {
 		})
 		pu.PURPOSENAME = value
 	}
-	if nodes := pc.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.ForIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   purpose.BooklistTable,
-			Columns: []string{purpose.BooklistColumn},
+			Table:   purpose.ForTable,
+			Columns: []string{purpose.ForColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

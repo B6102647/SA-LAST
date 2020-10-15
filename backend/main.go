@@ -32,6 +32,7 @@ type Books struct {
 type Book struct {
 	Name   string
 	Author string
+	Status string
 }
 
 type Purposes struct {
@@ -115,9 +116,9 @@ func main() {
 	// Set Books Data
 	books := Books{
 		Book: []Book{
-			Book{"Microprocessor for Beginner", "Mr.VC"},
-			Book{"System Analysis", "Mr.CW"},
-			Book{"Solo Leveling Novel", "JinWoo"},
+			Book{"Microprocessor for Beginner", "Mr.VC", "Availiable"},
+			Book{"System Analysis", "Mr.CW", "Availiable"},
+			Book{"Solo Leveling Novel", "JinWoo", "Availiable"},
 		},
 	}
 
@@ -127,6 +128,7 @@ func main() {
 			Create().
 			SetBOOKNAME(b.Name).
 			SetAuthor(b.Author).
+			SetStatus(b.Status).
 			Save(context.Background())
 	}
 
@@ -155,7 +157,7 @@ func main() {
 	// Set Users Data
 	users := Users{
 		User: []User{
-			User{"ManusChanok Srikhrueadong", "Manuschanok@gmail.com", 1},
+			User{"Manuschanok Srikhrueadong", "Manuschanok@gmail.com", 1},
 			User{"Sridong Manus", "B6102647@example.com", 1},
 		},
 	}

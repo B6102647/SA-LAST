@@ -10,23 +10,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// PurposeController defines the struct for the Purpose controller
+// PurposeController defines the struct for the purpose controller
 type PurposeController struct {
 	client *ent.Client
 	router gin.IRouter
 }
 
 // CreatePurpose handles POST requests for adding purpose entities
-// @Summary Create Purpose
-// @Description Create Purpose
-// @ID create-Purpose
+// @Summary Create purpose
+// @Description Create purpose
+// @ID create-purpose
 // @Accept   json
 // @Produce  json
-// @Param Purpose body ent.Purpose true "Purpose entity"
+// @Param purpose body ent.Purpose true "Purpose entity"
 // @Success 200 {object} ent.Purpose
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Purpose [post]
+// @Router /purposes [post]
 func (ctl *PurposeController) CreatePurpose(c *gin.Context) {
 	obj := ent.Purpose{}
 	if err := c.ShouldBind(&obj); err != nil {
@@ -50,17 +50,17 @@ func (ctl *PurposeController) CreatePurpose(c *gin.Context) {
 	c.JSON(200, pp)
 }
 
-// GetPurpose handles GET requests to retrieve a Purpose entity
-// @Summary Get a Purpose entity by ID
-// @Description get Purpose by ID
-// @ID get-Purpose
+// GetPurpose handles GET requests to retrieve a purpose entity
+// @Summary Get a purpose entity by ID
+// @Description get purpose by ID
+// @ID get-purpose
 // @Produce  json
 // @Param id path int true "Purpose ID"
 // @Success 200 {object} ent.Purpose
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Purposes/{id} [get]
+// @Router /purposes/{id} [get]
 func (ctl *PurposeController) GetPurpose(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -84,17 +84,17 @@ func (ctl *PurposeController) GetPurpose(c *gin.Context) {
 	c.JSON(200, pp)
 }
 
-// ListPurpose handles request to get a list of Purpose entities
-// @Summary List Purpose entities
-// @Description list Purpose entities
-// @ID list-Purpose
+// ListPurpose handles request to get a list of purpose entities
+// @Summary List purpose entities
+// @Description list purpose entities
+// @ID list-purpose
 // @Produce json
 // @Param limit  query int false "Limit"
 // @Param offset query int false "Offset"
 // @Success 200 {array} ent.Purpose
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Purpose [get]
+// @Router /purposes [get]
 func (ctl *PurposeController) ListPurpose(c *gin.Context) {
 	limitQuery := c.Query("limit")
 	limit := 10
@@ -127,17 +127,17 @@ func (ctl *PurposeController) ListPurpose(c *gin.Context) {
 	c.JSON(200, purpose)
 }
 
-// DeletePurpose handles DELETE requests to delete a Purpose entity
-// @Summary Delete a Purpose entity by ID
-// @Description get Purpose by ID
-// @ID delete-Purpose
+// DeletePurpose handles DELETE requests to delete a purpose entity
+// @Summary Delete a purpose entity by ID
+// @Description get purpose by ID
+// @ID delete-purpose
 // @Produce  json
 // @Param id path int true "Purpose ID"
 // @Success 200 {object} gin.H
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Purpose/{id} [delete]
+// @Router /purposes/{id} [delete]
 func (ctl *PurposeController) DeletePurpose(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -160,18 +160,18 @@ func (ctl *PurposeController) DeletePurpose(c *gin.Context) {
 	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
 
-// UpdatePurpose handles PUT requests to update a Purpose entity
-// @Summary Update a Purpose entity by ID
-// @Description update Purpose by ID
-// @ID update-Purpose
+// UpdatePurpose handles PUT requests to update a purpose entity
+// @Summary Update a purpose entity by ID
+// @Description update purpose by ID
+// @ID update-purpose
 // @Accept   json
 // @Produce  json
 // @Param id path int true "Purpose ID"
-// @Param Purpose body ent.Purpose true "Purpose entity"
+// @Param purpose body ent.Purpose true "Purpose entity"
 // @Success 200 {object} ent.Purpose
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Purpose/{id} [put]
+// @Router /purposes/{id} [put]
 func (ctl *PurposeController) UpdatePurpose(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -200,7 +200,7 @@ func (ctl *PurposeController) UpdatePurpose(c *gin.Context) {
 	c.JSON(200, pp)
 }
 
-// NewPurposeController creates and registers handles for the Purpose controller
+// NewPurposeController creates and registers handles for the purpose controller
 func NewPurposeController(router gin.IRouter, client *ent.Client) *PurposeController {
 	pp := &PurposeController{
 		client: client,
@@ -212,13 +212,13 @@ func NewPurposeController(router gin.IRouter, client *ent.Client) *PurposeContro
 
 // InitPurposeController registers routes to the main engine
 func (ctl *PurposeController) register() {
-	Purpose := ctl.router.Group("/Purpose")
+	purposes := ctl.router.Group("/purposes")
 
-	Purpose.GET("", ctl.ListPurpose)
+	purposes.GET("", ctl.ListPurpose)
 
 	// CRUD
-	Purpose.POST("", ctl.CreatePurpose)
-	Purpose.GET(":id", ctl.GetPurpose)
-	Purpose.PUT(":id", ctl.UpdatePurpose)
-	Purpose.DELETE(":id", ctl.DeletePurpose)
+	purposes.POST("", ctl.CreatePurpose)
+	purposes.GET(":id", ctl.GetPurpose)
+	purposes.PUT(":id", ctl.UpdatePurpose)
+	purposes.DELETE(":id", ctl.DeletePurpose)
 }

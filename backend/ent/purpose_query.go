@@ -26,7 +26,7 @@ type PurposeQuery struct {
 	unique     []string
 	predicates []predicate.Purpose
 	// eager-loading edges.
-	withBooklist *BookBorrowQuery
+	withFor *BookBorrowQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,8 +56,8 @@ func (pq *PurposeQuery) Order(o ...OrderFunc) *PurposeQuery {
 	return pq
 }
 
-// QueryBooklist chains the current query on the Booklist edge.
-func (pq *PurposeQuery) QueryBooklist() *BookBorrowQuery {
+// QueryFor chains the current query on the for edge.
+func (pq *PurposeQuery) QueryFor() *BookBorrowQuery {
 	query := &BookBorrowQuery{config: pq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -66,7 +66,7 @@ func (pq *PurposeQuery) QueryBooklist() *BookBorrowQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(purpose.Table, purpose.FieldID, pq.sqlQuery()),
 			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, purpose.BooklistTable, purpose.BooklistColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, purpose.ForTable, purpose.ForColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -253,14 +253,14 @@ func (pq *PurposeQuery) Clone() *PurposeQuery {
 	}
 }
 
-//  WithBooklist tells the query-builder to eager-loads the nodes that are connected to
-// the "Booklist" edge. The optional arguments used to configure the query builder of the edge.
-func (pq *PurposeQuery) WithBooklist(opts ...func(*BookBorrowQuery)) *PurposeQuery {
+//  WithFor tells the query-builder to eager-loads the nodes that are connected to
+// the "for" edge. The optional arguments used to configure the query builder of the edge.
+func (pq *PurposeQuery) WithFor(opts ...func(*BookBorrowQuery)) *PurposeQuery {
 	query := &BookBorrowQuery{config: pq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withBooklist = query
+	pq.withFor = query
 	return pq
 }
 
@@ -331,7 +331,7 @@ func (pq *PurposeQuery) sqlAll(ctx context.Context) ([]*Purpose, error) {
 		nodes       = []*Purpose{}
 		_spec       = pq.querySpec()
 		loadedTypes = [1]bool{
-			pq.withBooklist != nil,
+			pq.withFor != nil,
 		}
 	)
 	_spec.ScanValues = func() []interface{} {
@@ -355,7 +355,7 @@ func (pq *PurposeQuery) sqlAll(ctx context.Context) ([]*Purpose, error) {
 		return nodes, nil
 	}
 
-	if query := pq.withBooklist; query != nil {
+	if query := pq.withFor; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*Purpose)
 		for i := range nodes {
@@ -364,22 +364,22 @@ func (pq *PurposeQuery) sqlAll(ctx context.Context) ([]*Purpose, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.BookBorrow(func(s *sql.Selector) {
-			s.Where(sql.InValues(purpose.BooklistColumn, fks...))
+			s.Where(sql.InValues(purpose.ForColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.purpose_booklist
+			fk := n.PURPOSE_ID
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "purpose_booklist" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "PURPOSE_ID" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "purpose_booklist" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "PURPOSE_ID" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Booklist = append(node.Edges.Booklist, n)
+			node.Edges.For = append(node.Edges.For, n)
 		}
 	}
 

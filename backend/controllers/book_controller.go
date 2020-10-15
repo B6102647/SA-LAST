@@ -10,23 +10,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// BookController defines the struct for the Book controller
+// BookController defines the struct for the book controller
 type BookController struct {
 	client *ent.Client
 	router gin.IRouter
 }
 
-// CreateBook handles POST requests for adding Book entities
-// @Summary Create Book
-// @Description Create Book
-// @ID create-Book
+// CreateBook handles POST requests for adding book entities
+// @Summary Create book
+// @Description Create book
+// @ID create-book
 // @Accept   json
 // @Produce  json
-// @Param Book body ent.Book true "Book entity"
+// @Param book body ent.Book true "Book entity"
 // @Success 200 {object} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Book [post]
+// @Router /books [post]
 func (ctl *BookController) CreateBook(c *gin.Context) {
 	obj := ent.Book{}
 	if err := c.ShouldBind(&obj); err != nil {
@@ -40,6 +40,7 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 		Create().
 		SetBOOKNAME(obj.BOOKNAME).
 		SetAuthor(obj.Author).
+		SetStatus(obj.Status).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -51,17 +52,17 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 	c.JSON(200, bk)
 }
 
-// GetBook handles GET requests to retrieve a Book entity
-// @Summary Get a Book entity by ID
-// @Description get Book by ID
-// @ID get-Book
+// GetBook handles GET requests to retrieve a book entity
+// @Summary Get a book entity by ID
+// @Description get book by ID
+// @ID get-book
 // @Produce  json
 // @Param id path int true "Book ID"
 // @Success 200 {object} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Books/{id} [get]
+// @Router /books/{id} [get]
 func (ctl *BookController) GetBook(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -85,17 +86,17 @@ func (ctl *BookController) GetBook(c *gin.Context) {
 	c.JSON(200, bk)
 }
 
-// ListBook handles request to get a list of Book entities
-// @Summary List Book entities
-// @Description list Book entities
-// @ID list-Book
+// ListBook handles request to get a list of book entities
+// @Summary List book entities
+// @Description list book entities
+// @ID list-book
 // @Produce json
 // @Param limit  query int false "Limit"
 // @Param offset query int false "Offset"
 // @Success 200 {array} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Book [get]
+// @Router /books [get]
 func (ctl *BookController) ListBook(c *gin.Context) {
 	limitQuery := c.Query("limit")
 	limit := 10
@@ -128,17 +129,17 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 	c.JSON(200, book)
 }
 
-// DeleteBook handles DELETE requests to delete a Book entity
-// @Summary Delete a Book entity by ID
-// @Description get Book by ID
-// @ID delete-Book
+// DeleteBook handles DELETE requests to delete a book entity
+// @Summary Delete a book entity by ID
+// @Description get book by ID
+// @ID delete-book
 // @Produce  json
 // @Param id path int true "Book ID"
 // @Success 200 {object} gin.H
 // @Failure 400 {object} gin.H
 // @Failure 404 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Book/{id} [delete]
+// @Router /books/{id} [delete]
 func (ctl *BookController) DeleteBook(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -161,10 +162,10 @@ func (ctl *BookController) DeleteBook(c *gin.Context) {
 	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
 }
 
-// UpdateBook handles PUT requests to update a Book entity
-// @Summary Update a Book entity by ID
-// @Description update Book by ID
-// @ID update-Book
+// UpdateBook handles PUT requests to update a book entity
+// @Summary Update a book entity by ID
+// @Description update book by ID
+// @ID update-book
 // @Accept   json
 // @Produce  json
 // @Param id path int true "Book ID"
@@ -172,7 +173,7 @@ func (ctl *BookController) DeleteBook(c *gin.Context) {
 // @Success 200 {object} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
-// @Router /Book/{id} [put]
+// @Router /books/{id} [put]
 func (ctl *BookController) UpdateBook(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -201,7 +202,7 @@ func (ctl *BookController) UpdateBook(c *gin.Context) {
 	c.JSON(200, bk)
 }
 
-// NewBookController creates and registers handles for the Book controller
+// NewBookController creates and registers handles for the book controller
 func NewBookController(router gin.IRouter, client *ent.Client) *BookController {
 	bk := &BookController{
 		client: client,
@@ -213,13 +214,13 @@ func NewBookController(router gin.IRouter, client *ent.Client) *BookController {
 
 // InitBookController registers routes to the main engine
 func (ctl *BookController) register() {
-	Book := ctl.router.Group("/book")
+	books := ctl.router.Group("/books")
 
-	Book.GET("", ctl.ListBook)
+	books.GET("", ctl.ListBook)
 
 	// CRUD
-	Book.POST("", ctl.CreateBook)
-	Book.GET(":id", ctl.GetBook)
-	Book.PUT(":id", ctl.UpdateBook)
-	Book.DELETE(":id", ctl.DeleteBook)
+	books.POST("", ctl.CreateBook)
+	books.GET(":id", ctl.GetBook)
+	books.PUT(":id", ctl.UpdateBook)
+	books.DELETE(":id", ctl.DeleteBook)
 }

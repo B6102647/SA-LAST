@@ -12,20 +12,20 @@ const (
 	// FieldUSERNAME holds the string denoting the user_name field in the database.
 	FieldUSERNAME = "user_name"
 
-	// EdgeBooklist holds the string denoting the booklist edge name in mutations.
-	EdgeBooklist = "Booklist"
+	// EdgeBorrow holds the string denoting the borrow edge name in mutations.
+	EdgeBorrow = "Borrow"
 	// EdgeRolePlay holds the string denoting the roleplay edge name in mutations.
 	EdgeRolePlay = "RolePlay"
 
 	// Table holds the table name of the user in the database.
 	Table = "users"
-	// BooklistTable is the table the holds the Booklist relation/edge.
-	BooklistTable = "book_borrows"
-	// BooklistInverseTable is the table name for the BookBorrow entity.
+	// BorrowTable is the table the holds the Borrow relation/edge.
+	BorrowTable = "book_borrows"
+	// BorrowInverseTable is the table name for the BookBorrow entity.
 	// It exists in this package in order to avoid circular dependency with the "bookborrow" package.
-	BooklistInverseTable = "book_borrows"
-	// BooklistColumn is the table column denoting the Booklist relation/edge.
-	BooklistColumn = "user_booklist"
+	BorrowInverseTable = "book_borrows"
+	// BorrowColumn is the table column denoting the Borrow relation/edge.
+	BorrowColumn = "User_ID"
 	// RolePlayTable is the table the holds the RolePlay relation/edge.
 	RolePlayTable = "users"
 	// RolePlayInverseTable is the table name for the Role entity.

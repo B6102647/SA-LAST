@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * SUT SA Example API
+ * SUT SA Example API Playlist Vidoe
  * This is a sample server for SUT SE 2563
  *
  * The version of the OpenAPI document: 1.0
@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    EntUserEdges,
+    EntUserEdgesFromJSON,
+    EntUserEdgesFromJSONTyped,
+    EntUserEdgesToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -20,11 +27,23 @@ import { exists, mapValues } from '../runtime';
  */
 export interface EntUser {
     /**
-     * Age holds the value of the "age" field.
-     * @type {number}
+     * USEREMAIL holds the value of the "USER_EMAIL" field.
+     * @type {string}
      * @memberof EntUser
      */
-    age?: number;
+    uSEREMAIL?: string;
+    /**
+     * USERNAME holds the value of the "USER_NAME" field.
+     * @type {string}
+     * @memberof EntUser
+     */
+    uSERNAME?: string;
+    /**
+     * 
+     * @type {EntUserEdges}
+     * @memberof EntUser
+     */
+    edges?: EntUserEdges;
     /**
      * ID of the ent.
      * @type {number}
@@ -32,11 +51,11 @@ export interface EntUser {
      */
     id?: number;
     /**
-     * Name holds the value of the "name" field.
-     * @type {string}
+     * 
+     * @type {number}
      * @memberof EntUser
      */
-    name?: string;
+    roleID?: number;
 }
 
 export function EntUserFromJSON(json: any): EntUser {
@@ -49,9 +68,11 @@ export function EntUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): E
     }
     return {
         
-        'age': !exists(json, 'age') ? undefined : json['age'],
+        'uSEREMAIL': !exists(json, 'USER_EMAIL') ? undefined : json['USER_EMAIL'],
+        'uSERNAME': !exists(json, 'USER_NAME') ? undefined : json['USER_NAME'],
+        'edges': !exists(json, 'edges') ? undefined : EntUserEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'roleID': !exists(json, 'role_ID') ? undefined : json['role_ID'],
     };
 }
 
@@ -64,9 +85,11 @@ export function EntUserToJSON(value?: EntUser | null): any {
     }
     return {
         
-        'age': value.age,
+        'USER_EMAIL': value.uSEREMAIL,
+        'USER_NAME': value.uSERNAME,
+        'edges': EntUserEdgesToJSON(value.edges),
         'id': value.id,
-        'name': value.name,
+        'role_ID': value.roleID,
     };
 }
 

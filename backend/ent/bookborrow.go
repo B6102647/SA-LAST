@@ -23,16 +23,16 @@ type BookBorrow struct {
 	ADDEDTIME time.Time `json:"ADDED_TIME,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookBorrowQuery when eager-loading is set.
-	Edges            BookBorrowEdges `json:"edges"`
-	book_booklist    *int
-	purpose_booklist *int
-	user_booklist    *int
+	Edges      BookBorrowEdges `json:"edges"`
+	BOOK_ID    *int
+	PURPOSE_ID *int
+	User_ID    *int
 }
 
 // BookBorrowEdges holds the relations/edges for other nodes in the graph.
 type BookBorrowEdges struct {
-	// Owner holds the value of the Owner edge.
-	Owner *User
+	// USER holds the value of the USER edge.
+	USER *User
 	// BOOK holds the value of the BOOK edge.
 	BOOK *Book
 	// PURPOSE holds the value of the PURPOSE edge.
@@ -42,18 +42,18 @@ type BookBorrowEdges struct {
 	loadedTypes [3]bool
 }
 
-// OwnerOrErr returns the Owner value or an error if the edge
+// USEROrErr returns the USER value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e BookBorrowEdges) OwnerOrErr() (*User, error) {
+func (e BookBorrowEdges) USEROrErr() (*User, error) {
 	if e.loadedTypes[0] {
-		if e.Owner == nil {
-			// The edge Owner was loaded in eager-loading,
+		if e.USER == nil {
+			// The edge USER was loaded in eager-loading,
 			// but was not found.
 			return nil, &NotFoundError{label: user.Label}
 		}
-		return e.Owner, nil
+		return e.USER, nil
 	}
-	return nil, &NotLoadedError{edge: "Owner"}
+	return nil, &NotLoadedError{edge: "USER"}
 }
 
 // BOOKOrErr returns the BOOK value or an error if the edge
@@ -95,9 +95,9 @@ func (*BookBorrow) scanValues() []interface{} {
 // fkValues returns the types for scanning foreign-keys values from sql.Rows.
 func (*BookBorrow) fkValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{}, // book_booklist
-		&sql.NullInt64{}, // purpose_booklist
-		&sql.NullInt64{}, // user_booklist
+		&sql.NullInt64{}, // BOOK_ID
+		&sql.NullInt64{}, // PURPOSE_ID
+		&sql.NullInt64{}, // User_ID
 	}
 }
 
@@ -121,30 +121,30 @@ func (bb *BookBorrow) assignValues(values ...interface{}) error {
 	values = values[1:]
 	if len(values) == len(bookborrow.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field book_booklist", value)
+			return fmt.Errorf("unexpected type %T for edge-field BOOK_ID", value)
 		} else if value.Valid {
-			bb.book_booklist = new(int)
-			*bb.book_booklist = int(value.Int64)
+			bb.BOOK_ID = new(int)
+			*bb.BOOK_ID = int(value.Int64)
 		}
 		if value, ok := values[1].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field purpose_booklist", value)
+			return fmt.Errorf("unexpected type %T for edge-field PURPOSE_ID", value)
 		} else if value.Valid {
-			bb.purpose_booklist = new(int)
-			*bb.purpose_booklist = int(value.Int64)
+			bb.PURPOSE_ID = new(int)
+			*bb.PURPOSE_ID = int(value.Int64)
 		}
 		if value, ok := values[2].(*sql.NullInt64); !ok {
-			return fmt.Errorf("unexpected type %T for edge-field user_booklist", value)
+			return fmt.Errorf("unexpected type %T for edge-field User_ID", value)
 		} else if value.Valid {
-			bb.user_booklist = new(int)
-			*bb.user_booklist = int(value.Int64)
+			bb.User_ID = new(int)
+			*bb.User_ID = int(value.Int64)
 		}
 	}
 	return nil
 }
 
-// QueryOwner queries the Owner edge of the BookBorrow.
-func (bb *BookBorrow) QueryOwner() *UserQuery {
-	return (&BookBorrowClient{config: bb.config}).QueryOwner(bb)
+// QueryUSER queries the USER edge of the BookBorrow.
+func (bb *BookBorrow) QueryUSER() *UserQuery {
+	return (&BookBorrowClient{config: bb.config}).QueryUSER(bb)
 }
 
 // QueryBOOK queries the BOOK edge of the BookBorrow.

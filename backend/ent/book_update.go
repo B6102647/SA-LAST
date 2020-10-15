@@ -40,6 +40,12 @@ func (bu *BookUpdate) SetAuthor(s string) *BookUpdate {
 	return bu
 }
 
+// SetStatus sets the Status field.
+func (bu *BookUpdate) SetStatus(s string) *BookUpdate {
+	bu.mutation.SetStatus(s)
+	return bu
+}
+
 // AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
 func (bu *BookUpdate) AddBooklistIDs(ids ...int) *BookUpdate {
 	bu.mutation.AddBooklistIDs(ids...)
@@ -164,6 +170,13 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: book.FieldAuthor,
 		})
 	}
+	if value, ok := bu.mutation.Status(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldStatus,
+		})
+	}
 	if nodes := bu.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -229,6 +242,12 @@ func (buo *BookUpdateOne) SetBOOKNAME(s string) *BookUpdateOne {
 // SetAuthor sets the Author field.
 func (buo *BookUpdateOne) SetAuthor(s string) *BookUpdateOne {
 	buo.mutation.SetAuthor(s)
+	return buo
+}
+
+// SetStatus sets the Status field.
+func (buo *BookUpdateOne) SetStatus(s string) *BookUpdateOne {
+	buo.mutation.SetStatus(s)
 	return buo
 }
 
@@ -352,6 +371,13 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (b *Book, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: book.FieldAuthor,
+		})
+	}
+	if value, ok := buo.mutation.Status(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldStatus,
 		})
 	}
 	if nodes := buo.mutation.RemovedBooklistIDs(); len(nodes) > 0 {

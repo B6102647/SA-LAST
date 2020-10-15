@@ -41,19 +41,19 @@ func (uu *UserUpdate) SetUSERNAME(s string) *UserUpdate {
 	return uu
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (uu *UserUpdate) AddBooklistIDs(ids ...int) *UserUpdate {
-	uu.mutation.AddBooklistIDs(ids...)
+// AddBorrowIDs adds the Borrow edge to BookBorrow by ids.
+func (uu *UserUpdate) AddBorrowIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddBorrowIDs(ids...)
 	return uu
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (uu *UserUpdate) AddBooklist(b ...*BookBorrow) *UserUpdate {
+// AddBorrow adds the Borrow edges to BookBorrow.
+func (uu *UserUpdate) AddBorrow(b ...*BookBorrow) *UserUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return uu.AddBooklistIDs(ids...)
+	return uu.AddBorrowIDs(ids...)
 }
 
 // SetRolePlayID sets the RolePlay edge to Role by id.
@@ -80,19 +80,19 @@ func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (uu *UserUpdate) RemoveBooklistIDs(ids ...int) *UserUpdate {
-	uu.mutation.RemoveBooklistIDs(ids...)
+// RemoveBorrowIDs removes the Borrow edge to BookBorrow by ids.
+func (uu *UserUpdate) RemoveBorrowIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveBorrowIDs(ids...)
 	return uu
 }
 
-// RemoveBooklist removes Booklist edges to BookBorrow.
-func (uu *UserUpdate) RemoveBooklist(b ...*BookBorrow) *UserUpdate {
+// RemoveBorrow removes Borrow edges to BookBorrow.
+func (uu *UserUpdate) RemoveBorrow(b ...*BookBorrow) *UserUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return uu.RemoveBooklistIDs(ids...)
+	return uu.RemoveBorrowIDs(ids...)
 }
 
 // ClearRolePlay clears the RolePlay edge to Role.
@@ -195,12 +195,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldUSERNAME,
 		})
 	}
-	if nodes := uu.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.RemovedBorrowIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.BooklistTable,
-			Columns: []string{user.BooklistColumn},
+			Table:   user.BorrowTable,
+			Columns: []string{user.BorrowColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -214,12 +214,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uu.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := uu.mutation.BorrowIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.BooklistTable,
-			Columns: []string{user.BooklistColumn},
+			Table:   user.BorrowTable,
+			Columns: []string{user.BorrowColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -298,19 +298,19 @@ func (uuo *UserUpdateOne) SetUSERNAME(s string) *UserUpdateOne {
 	return uuo
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (uuo *UserUpdateOne) AddBooklistIDs(ids ...int) *UserUpdateOne {
-	uuo.mutation.AddBooklistIDs(ids...)
+// AddBorrowIDs adds the Borrow edge to BookBorrow by ids.
+func (uuo *UserUpdateOne) AddBorrowIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddBorrowIDs(ids...)
 	return uuo
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (uuo *UserUpdateOne) AddBooklist(b ...*BookBorrow) *UserUpdateOne {
+// AddBorrow adds the Borrow edges to BookBorrow.
+func (uuo *UserUpdateOne) AddBorrow(b ...*BookBorrow) *UserUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return uuo.AddBooklistIDs(ids...)
+	return uuo.AddBorrowIDs(ids...)
 }
 
 // SetRolePlayID sets the RolePlay edge to Role by id.
@@ -337,19 +337,19 @@ func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (uuo *UserUpdateOne) RemoveBooklistIDs(ids ...int) *UserUpdateOne {
-	uuo.mutation.RemoveBooklistIDs(ids...)
+// RemoveBorrowIDs removes the Borrow edge to BookBorrow by ids.
+func (uuo *UserUpdateOne) RemoveBorrowIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveBorrowIDs(ids...)
 	return uuo
 }
 
-// RemoveBooklist removes Booklist edges to BookBorrow.
-func (uuo *UserUpdateOne) RemoveBooklist(b ...*BookBorrow) *UserUpdateOne {
+// RemoveBorrow removes Borrow edges to BookBorrow.
+func (uuo *UserUpdateOne) RemoveBorrow(b ...*BookBorrow) *UserUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return uuo.RemoveBooklistIDs(ids...)
+	return uuo.RemoveBorrowIDs(ids...)
 }
 
 // ClearRolePlay clears the RolePlay edge to Role.
@@ -450,12 +450,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 			Column: user.FieldUSERNAME,
 		})
 	}
-	if nodes := uuo.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.RemovedBorrowIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.BooklistTable,
-			Columns: []string{user.BooklistColumn},
+			Table:   user.BorrowTable,
+			Columns: []string{user.BorrowColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -469,12 +469,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := uuo.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := uuo.mutation.BorrowIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.BooklistTable,
-			Columns: []string{user.BooklistColumn},
+			Table:   user.BorrowTable,
+			Columns: []string{user.BorrowColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

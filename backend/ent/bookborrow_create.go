@@ -29,23 +29,23 @@ func (bbc *BookBorrowCreate) SetADDEDTIME(t time.Time) *BookBorrowCreate {
 	return bbc
 }
 
-// SetOwnerID sets the Owner edge to User by id.
-func (bbc *BookBorrowCreate) SetOwnerID(id int) *BookBorrowCreate {
-	bbc.mutation.SetOwnerID(id)
+// SetUSERID sets the USER edge to User by id.
+func (bbc *BookBorrowCreate) SetUSERID(id int) *BookBorrowCreate {
+	bbc.mutation.SetUSERID(id)
 	return bbc
 }
 
-// SetNillableOwnerID sets the Owner edge to User by id if the given value is not nil.
-func (bbc *BookBorrowCreate) SetNillableOwnerID(id *int) *BookBorrowCreate {
+// SetNillableUSERID sets the USER edge to User by id if the given value is not nil.
+func (bbc *BookBorrowCreate) SetNillableUSERID(id *int) *BookBorrowCreate {
 	if id != nil {
-		bbc = bbc.SetOwnerID(*id)
+		bbc = bbc.SetUSERID(*id)
 	}
 	return bbc
 }
 
-// SetOwner sets the Owner edge to User.
-func (bbc *BookBorrowCreate) SetOwner(u *User) *BookBorrowCreate {
-	return bbc.SetOwnerID(u.ID)
+// SetUSER sets the USER edge to User.
+func (bbc *BookBorrowCreate) SetUSER(u *User) *BookBorrowCreate {
+	return bbc.SetUSERID(u.ID)
 }
 
 // SetBOOKID sets the BOOK edge to Book by id.
@@ -164,12 +164,12 @@ func (bbc *BookBorrowCreate) createSpec() (*BookBorrow, *sqlgraph.CreateSpec) {
 		})
 		bb.ADDEDTIME = value
 	}
-	if nodes := bbc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := bbc.mutation.USERIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   bookborrow.OwnerTable,
-			Columns: []string{bookborrow.OwnerColumn},
+			Table:   bookborrow.USERTable,
+			Columns: []string{bookborrow.USERColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

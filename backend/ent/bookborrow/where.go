@@ -176,25 +176,25 @@ func ADDEDTIMELTE(v time.Time) predicate.BookBorrow {
 	})
 }
 
-// HasOwner applies the HasEdge predicate on the "Owner" edge.
-func HasOwner() predicate.BookBorrow {
+// HasUSER applies the HasEdge predicate on the "USER" edge.
+func HasUSER() predicate.BookBorrow {
 	return predicate.BookBorrow(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(OwnerTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+			sqlgraph.To(USERTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, USERTable, USERColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasOwnerWith applies the HasEdge predicate on the "Owner" edge with a given conditions (other predicates).
-func HasOwnerWith(preds ...predicate.User) predicate.BookBorrow {
+// HasUSERWith applies the HasEdge predicate on the "USER" edge with a given conditions (other predicates).
+func HasUSERWith(preds ...predicate.User) predicate.BookBorrow {
 	return predicate.BookBorrow(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(OwnerInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+			sqlgraph.To(USERInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, USERTable, USERColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

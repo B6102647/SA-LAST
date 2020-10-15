@@ -14,7 +14,7 @@ type User struct {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("USER_EMAIL").NotEmpty(),
+		field.String("USER_EMAIL").NotEmpty().Unique(),
 		field.String("USER_NAME").NotEmpty(),
 	}
 }
@@ -22,7 +22,7 @@ func (User) Fields() []ent.Field {
 // Edges of the User.
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("Booklist", BookBorrow.Type),
+		edge.To("Borrow", BookBorrow.Type).StorageKey(edge.Column("User_ID")),
 		edge.From("RolePlay", Role.Type).Ref("role").Unique(),
 	}
 }

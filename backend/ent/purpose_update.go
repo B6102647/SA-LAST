@@ -34,19 +34,19 @@ func (pu *PurposeUpdate) SetPURPOSENAME(s string) *PurposeUpdate {
 	return pu
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (pu *PurposeUpdate) AddBooklistIDs(ids ...int) *PurposeUpdate {
-	pu.mutation.AddBooklistIDs(ids...)
+// AddForIDs adds the for edge to BookBorrow by ids.
+func (pu *PurposeUpdate) AddForIDs(ids ...int) *PurposeUpdate {
+	pu.mutation.AddForIDs(ids...)
 	return pu
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (pu *PurposeUpdate) AddBooklist(b ...*BookBorrow) *PurposeUpdate {
+// AddFor adds the for edges to BookBorrow.
+func (pu *PurposeUpdate) AddFor(b ...*BookBorrow) *PurposeUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return pu.AddBooklistIDs(ids...)
+	return pu.AddForIDs(ids...)
 }
 
 // Mutation returns the PurposeMutation object of the builder.
@@ -54,19 +54,19 @@ func (pu *PurposeUpdate) Mutation() *PurposeMutation {
 	return pu.mutation
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (pu *PurposeUpdate) RemoveBooklistIDs(ids ...int) *PurposeUpdate {
-	pu.mutation.RemoveBooklistIDs(ids...)
+// RemoveForIDs removes the for edge to BookBorrow by ids.
+func (pu *PurposeUpdate) RemoveForIDs(ids ...int) *PurposeUpdate {
+	pu.mutation.RemoveForIDs(ids...)
 	return pu
 }
 
-// RemoveBooklist removes Booklist edges to BookBorrow.
-func (pu *PurposeUpdate) RemoveBooklist(b ...*BookBorrow) *PurposeUpdate {
+// RemoveFor removes for edges to BookBorrow.
+func (pu *PurposeUpdate) RemoveFor(b ...*BookBorrow) *PurposeUpdate {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return pu.RemoveBooklistIDs(ids...)
+	return pu.RemoveForIDs(ids...)
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -151,12 +151,12 @@ func (pu *PurposeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: purpose.FieldPURPOSENAME,
 		})
 	}
-	if nodes := pu.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.RemovedForIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   purpose.BooklistTable,
-			Columns: []string{purpose.BooklistColumn},
+			Table:   purpose.ForTable,
+			Columns: []string{purpose.ForColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -170,12 +170,12 @@ func (pu *PurposeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ForIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   purpose.BooklistTable,
-			Columns: []string{purpose.BooklistColumn},
+			Table:   purpose.ForTable,
+			Columns: []string{purpose.ForColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -213,19 +213,19 @@ func (puo *PurposeUpdateOne) SetPURPOSENAME(s string) *PurposeUpdateOne {
 	return puo
 }
 
-// AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
-func (puo *PurposeUpdateOne) AddBooklistIDs(ids ...int) *PurposeUpdateOne {
-	puo.mutation.AddBooklistIDs(ids...)
+// AddForIDs adds the for edge to BookBorrow by ids.
+func (puo *PurposeUpdateOne) AddForIDs(ids ...int) *PurposeUpdateOne {
+	puo.mutation.AddForIDs(ids...)
 	return puo
 }
 
-// AddBooklist adds the Booklist edges to BookBorrow.
-func (puo *PurposeUpdateOne) AddBooklist(b ...*BookBorrow) *PurposeUpdateOne {
+// AddFor adds the for edges to BookBorrow.
+func (puo *PurposeUpdateOne) AddFor(b ...*BookBorrow) *PurposeUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return puo.AddBooklistIDs(ids...)
+	return puo.AddForIDs(ids...)
 }
 
 // Mutation returns the PurposeMutation object of the builder.
@@ -233,19 +233,19 @@ func (puo *PurposeUpdateOne) Mutation() *PurposeMutation {
 	return puo.mutation
 }
 
-// RemoveBooklistIDs removes the Booklist edge to BookBorrow by ids.
-func (puo *PurposeUpdateOne) RemoveBooklistIDs(ids ...int) *PurposeUpdateOne {
-	puo.mutation.RemoveBooklistIDs(ids...)
+// RemoveForIDs removes the for edge to BookBorrow by ids.
+func (puo *PurposeUpdateOne) RemoveForIDs(ids ...int) *PurposeUpdateOne {
+	puo.mutation.RemoveForIDs(ids...)
 	return puo
 }
 
-// RemoveBooklist removes Booklist edges to BookBorrow.
-func (puo *PurposeUpdateOne) RemoveBooklist(b ...*BookBorrow) *PurposeUpdateOne {
+// RemoveFor removes for edges to BookBorrow.
+func (puo *PurposeUpdateOne) RemoveFor(b ...*BookBorrow) *PurposeUpdateOne {
 	ids := make([]int, len(b))
 	for i := range b {
 		ids[i] = b[i].ID
 	}
-	return puo.RemoveBooklistIDs(ids...)
+	return puo.RemoveForIDs(ids...)
 }
 
 // Save executes the query and returns the updated entity.
@@ -328,12 +328,12 @@ func (puo *PurposeUpdateOne) sqlSave(ctx context.Context) (pu *Purpose, err erro
 			Column: purpose.FieldPURPOSENAME,
 		})
 	}
-	if nodes := puo.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.RemovedForIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   purpose.BooklistTable,
-			Columns: []string{purpose.BooklistColumn},
+			Table:   purpose.ForTable,
+			Columns: []string{purpose.ForColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -347,12 +347,12 @@ func (puo *PurposeUpdateOne) sqlSave(ctx context.Context) (pu *Purpose, err erro
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.BooklistIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ForIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   purpose.BooklistTable,
-			Columns: []string{purpose.BooklistColumn},
+			Table:   purpose.ForTable,
+			Columns: []string{purpose.ForColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

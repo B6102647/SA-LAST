@@ -14,14 +14,15 @@ type Book struct {
 // Fields of the Book.
 func (Book) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("BOOK_NAME").NotEmpty(),
+		field.String("BOOK_NAME").NotEmpty().Unique(),
 		field.String("Author"),
+		field.String("Status"),
 	}
 }
 
 // Edges of the Book.
 func (Book) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("Booklist", BookBorrow.Type),
+		edge.To("Booklist", BookBorrow.Type).StorageKey(edge.Column("BOOK_ID")),
 	}
 }

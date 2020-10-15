@@ -27,7 +27,7 @@ type UserQuery struct {
 	unique     []string
 	predicates []predicate.User
 	// eager-loading edges.
-	withBooklist *BookBorrowQuery
+	withBorrow   *BookBorrowQuery
 	withRolePlay *RoleQuery
 	withFKs      bool
 	// intermediate query (i.e. traversal path).
@@ -59,8 +59,8 @@ func (uq *UserQuery) Order(o ...OrderFunc) *UserQuery {
 	return uq
 }
 
-// QueryBooklist chains the current query on the Booklist edge.
-func (uq *UserQuery) QueryBooklist() *BookBorrowQuery {
+// QueryBorrow chains the current query on the Borrow edge.
+func (uq *UserQuery) QueryBorrow() *BookBorrowQuery {
 	query := &BookBorrowQuery{config: uq.config}
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := uq.prepareQuery(ctx); err != nil {
@@ -69,7 +69,7 @@ func (uq *UserQuery) QueryBooklist() *BookBorrowQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, uq.sqlQuery()),
 			sqlgraph.To(bookborrow.Table, bookborrow.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.BooklistTable, user.BooklistColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.BorrowTable, user.BorrowColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -274,14 +274,14 @@ func (uq *UserQuery) Clone() *UserQuery {
 	}
 }
 
-//  WithBooklist tells the query-builder to eager-loads the nodes that are connected to
-// the "Booklist" edge. The optional arguments used to configure the query builder of the edge.
-func (uq *UserQuery) WithBooklist(opts ...func(*BookBorrowQuery)) *UserQuery {
+//  WithBorrow tells the query-builder to eager-loads the nodes that are connected to
+// the "Borrow" edge. The optional arguments used to configure the query builder of the edge.
+func (uq *UserQuery) WithBorrow(opts ...func(*BookBorrowQuery)) *UserQuery {
 	query := &BookBorrowQuery{config: uq.config}
 	for _, opt := range opts {
 		opt(query)
 	}
-	uq.withBooklist = query
+	uq.withBorrow = query
 	return uq
 }
 
@@ -364,7 +364,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		withFKs     = uq.withFKs
 		_spec       = uq.querySpec()
 		loadedTypes = [2]bool{
-			uq.withBooklist != nil,
+			uq.withBorrow != nil,
 			uq.withRolePlay != nil,
 		}
 	)
@@ -398,7 +398,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		return nodes, nil
 	}
 
-	if query := uq.withBooklist; query != nil {
+	if query := uq.withBorrow; query != nil {
 		fks := make([]driver.Value, 0, len(nodes))
 		nodeids := make(map[int]*User)
 		for i := range nodes {
@@ -407,22 +407,22 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 		}
 		query.withFKs = true
 		query.Where(predicate.BookBorrow(func(s *sql.Selector) {
-			s.Where(sql.InValues(user.BooklistColumn, fks...))
+			s.Where(sql.InValues(user.BorrowColumn, fks...))
 		}))
 		neighbors, err := query.All(ctx)
 		if err != nil {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.user_booklist
+			fk := n.User_ID
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "user_booklist" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "User_ID" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "user_booklist" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "User_ID" returned %v for node %v`, *fk, n.ID)
 			}
-			node.Edges.Booklist = append(node.Edges.Booklist, n)
+			node.Edges.Borrow = append(node.Edges.Borrow, n)
 		}
 	}
 

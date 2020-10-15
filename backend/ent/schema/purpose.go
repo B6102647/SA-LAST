@@ -14,13 +14,13 @@ type Purpose struct {
 // Fields of the Purpose.
 func (Purpose) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("PURPOSE_NAME").NotEmpty(),
+		field.String("PURPOSE_NAME").NotEmpty().Unique(),
 	}
 }
 
 // Edges of the Purpose.
 func (Purpose) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("Booklist", BookBorrow.Type),
+		edge.To("for", BookBorrow.Type).StorageKey(edge.Column("PURPOSE_ID")),
 	}
 }

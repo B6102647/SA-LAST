@@ -32,6 +32,12 @@ func (bc *BookCreate) SetAuthor(s string) *BookCreate {
 	return bc
 }
 
+// SetStatus sets the Status field.
+func (bc *BookCreate) SetStatus(s string) *BookCreate {
+	bc.mutation.SetStatus(s)
+	return bc
+}
+
 // AddBooklistIDs adds the Booklist edge to BookBorrow by ids.
 func (bc *BookCreate) AddBooklistIDs(ids ...int) *BookCreate {
 	bc.mutation.AddBooklistIDs(ids...)
@@ -64,6 +70,9 @@ func (bc *BookCreate) Save(ctx context.Context) (*Book, error) {
 	}
 	if _, ok := bc.mutation.Author(); !ok {
 		return nil, &ValidationError{Name: "Author", err: errors.New("ent: missing required field \"Author\"")}
+	}
+	if _, ok := bc.mutation.Status(); !ok {
+		return nil, &ValidationError{Name: "Status", err: errors.New("ent: missing required field \"Status\"")}
 	}
 	var (
 		err  error
@@ -140,6 +149,14 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			Column: book.FieldAuthor,
 		})
 		b.Author = value
+	}
+	if value, ok := bc.mutation.Status(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldStatus,
+		})
+		b.Status = value
 	}
 	if nodes := bc.mutation.BooklistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

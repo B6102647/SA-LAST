@@ -371,13 +371,13 @@ func (bq *BookQuery) sqlAll(ctx context.Context) ([]*Book, error) {
 			return nil, err
 		}
 		for _, n := range neighbors {
-			fk := n.book_booklist
+			fk := n.BOOK_ID
 			if fk == nil {
-				return nil, fmt.Errorf(`foreign-key "book_booklist" is nil for node %v`, n.ID)
+				return nil, fmt.Errorf(`foreign-key "BOOK_ID" is nil for node %v`, n.ID)
 			}
 			node, ok := nodeids[*fk]
 			if !ok {
-				return nil, fmt.Errorf(`unexpected foreign-key "book_booklist" returned %v for node %v`, *fk, n.ID)
+				return nil, fmt.Errorf(`unexpected foreign-key "BOOK_ID" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Booklist = append(node.Edges.Booklist, n)
 		}

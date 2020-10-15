@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * SUT SA Example API
+ * SUT SA Example API Playlist Vidoe
  * This is a sample server for SUT SE 2563
  *
  * The version of the OpenAPI document: 1.0
@@ -15,16 +15,79 @@
 
 import * as runtime from '../runtime';
 import {
+    ControllersBookBorrow,
+    ControllersBookBorrowFromJSON,
+    ControllersBookBorrowToJSON,
+    EntBook,
+    EntBookFromJSON,
+    EntBookToJSON,
+    EntBookBorrow,
+    EntBookBorrowFromJSON,
+    EntBookBorrowToJSON,
+    EntPurpose,
+    EntPurposeFromJSON,
+    EntPurposeToJSON,
+    EntRole,
+    EntRoleFromJSON,
+    EntRoleToJSON,
     EntUser,
     EntUserFromJSON,
     EntUserToJSON,
 } from '../models';
 
+export interface CreateBookRequest {
+    book: EntBook;
+}
+
+export interface CreateBookborrowRequest {
+    bookborrow: ControllersBookBorrow;
+}
+
+export interface CreatePurposeRequest {
+    purpose: EntPurpose;
+}
+
+export interface CreateRoleRequest {
+    role: EntRole;
+}
+
 export interface CreateUserRequest {
     user: EntUser;
 }
 
+export interface DeleteBookRequest {
+    id: number;
+}
+
+export interface DeleteBookborrowRequest {
+    id: number;
+}
+
+export interface DeletePurposeRequest {
+    id: number;
+}
+
+export interface DeleteRoleRequest {
+    id: number;
+}
+
 export interface DeleteUserRequest {
+    id: number;
+}
+
+export interface GetBookRequest {
+    id: number;
+}
+
+export interface GetBookborrowRequest {
+    id: number;
+}
+
+export interface GetPurposeRequest {
+    id: number;
+}
+
+export interface GetRoleRequest {
     id: number;
 }
 
@@ -32,9 +95,49 @@ export interface GetUserRequest {
     id: number;
 }
 
+export interface ListBookRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListBookborrowRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListPurposeRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListRoleRequest {
+    limit?: number;
+    offset?: number;
+}
+
 export interface ListUserRequest {
     limit?: number;
     offset?: number;
+}
+
+export interface UpdateBookRequest {
+    id: number;
+    book: EntBook;
+}
+
+export interface UpdateBookborrowRequest {
+    id: number;
+    bookborrow: EntBookBorrow;
+}
+
+export interface UpdatePurposeRequest {
+    id: number;
+    purpose: EntPurpose;
+}
+
+export interface UpdateRoleRequest {
+    id: number;
+    role: EntRole;
 }
 
 export interface UpdateUserRequest {
@@ -46,6 +149,146 @@ export interface UpdateUserRequest {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     * Create book
+     * Create book
+     */
+    async createBookRaw(requestParameters: CreateBookRequest): Promise<runtime.ApiResponse<EntBook>> {
+        if (requestParameters.book === null || requestParameters.book === undefined) {
+            throw new runtime.RequiredError('book','Required parameter requestParameters.book was null or undefined when calling createBook.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/books`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntBookToJSON(requestParameters.book),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));
+    }
+
+    /**
+     * Create book
+     * Create book
+     */
+    async createBook(requestParameters: CreateBookRequest): Promise<EntBook> {
+        const response = await this.createBookRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Create bookborrow
+     * Create bookborrow
+     */
+    async createBookborrowRaw(requestParameters: CreateBookborrowRequest): Promise<runtime.ApiResponse<EntBookBorrow>> {
+        if (requestParameters.bookborrow === null || requestParameters.bookborrow === undefined) {
+            throw new runtime.RequiredError('bookborrow','Required parameter requestParameters.bookborrow was null or undefined when calling createBookborrow.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/bookborrows`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ControllersBookBorrowToJSON(requestParameters.bookborrow),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookBorrowFromJSON(jsonValue));
+    }
+
+    /**
+     * Create bookborrow
+     * Create bookborrow
+     */
+    async createBookborrow(requestParameters: CreateBookborrowRequest): Promise<EntBookBorrow> {
+        const response = await this.createBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Create purpose
+     * Create purpose
+     */
+    async createPurposeRaw(requestParameters: CreatePurposeRequest): Promise<runtime.ApiResponse<EntPurpose>> {
+        if (requestParameters.purpose === null || requestParameters.purpose === undefined) {
+            throw new runtime.RequiredError('purpose','Required parameter requestParameters.purpose was null or undefined when calling createPurpose.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/purposes`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPurposeToJSON(requestParameters.purpose),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPurposeFromJSON(jsonValue));
+    }
+
+    /**
+     * Create purpose
+     * Create purpose
+     */
+    async createPurpose(requestParameters: CreatePurposeRequest): Promise<EntPurpose> {
+        const response = await this.createPurposeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * Create role
+     * Create role
+     */
+    async createRoleRaw(requestParameters: CreateRoleRequest): Promise<runtime.ApiResponse<EntRole>> {
+        if (requestParameters.role === null || requestParameters.role === undefined) {
+            throw new runtime.RequiredError('role','Required parameter requestParameters.role was null or undefined when calling createRole.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/roles`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntRoleToJSON(requestParameters.role),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntRoleFromJSON(jsonValue));
+    }
+
+    /**
+     * Create role
+     * Create role
+     */
+    async createRole(requestParameters: CreateRoleRequest): Promise<EntRole> {
+        const response = await this.createRoleRaw(requestParameters);
+        return await response.value();
+    }
 
     /**
      * Create user
@@ -83,6 +326,134 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * get book by ID
+     * Delete a book entity by ID
+     */
+    async deleteBookRaw(requestParameters: DeleteBookRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteBook.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/books/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get book by ID
+     * Delete a book entity by ID
+     */
+    async deleteBook(requestParameters: DeleteBookRequest): Promise<object> {
+        const response = await this.deleteBookRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get bookborrow by ID
+     * Delete a bookborrow entity by ID
+     */
+    async deleteBookborrowRaw(requestParameters: DeleteBookborrowRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteBookborrow.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get bookborrow by ID
+     * Delete a bookborrow entity by ID
+     */
+    async deleteBookborrow(requestParameters: DeleteBookborrowRequest): Promise<object> {
+        const response = await this.deleteBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get purpose by ID
+     * Delete a purpose entity by ID
+     */
+    async deletePurposeRaw(requestParameters: DeletePurposeRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deletePurpose.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/purposes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get purpose by ID
+     * Delete a purpose entity by ID
+     */
+    async deletePurpose(requestParameters: DeletePurposeRequest): Promise<object> {
+        const response = await this.deletePurposeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get role by ID
+     * Delete a role entity by ID
+     */
+    async deleteRoleRaw(requestParameters: DeleteRoleRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteRole.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/roles/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get role by ID
+     * Delete a role entity by ID
+     */
+    async deleteRole(requestParameters: DeleteRoleRequest): Promise<object> {
+        const response = await this.deleteRoleRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * get user by ID
      * Delete a user entity by ID
      */
@@ -111,6 +482,134 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteUser(requestParameters: DeleteUserRequest): Promise<object> {
         const response = await this.deleteUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get book by ID
+     * Get a book entity by ID
+     */
+    async getBookRaw(requestParameters: GetBookRequest): Promise<runtime.ApiResponse<EntBook>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBook.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/books/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));
+    }
+
+    /**
+     * get book by ID
+     * Get a book entity by ID
+     */
+    async getBook(requestParameters: GetBookRequest): Promise<EntBook> {
+        const response = await this.getBookRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get bookborrow by ID
+     * Get a bookborrow entity by ID
+     */
+    async getBookborrowRaw(requestParameters: GetBookborrowRequest): Promise<runtime.ApiResponse<EntBookBorrow>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getBookborrow.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookBorrowFromJSON(jsonValue));
+    }
+
+    /**
+     * get bookborrow by ID
+     * Get a bookborrow entity by ID
+     */
+    async getBookborrow(requestParameters: GetBookborrowRequest): Promise<EntBookBorrow> {
+        const response = await this.getBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get purpose by ID
+     * Get a purpose entity by ID
+     */
+    async getPurposeRaw(requestParameters: GetPurposeRequest): Promise<runtime.ApiResponse<EntPurpose>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getPurpose.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/purposes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPurposeFromJSON(jsonValue));
+    }
+
+    /**
+     * get purpose by ID
+     * Get a purpose entity by ID
+     */
+    async getPurpose(requestParameters: GetPurposeRequest): Promise<EntPurpose> {
+        const response = await this.getPurposeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get role by ID
+     * Get a role entity by ID
+     */
+    async getRoleRaw(requestParameters: GetRoleRequest): Promise<runtime.ApiResponse<EntRole>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getRole.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/roles/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntRoleFromJSON(jsonValue));
+    }
+
+    /**
+     * get role by ID
+     * Get a role entity by ID
+     */
+    async getRole(requestParameters: GetRoleRequest): Promise<EntRole> {
+        const response = await this.getRoleRaw(requestParameters);
         return await response.value();
     }
 
@@ -147,6 +646,150 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * list book entities
+     * List book entities
+     */
+    async listBookRaw(requestParameters: ListBookRequest): Promise<runtime.ApiResponse<Array<EntBook>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/books`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookFromJSON));
+    }
+
+    /**
+     * list book entities
+     * List book entities
+     */
+    async listBook(requestParameters: ListBookRequest): Promise<Array<EntBook>> {
+        const response = await this.listBookRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list bookborrow entities
+     * List bookborrow entities
+     */
+    async listBookborrowRaw(requestParameters: ListBookborrowRequest): Promise<runtime.ApiResponse<Array<EntBookBorrow>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/bookborrows`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntBookBorrowFromJSON));
+    }
+
+    /**
+     * list bookborrow entities
+     * List bookborrow entities
+     */
+    async listBookborrow(requestParameters: ListBookborrowRequest): Promise<Array<EntBookBorrow>> {
+        const response = await this.listBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list purpose entities
+     * List purpose entities
+     */
+    async listPurposeRaw(requestParameters: ListPurposeRequest): Promise<runtime.ApiResponse<Array<EntPurpose>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/purposes`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntPurposeFromJSON));
+    }
+
+    /**
+     * list purpose entities
+     * List purpose entities
+     */
+    async listPurpose(requestParameters: ListPurposeRequest): Promise<Array<EntPurpose>> {
+        const response = await this.listPurposeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * list role entities
+     * List role entities
+     */
+    async listRoleRaw(requestParameters: ListRoleRequest): Promise<runtime.ApiResponse<Array<EntRole>>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/roles`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EntRoleFromJSON));
+    }
+
+    /**
+     * list role entities
+     * List role entities
+     */
+    async listRole(requestParameters: ListRoleRequest): Promise<Array<EntRole>> {
+        const response = await this.listRoleRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
      * list user entities
      * List user entities
      */
@@ -179,6 +822,162 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listUser(requestParameters: ListUserRequest): Promise<Array<EntUser>> {
         const response = await this.listUserRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update book by ID
+     * Update a book entity by ID
+     */
+    async updateBookRaw(requestParameters: UpdateBookRequest): Promise<runtime.ApiResponse<EntBook>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateBook.');
+        }
+
+        if (requestParameters.book === null || requestParameters.book === undefined) {
+            throw new runtime.RequiredError('book','Required parameter requestParameters.book was null or undefined when calling updateBook.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/books/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntBookToJSON(requestParameters.book),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookFromJSON(jsonValue));
+    }
+
+    /**
+     * update book by ID
+     * Update a book entity by ID
+     */
+    async updateBook(requestParameters: UpdateBookRequest): Promise<EntBook> {
+        const response = await this.updateBookRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update bookborrow by ID
+     * Update a bookborrow entity by ID
+     */
+    async updateBookborrowRaw(requestParameters: UpdateBookborrowRequest): Promise<runtime.ApiResponse<EntBookBorrow>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateBookborrow.');
+        }
+
+        if (requestParameters.bookborrow === null || requestParameters.bookborrow === undefined) {
+            throw new runtime.RequiredError('bookborrow','Required parameter requestParameters.bookborrow was null or undefined when calling updateBookborrow.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/bookborrows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntBookBorrowToJSON(requestParameters.bookborrow),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntBookBorrowFromJSON(jsonValue));
+    }
+
+    /**
+     * update bookborrow by ID
+     * Update a bookborrow entity by ID
+     */
+    async updateBookborrow(requestParameters: UpdateBookborrowRequest): Promise<EntBookBorrow> {
+        const response = await this.updateBookborrowRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update purpose by ID
+     * Update a purpose entity by ID
+     */
+    async updatePurposeRaw(requestParameters: UpdatePurposeRequest): Promise<runtime.ApiResponse<EntPurpose>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updatePurpose.');
+        }
+
+        if (requestParameters.purpose === null || requestParameters.purpose === undefined) {
+            throw new runtime.RequiredError('purpose','Required parameter requestParameters.purpose was null or undefined when calling updatePurpose.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/purposes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntPurposeToJSON(requestParameters.purpose),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntPurposeFromJSON(jsonValue));
+    }
+
+    /**
+     * update purpose by ID
+     * Update a purpose entity by ID
+     */
+    async updatePurpose(requestParameters: UpdatePurposeRequest): Promise<EntPurpose> {
+        const response = await this.updatePurposeRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update role by ID
+     * Update a role entity by ID
+     */
+    async updateRoleRaw(requestParameters: UpdateRoleRequest): Promise<runtime.ApiResponse<EntRole>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateRole.');
+        }
+
+        if (requestParameters.role === null || requestParameters.role === undefined) {
+            throw new runtime.RequiredError('role','Required parameter requestParameters.role was null or undefined when calling updateRole.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/roles/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntRoleToJSON(requestParameters.role),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntRoleFromJSON(jsonValue));
+    }
+
+    /**
+     * update role by ID
+     * Update a role entity by ID
+     */
+    async updateRole(requestParameters: UpdateRoleRequest): Promise<EntRole> {
+        const response = await this.updateRoleRaw(requestParameters);
         return await response.value();
     }
 
