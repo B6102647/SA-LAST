@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 const username = { givenuser: 'Manuschanok Srikhrueadong' };
 export default function Create() {
-  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบยืมหนังสือ' };
+  const profile = { givenName: 'ยินดีต้อนรับสู่ ระบบห้องสมุด' };
   const classes = useStyles();
   const api = new DefaultApi();
   const [loading, setLoading] = useState(true);
