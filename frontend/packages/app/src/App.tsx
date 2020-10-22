@@ -38,7 +38,7 @@ const App: FC<{}> = () => (
     <OAuthRequestDialog />
     <AppRouter>
         <Routes>
-          <Navigate key="/" to="/welcome" />
+          <Navigate key="/" to="/login" />
           <Route
             path="/catalog/*"
             element={<CatalogRouter EntityPage={EntityPage} />}

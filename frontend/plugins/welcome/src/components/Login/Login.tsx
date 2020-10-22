@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Link as RouterLink } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -56,7 +57,7 @@ const SignIn: FC<{}> = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Log in
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -88,11 +89,13 @@ const SignIn: FC<{}> = () => {
           <Button
             type="submit"
             fullWidth
+            component={RouterLink}
+            to="/welcome"
             variant="contained"
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Log In
           </Button>
           <Grid container>
             <Grid item xs>

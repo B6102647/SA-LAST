@@ -1,6 +1,6 @@
 import { createPlugin, createRouteRef } from '@backstage/core';
 import ExampleComponent from './components/welcome';
-import SignIn from './components/SignIn';
+import Login from './components/Login';
 import Create from './components/BookBorrow';
 
 export const rootRouteRef = createRouteRef({
@@ -13,6 +13,6 @@ export const plugin = createPlugin({
   register({ router }) {
     router.addRoute(rootRouteRef, ExampleComponent);
     router.registerRoute('/BookBorrow', Create);
-    router.registerRoute('/SignIn', SignIn);
+    router.registerRoute('/Login', Login);
   },
 });
