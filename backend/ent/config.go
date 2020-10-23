@@ -28,6 +28,7 @@ type hooks struct {
 	BookBorrow []ent.Hook
 	Purpose    []ent.Hook
 	Role       []ent.Hook
+	Status     []ent.Hook
 	User       []ent.Hook
 }
 

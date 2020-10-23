@@ -18,7 +18,6 @@ type UserController struct {
 }
 
 type User struct {
-	UserID    int
 	UserName  string
 	UserEmail string
 	Role      int

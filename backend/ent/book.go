@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/B6102647/app/ent/book"
+	"github.com/B6102647/app/ent/status"
 	"github.com/facebookincubator/ent/dialect/sql"
 )
 
@@ -17,22 +18,27 @@ type Book struct {
 	ID int `json:"id,omitempty"`
 	// BOOKNAME holds the value of the "BOOK_NAME" field.
 	BOOKNAME string `json:"BOOK_NAME,omitempty"`
+	// USERNAME holds the value of the "USER_NAME" field.
+	USERNAME string `json:"USER_NAME,omitempty"`
+	// CATEGORY holds the value of the "CATEGORY" field.
+	CATEGORY string `json:"CATEGORY,omitempty"`
 	// Author holds the value of the "Author" field.
 	Author string `json:"Author,omitempty"`
-	// Status holds the value of the "Status" field.
-	Status string `json:"Status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookQuery when eager-loading is set.
-	Edges BookEdges `json:"edges"`
+	Edges     BookEdges `json:"edges"`
+	STATUS_ID *int
 }
 
 // BookEdges holds the relations/edges for other nodes in the graph.
 type BookEdges struct {
 	// Booklist holds the value of the Booklist edge.
 	Booklist []*BookBorrow
+	// Status holds the value of the Status edge.
+	Status *Status
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // BooklistOrErr returns the Booklist value or an error if the edge
@@ -44,13 +50,35 @@ func (e BookEdges) BooklistOrErr() ([]*BookBorrow, error) {
 	return nil, &NotLoadedError{edge: "Booklist"}
 }
 
+// StatusOrErr returns the Status value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) StatusOrErr() (*Status, error) {
+	if e.loadedTypes[1] {
+		if e.Status == nil {
+			// The edge Status was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: status.Label}
+		}
+		return e.Status, nil
+	}
+	return nil, &NotLoadedError{edge: "Status"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Book) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // BOOK_NAME
+		&sql.NullString{}, // USER_NAME
+		&sql.NullString{}, // CATEGORY
 		&sql.NullString{}, // Author
-		&sql.NullString{}, // Status
+	}
+}
+
+// fkValues returns the types for scanning foreign-keys values from sql.Rows.
+func (*Book) fkValues() []interface{} {
+	return []interface{}{
+		&sql.NullInt64{}, // STATUS_ID
 	}
 }
 
@@ -72,14 +100,28 @@ func (b *Book) assignValues(values ...interface{}) error {
 		b.BOOKNAME = value.String
 	}
 	if value, ok := values[1].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field Author", values[1])
+		return fmt.Errorf("unexpected type %T for field USER_NAME", values[1])
+	} else if value.Valid {
+		b.USERNAME = value.String
+	}
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field CATEGORY", values[2])
+	} else if value.Valid {
+		b.CATEGORY = value.String
+	}
+	if value, ok := values[3].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Author", values[3])
 	} else if value.Valid {
 		b.Author = value.String
 	}
-	if value, ok := values[2].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field Status", values[2])
-	} else if value.Valid {
-		b.Status = value.String
+	values = values[4:]
+	if len(values) == len(book.ForeignKeys) {
+		if value, ok := values[0].(*sql.NullInt64); !ok {
+			return fmt.Errorf("unexpected type %T for edge-field STATUS_ID", value)
+		} else if value.Valid {
+			b.STATUS_ID = new(int)
+			*b.STATUS_ID = int(value.Int64)
+		}
 	}
 	return nil
 }
@@ -87,6 +129,11 @@ func (b *Book) assignValues(values ...interface{}) error {
 // QueryBooklist queries the Booklist edge of the Book.
 func (b *Book) QueryBooklist() *BookBorrowQuery {
 	return (&BookClient{config: b.config}).QueryBooklist(b)
+}
+
+// QueryStatus queries the Status edge of the Book.
+func (b *Book) QueryStatus() *StatusQuery {
+	return (&BookClient{config: b.config}).QueryStatus(b)
 }
 
 // Update returns a builder for updating this Book.
@@ -114,10 +161,12 @@ func (b *Book) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", b.ID))
 	builder.WriteString(", BOOK_NAME=")
 	builder.WriteString(b.BOOKNAME)
+	builder.WriteString(", USER_NAME=")
+	builder.WriteString(b.USERNAME)
+	builder.WriteString(", CATEGORY=")
+	builder.WriteString(b.CATEGORY)
 	builder.WriteString(", Author=")
 	builder.WriteString(b.Author)
-	builder.WriteString(", Status=")
-	builder.WriteString(b.Status)
 	builder.WriteByte(')')
 	return builder.String()
 }

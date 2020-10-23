@@ -34,7 +34,7 @@ export default function ComponentsTable() {
 
     const deleteUsers = async (id: number,bid :number) => {
         const book = {
-            status : "Availiable",
+            sid : Number(1)
           };
         const res = await api.deleteBookborrow({ id: id });
         const res2 = await api.updateBook({ id: bid ,book : book});
@@ -58,7 +58,7 @@ export default function ComponentsTable() {
                     {bookborrows.map((item: any) => (
                         <TableRow key={item.id}>
                             <TableCell align="center">{item.id}</TableCell>
-                            <TableCell align="center">{item.edges.user.uSERNAME}</TableCell>
+                            <TableCell align="center">{item.edges?.user?.uSERNAME}</TableCell>
                             <TableCell align="center">{item.edges?.book?.bOOKNAME}</TableCell>
                             <TableCell align="center">{item.edges?.purpose?.pURPOSENAME}</TableCell>
                             <TableCell align="center">{item.aDDEDTIME}</TableCell>

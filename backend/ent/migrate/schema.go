@@ -12,15 +12,25 @@ var (
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "book_name", Type: field.TypeString, Unique: true},
+		{Name: "user_name", Type: field.TypeString},
+		{Name: "category", Type: field.TypeString},
 		{Name: "author", Type: field.TypeString},
-		{Name: "status", Type: field.TypeString},
+		{Name: "STATUS_ID", Type: field.TypeInt, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
 	BooksTable = &schema.Table{
-		Name:        "books",
-		Columns:     BooksColumns,
-		PrimaryKey:  []*schema.Column{BooksColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{},
+		Name:       "books",
+		Columns:    BooksColumns,
+		PrimaryKey: []*schema.Column{BooksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:  "books_status_status",
+				Columns: []*schema.Column{BooksColumns[5]},
+
+				RefColumns: []*schema.Column{StatusColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// BookBorrowsColumns holds the columns for the "book_borrows" table.
 	BookBorrowsColumns = []*schema.Column{
@@ -83,6 +93,18 @@ var (
 		PrimaryKey:  []*schema.Column{RolesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
+	// StatusColumns holds the columns for the "status" table.
+	StatusColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "status_name", Type: field.TypeString},
+	}
+	// StatusTable holds the schema information for the "status" table.
+	StatusTable = &schema.Table{
+		Name:        "status",
+		Columns:     StatusColumns,
+		PrimaryKey:  []*schema.Column{StatusColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -111,11 +133,13 @@ var (
 		BookBorrowsTable,
 		PurposesTable,
 		RolesTable,
+		StatusTable,
 		UsersTable,
 	}
 )
 
 func init() {
+	BooksTable.ForeignKeys[0].RefTable = StatusTable
 	BookBorrowsTable.ForeignKeys[0].RefTable = BooksTable
 	BookBorrowsTable.ForeignKeys[1].RefTable = PurposesTable
 	BookBorrowsTable.ForeignKeys[2].RefTable = UsersTable

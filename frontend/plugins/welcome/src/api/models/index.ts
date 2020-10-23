@@ -1,4 +1,5 @@
 export * from './ControllersBookBorrow';
+export * from './ControllersBookEntity';
 export * from './EntBook';
 export * from './EntBookBorrow';
 export * from './EntBookBorrowEdges';
@@ -7,5 +8,7 @@ export * from './EntPurpose';
 export * from './EntPurposeEdges';
 export * from './EntRole';
 export * from './EntRoleEdges';
+export * from './EntStatus';
+export * from './EntStatusEdges';
 export * from './EntUser';
 export * from './EntUserEdges';

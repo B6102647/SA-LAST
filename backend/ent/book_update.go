@@ -9,6 +9,7 @@ import (
 	"github.com/B6102647/app/ent/book"
 	"github.com/B6102647/app/ent/bookborrow"
 	"github.com/B6102647/app/ent/predicate"
+	"github.com/B6102647/app/ent/status"
 	"github.com/facebookincubator/ent/dialect/sql"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
@@ -34,15 +35,21 @@ func (bu *BookUpdate) SetBOOKNAME(s string) *BookUpdate {
 	return bu
 }
 
-// SetAuthor sets the Author field.
-func (bu *BookUpdate) SetAuthor(s string) *BookUpdate {
-	bu.mutation.SetAuthor(s)
+// SetUSERNAME sets the USER_NAME field.
+func (bu *BookUpdate) SetUSERNAME(s string) *BookUpdate {
+	bu.mutation.SetUSERNAME(s)
 	return bu
 }
 
-// SetStatus sets the Status field.
-func (bu *BookUpdate) SetStatus(s string) *BookUpdate {
-	bu.mutation.SetStatus(s)
+// SetCATEGORY sets the CATEGORY field.
+func (bu *BookUpdate) SetCATEGORY(s string) *BookUpdate {
+	bu.mutation.SetCATEGORY(s)
+	return bu
+}
+
+// SetAuthor sets the Author field.
+func (bu *BookUpdate) SetAuthor(s string) *BookUpdate {
+	bu.mutation.SetAuthor(s)
 	return bu
 }
 
@@ -59,6 +66,25 @@ func (bu *BookUpdate) AddBooklist(b ...*BookBorrow) *BookUpdate {
 		ids[i] = b[i].ID
 	}
 	return bu.AddBooklistIDs(ids...)
+}
+
+// SetStatusID sets the Status edge to Status by id.
+func (bu *BookUpdate) SetStatusID(id int) *BookUpdate {
+	bu.mutation.SetStatusID(id)
+	return bu
+}
+
+// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+func (bu *BookUpdate) SetNillableStatusID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetStatusID(*id)
+	}
+	return bu
+}
+
+// SetStatus sets the Status edge to Status.
+func (bu *BookUpdate) SetStatus(s *Status) *BookUpdate {
+	return bu.SetStatusID(s.ID)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -79,6 +105,12 @@ func (bu *BookUpdate) RemoveBooklist(b ...*BookBorrow) *BookUpdate {
 		ids[i] = b[i].ID
 	}
 	return bu.RemoveBooklistIDs(ids...)
+}
+
+// ClearStatus clears the Status edge to Status.
+func (bu *BookUpdate) ClearStatus() *BookUpdate {
+	bu.mutation.ClearStatus()
+	return bu
 }
 
 // Save executes the query and returns the number of rows/vertices matched by this operation.
@@ -163,18 +195,25 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: book.FieldBOOKNAME,
 		})
 	}
+	if value, ok := bu.mutation.USERNAME(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldUSERNAME,
+		})
+	}
+	if value, ok := bu.mutation.CATEGORY(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldCATEGORY,
+		})
+	}
 	if value, ok := bu.mutation.Author(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
 			Column: book.FieldAuthor,
-		})
-	}
-	if value, ok := bu.mutation.Status(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: book.FieldStatus,
 		})
 	}
 	if nodes := bu.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
@@ -215,6 +254,41 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.StatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.StatusTable,
+			Columns: []string{book.StatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.StatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.StatusTable,
+			Columns: []string{book.StatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{book.Label}
@@ -239,15 +313,21 @@ func (buo *BookUpdateOne) SetBOOKNAME(s string) *BookUpdateOne {
 	return buo
 }
 
-// SetAuthor sets the Author field.
-func (buo *BookUpdateOne) SetAuthor(s string) *BookUpdateOne {
-	buo.mutation.SetAuthor(s)
+// SetUSERNAME sets the USER_NAME field.
+func (buo *BookUpdateOne) SetUSERNAME(s string) *BookUpdateOne {
+	buo.mutation.SetUSERNAME(s)
 	return buo
 }
 
-// SetStatus sets the Status field.
-func (buo *BookUpdateOne) SetStatus(s string) *BookUpdateOne {
-	buo.mutation.SetStatus(s)
+// SetCATEGORY sets the CATEGORY field.
+func (buo *BookUpdateOne) SetCATEGORY(s string) *BookUpdateOne {
+	buo.mutation.SetCATEGORY(s)
+	return buo
+}
+
+// SetAuthor sets the Author field.
+func (buo *BookUpdateOne) SetAuthor(s string) *BookUpdateOne {
+	buo.mutation.SetAuthor(s)
 	return buo
 }
 
@@ -264,6 +344,25 @@ func (buo *BookUpdateOne) AddBooklist(b ...*BookBorrow) *BookUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return buo.AddBooklistIDs(ids...)
+}
+
+// SetStatusID sets the Status edge to Status by id.
+func (buo *BookUpdateOne) SetStatusID(id int) *BookUpdateOne {
+	buo.mutation.SetStatusID(id)
+	return buo
+}
+
+// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableStatusID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetStatusID(*id)
+	}
+	return buo
+}
+
+// SetStatus sets the Status edge to Status.
+func (buo *BookUpdateOne) SetStatus(s *Status) *BookUpdateOne {
+	return buo.SetStatusID(s.ID)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -284,6 +383,12 @@ func (buo *BookUpdateOne) RemoveBooklist(b ...*BookBorrow) *BookUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return buo.RemoveBooklistIDs(ids...)
+}
+
+// ClearStatus clears the Status edge to Status.
+func (buo *BookUpdateOne) ClearStatus() *BookUpdateOne {
+	buo.mutation.ClearStatus()
+	return buo
 }
 
 // Save executes the query and returns the updated entity.
@@ -366,18 +471,25 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (b *Book, err error) {
 			Column: book.FieldBOOKNAME,
 		})
 	}
+	if value, ok := buo.mutation.USERNAME(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldUSERNAME,
+		})
+	}
+	if value, ok := buo.mutation.CATEGORY(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldCATEGORY,
+		})
+	}
 	if value, ok := buo.mutation.Author(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
 			Column: book.FieldAuthor,
-		})
-	}
-	if value, ok := buo.mutation.Status(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: book.FieldStatus,
 		})
 	}
 	if nodes := buo.mutation.RemovedBooklistIDs(); len(nodes) > 0 {
@@ -410,6 +522,41 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (b *Book, err error) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.StatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.StatusTable,
+			Columns: []string{book.StatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.StatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.StatusTable,
+			Columns: []string{book.StatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}

@@ -39,11 +39,17 @@ export interface EntBook {
      */
     bOOKNAME?: string;
     /**
-     * Status holds the value of the "Status" field.
+     * CATEGORY holds the value of the "CATEGORY" field.
      * @type {string}
      * @memberof EntBook
      */
-    status?: string;
+    cATEGORY?: string;
+    /**
+     * USERNAME holds the value of the "USER_NAME" field.
+     * @type {string}
+     * @memberof EntBook
+     */
+    uSERNAME?: string;
     /**
      * 
      * @type {EntBookEdges}
@@ -56,6 +62,12 @@ export interface EntBook {
      * @memberof EntBook
      */
     id?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EntBook
+     */
+    statusID?: number;
 }
 
 export function EntBookFromJSON(json: any): EntBook {
@@ -70,9 +82,11 @@ export function EntBookFromJSONTyped(json: any, ignoreDiscriminator: boolean): E
         
         'author': !exists(json, 'Author') ? undefined : json['Author'],
         'bOOKNAME': !exists(json, 'BOOK_NAME') ? undefined : json['BOOK_NAME'],
-        'status': !exists(json, 'Status') ? undefined : json['Status'],
+        'cATEGORY': !exists(json, 'CATEGORY') ? undefined : json['CATEGORY'],
+        'uSERNAME': !exists(json, 'USER_NAME') ? undefined : json['USER_NAME'],
         'edges': !exists(json, 'edges') ? undefined : EntBookEdgesFromJSON(json['edges']),
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'statusID': !exists(json, 'status_ID') ? undefined : json['status_ID'],
     };
 }
 
@@ -87,9 +101,11 @@ export function EntBookToJSON(value?: EntBook | null): any {
         
         'Author': value.author,
         'BOOK_NAME': value.bOOKNAME,
-        'Status': value.status,
+        'CATEGORY': value.cATEGORY,
+        'USER_NAME': value.uSERNAME,
         'edges': EntBookEdgesToJSON(value.edges),
         'id': value.id,
+        'status_ID': value.statusID,
     };
 }
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/B6102647/app/ent"
 	"github.com/B6102647/app/ent/book"
+	"github.com/B6102647/app/ent/status"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,10 @@ import (
 type BookController struct {
 	client *ent.Client
 	router gin.IRouter
+}
+
+type BookEntity struct {
+	Sid int
 }
 
 // CreateBook handles POST requests for adding book entities
@@ -39,8 +44,6 @@ func (ctl *BookController) CreateBook(c *gin.Context) {
 	bk, err := ctl.client.Book.
 		Create().
 		SetBOOKNAME(obj.BOOKNAME).
-		SetAuthor(obj.Author).
-		SetStatus(obj.Status).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -118,7 +121,7 @@ func (ctl *BookController) ListBook(c *gin.Context) {
 
 	book, err := ctl.client.Book.
 		Query().
-		Where(book.Status("Availiable")).
+		Where(book.HasStatusWith(status.STATUSNAMEEQ("Available"))).
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
@@ -170,7 +173,7 @@ func (ctl *BookController) DeleteBook(c *gin.Context) {
 // @Accept   json
 // @Produce  json
 // @Param id path int true "Book ID"
-// @Param Book body ent.Book true "Book entity"
+// @Param Book body BookEntity true "Book entity"
 // @Success 200 {object} ent.Book
 // @Failure 400 {object} gin.H
 // @Failure 500 {object} gin.H
@@ -184,17 +187,29 @@ func (ctl *BookController) UpdateBook(c *gin.Context) {
 		return
 	}
 
-	obj := ent.Book{}
+	obj := BookEntity{}
 	if err := c.ShouldBind(&obj); err != nil {
 		c.JSON(400, gin.H{
 			"error": "Book binding failed",
 		})
 		return
 	}
-	obj.ID = int(id)
+
+	s, err := ctl.client.Status.
+		Query().
+		Where(status.IDEQ(int(obj.Sid))).
+		Only(context.Background())
+
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "status not found",
+		})
+		return
+	}
+
 	bk, err := ctl.client.Book.
-		UpdateOne(&obj).
-		SetStatus(obj.Status).
+		UpdateOneID(int(id)).
+		SetStatus(s).
 		Save(context.Background())
 	if err != nil {
 		c.JSON(400, gin.H{"error": "update failed"})

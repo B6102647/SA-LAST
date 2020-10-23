@@ -15,8 +15,9 @@ type Book struct {
 func (Book) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("BOOK_NAME").NotEmpty().Unique(),
+		field.String("USER_NAME"),
+		field.String("CATEGORY"),
 		field.String("Author"),
-		field.String("Status"),
 	}
 }
 
@@ -24,5 +25,6 @@ func (Book) Fields() []ent.Field {
 func (Book) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("Booklist", BookBorrow.Type).StorageKey(edge.Column("BOOK_ID")),
+		edge.From("Status", Status.Type).Ref("status").Unique(),
 	}
 }

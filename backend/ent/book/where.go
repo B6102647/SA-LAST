@@ -98,17 +98,24 @@ func BOOKNAME(v string) predicate.Book {
 	})
 }
 
+// USERNAME applies equality check predicate on the "USER_NAME" field. It's identical to USERNAMEEQ.
+func USERNAME(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUSERNAME), v))
+	})
+}
+
+// CATEGORY applies equality check predicate on the "CATEGORY" field. It's identical to CATEGORYEQ.
+func CATEGORY(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCATEGORY), v))
+	})
+}
+
 // Author applies equality check predicate on the "Author" field. It's identical to AuthorEQ.
 func Author(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAuthor), v))
-	})
-}
-
-// Status applies equality check predicate on the "Status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldStatus), v))
 	})
 }
 
@@ -223,6 +230,228 @@ func BOOKNAMEContainsFold(v string) predicate.Book {
 	})
 }
 
+// USERNAMEEQ applies the EQ predicate on the "USER_NAME" field.
+func USERNAMEEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMENEQ applies the NEQ predicate on the "USER_NAME" field.
+func USERNAMENEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEIn applies the In predicate on the "USER_NAME" field.
+func USERNAMEIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldUSERNAME), v...))
+	})
+}
+
+// USERNAMENotIn applies the NotIn predicate on the "USER_NAME" field.
+func USERNAMENotIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldUSERNAME), v...))
+	})
+}
+
+// USERNAMEGT applies the GT predicate on the "USER_NAME" field.
+func USERNAMEGT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEGTE applies the GTE predicate on the "USER_NAME" field.
+func USERNAMEGTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMELT applies the LT predicate on the "USER_NAME" field.
+func USERNAMELT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMELTE applies the LTE predicate on the "USER_NAME" field.
+func USERNAMELTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEContains applies the Contains predicate on the "USER_NAME" field.
+func USERNAMEContains(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEHasPrefix applies the HasPrefix predicate on the "USER_NAME" field.
+func USERNAMEHasPrefix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEHasSuffix applies the HasSuffix predicate on the "USER_NAME" field.
+func USERNAMEHasSuffix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEEqualFold applies the EqualFold predicate on the "USER_NAME" field.
+func USERNAMEEqualFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldUSERNAME), v))
+	})
+}
+
+// USERNAMEContainsFold applies the ContainsFold predicate on the "USER_NAME" field.
+func USERNAMEContainsFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldUSERNAME), v))
+	})
+}
+
+// CATEGORYEQ applies the EQ predicate on the "CATEGORY" field.
+func CATEGORYEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYNEQ applies the NEQ predicate on the "CATEGORY" field.
+func CATEGORYNEQ(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYIn applies the In predicate on the "CATEGORY" field.
+func CATEGORYIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCATEGORY), v...))
+	})
+}
+
+// CATEGORYNotIn applies the NotIn predicate on the "CATEGORY" field.
+func CATEGORYNotIn(vs ...string) predicate.Book {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Book(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCATEGORY), v...))
+	})
+}
+
+// CATEGORYGT applies the GT predicate on the "CATEGORY" field.
+func CATEGORYGT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYGTE applies the GTE predicate on the "CATEGORY" field.
+func CATEGORYGTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYLT applies the LT predicate on the "CATEGORY" field.
+func CATEGORYLT(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYLTE applies the LTE predicate on the "CATEGORY" field.
+func CATEGORYLTE(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYContains applies the Contains predicate on the "CATEGORY" field.
+func CATEGORYContains(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYHasPrefix applies the HasPrefix predicate on the "CATEGORY" field.
+func CATEGORYHasPrefix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYHasSuffix applies the HasSuffix predicate on the "CATEGORY" field.
+func CATEGORYHasSuffix(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYEqualFold applies the EqualFold predicate on the "CATEGORY" field.
+func CATEGORYEqualFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldCATEGORY), v))
+	})
+}
+
+// CATEGORYContainsFold applies the ContainsFold predicate on the "CATEGORY" field.
+func CATEGORYContainsFold(v string) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldCATEGORY), v))
+	})
+}
+
 // AuthorEQ applies the EQ predicate on the "Author" field.
 func AuthorEQ(v string) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -334,117 +563,6 @@ func AuthorContainsFold(v string) predicate.Book {
 	})
 }
 
-// StatusEQ applies the EQ predicate on the "Status" field.
-func StatusEQ(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldStatus), v))
-	})
-}
-
-// StatusNEQ applies the NEQ predicate on the "Status" field.
-func StatusNEQ(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldStatus), v))
-	})
-}
-
-// StatusIn applies the In predicate on the "Status" field.
-func StatusIn(vs ...string) predicate.Book {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Book(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldStatus), v...))
-	})
-}
-
-// StatusNotIn applies the NotIn predicate on the "Status" field.
-func StatusNotIn(vs ...string) predicate.Book {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Book(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldStatus), v...))
-	})
-}
-
-// StatusGT applies the GT predicate on the "Status" field.
-func StatusGT(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldStatus), v))
-	})
-}
-
-// StatusGTE applies the GTE predicate on the "Status" field.
-func StatusGTE(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldStatus), v))
-	})
-}
-
-// StatusLT applies the LT predicate on the "Status" field.
-func StatusLT(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldStatus), v))
-	})
-}
-
-// StatusLTE applies the LTE predicate on the "Status" field.
-func StatusLTE(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldStatus), v))
-	})
-}
-
-// StatusContains applies the Contains predicate on the "Status" field.
-func StatusContains(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldStatus), v))
-	})
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "Status" field.
-func StatusHasPrefix(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldStatus), v))
-	})
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "Status" field.
-func StatusHasSuffix(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldStatus), v))
-	})
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "Status" field.
-func StatusEqualFold(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldStatus), v))
-	})
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "Status" field.
-func StatusContainsFold(v string) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldStatus), v))
-	})
-}
-
 // HasBooklist applies the HasEdge predicate on the "Booklist" edge.
 func HasBooklist() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -464,6 +582,34 @@ func HasBooklistWith(preds ...predicate.BookBorrow) predicate.Book {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(BooklistInverseTable, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BooklistTable, BooklistColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStatus applies the HasEdge predicate on the "Status" edge.
+func HasStatus() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(StatusTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, StatusTable, StatusColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStatusWith applies the HasEdge predicate on the "Status" edge with a given conditions (other predicates).
+func HasStatusWith(preds ...predicate.Status) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(StatusInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, StatusTable, StatusColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

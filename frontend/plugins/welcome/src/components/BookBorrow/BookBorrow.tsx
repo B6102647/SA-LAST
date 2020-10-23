@@ -92,7 +92,7 @@ export default function Create() {
       purpose: purposeID,
     };
     const book = {
-      status: "In Use",
+      sid: Number(2)
     };
     console.log(bookBorrow);
     const res2: any = await api.updateBook({ id: bookID, book: book })

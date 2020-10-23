@@ -8,6 +8,7 @@ import (
 	"github.com/B6102647/app/controllers"
 	"github.com/B6102647/app/ent"
 	"github.com/B6102647/app/ent/role"
+	"github.com/B6102647/app/ent/status"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
@@ -30,9 +31,11 @@ type Books struct {
 }
 
 type Book struct {
-	Name   string
-	Author string
-	Status string
+	Name     string
+	Username string
+	Author   string
+	Category string
+	Status   int
 }
 
 type Purposes struct {
@@ -48,6 +51,14 @@ type Roles struct {
 }
 
 type Role struct {
+	Name string
+}
+
+type Statuss struct {
+	Status []Status
+}
+
+type Status struct {
 	Name string
 }
 
@@ -112,25 +123,49 @@ func main() {
 	controllers.NewPurposeController(v1, client)
 	controllers.NewBookBorrowController(v1, client)
 	controllers.NewRoleController(v1, client)
+	controllers.NewStatusController(v1, client)
+
+	// Set Status Data
+	statuss := []string{"Available", "in use"}
+
+	for _, st := range statuss {
+
+		client.Status.
+			Create().
+			SetSTATUSNAME(st).
+			Save(context.Background())
+	}
 
 	// Set Books Data
 	books := Books{
 		Book: []Book{
-			Book{"Microprocessor for Beginner", "Mr.VC", "Availiable"},
-			Book{"System Analysis", "Mr.CW", "Availiable"},
-			Book{"Solo Leveling Novel", "JinWoo", "Availiable"},
-			Book{"Basic Math for Kids", "QG.", "Availiable"},
-			Book{"How to Sleep 5 hrs. in 3 hrs.", "Okay", "Availiable"},
+			Book{"Microprocessor for Beginner", "Somsri Tongdee", "Mr.VC", "Study", 1},
+			Book{"System Analysis", "Somsri Tongdee", "Mr.CW", "Study", 1},
+			Book{"Solo Leveling Novel", "Makmee Deedee", "JinWoo", "Relax", 1},
+			Book{"Basic Math for Kids", "MakMee Deedee", "QG.", "Study", 1},
+			Book{"How to Sleep 5 hrs. in 3 hrs.", "Somsri Tongdee", "Okay", "Other", 1},
 		},
 	}
 
 	for _, b := range books.Book {
 
+		st, err := client.Status.
+			Query().
+			Where(status.IDEQ(int(b.Status))).
+			Only(context.Background())
+
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
 		client.Book.
 			Create().
 			SetBOOKNAME(b.Name).
+			SetUSERNAME(b.Username).
 			SetAuthor(b.Author).
-			SetStatus(b.Status).
+			SetCATEGORY(b.Category).
+			SetStatus(st).
 			Save(context.Background())
 	}
 

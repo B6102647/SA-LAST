@@ -18,6 +18,10 @@ import {
     EntBookBorrowFromJSON,
     EntBookBorrowFromJSONTyped,
     EntBookBorrowToJSON,
+    EntStatus,
+    EntStatusFromJSON,
+    EntStatusFromJSONTyped,
+    EntStatusToJSON,
 } from './';
 
 /**
@@ -32,6 +36,12 @@ export interface EntBookEdges {
      * @memberof EntBookEdges
      */
     booklist?: Array<EntBookBorrow>;
+    /**
+     * 
+     * @type {EntStatus}
+     * @memberof EntBookEdges
+     */
+    status?: EntStatus;
 }
 
 export function EntBookEdgesFromJSON(json: any): EntBookEdges {
@@ -45,6 +55,7 @@ export function EntBookEdgesFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'booklist': !exists(json, 'booklist') ? undefined : ((json['booklist'] as Array<any>).map(EntBookBorrowFromJSON)),
+        'status': !exists(json, 'Status') ? undefined : EntStatusFromJSON(json['Status']),
     };
 }
 
@@ -58,6 +69,7 @@ export function EntBookEdgesToJSON(value?: EntBookEdges | null): any {
     return {
         
         'booklist': value.booklist === undefined ? undefined : ((value.booklist as Array<any>).map(EntBookBorrowToJSON)),
+        'status': EntStatusToJSON(value.status),
     };
 }
 

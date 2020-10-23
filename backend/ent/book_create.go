@@ -9,6 +9,7 @@ import (
 
 	"github.com/B6102647/app/ent/book"
 	"github.com/B6102647/app/ent/bookborrow"
+	"github.com/B6102647/app/ent/status"
 	"github.com/facebookincubator/ent/dialect/sql/sqlgraph"
 	"github.com/facebookincubator/ent/schema/field"
 )
@@ -26,15 +27,21 @@ func (bc *BookCreate) SetBOOKNAME(s string) *BookCreate {
 	return bc
 }
 
-// SetAuthor sets the Author field.
-func (bc *BookCreate) SetAuthor(s string) *BookCreate {
-	bc.mutation.SetAuthor(s)
+// SetUSERNAME sets the USER_NAME field.
+func (bc *BookCreate) SetUSERNAME(s string) *BookCreate {
+	bc.mutation.SetUSERNAME(s)
 	return bc
 }
 
-// SetStatus sets the Status field.
-func (bc *BookCreate) SetStatus(s string) *BookCreate {
-	bc.mutation.SetStatus(s)
+// SetCATEGORY sets the CATEGORY field.
+func (bc *BookCreate) SetCATEGORY(s string) *BookCreate {
+	bc.mutation.SetCATEGORY(s)
+	return bc
+}
+
+// SetAuthor sets the Author field.
+func (bc *BookCreate) SetAuthor(s string) *BookCreate {
+	bc.mutation.SetAuthor(s)
 	return bc
 }
 
@@ -53,6 +60,25 @@ func (bc *BookCreate) AddBooklist(b ...*BookBorrow) *BookCreate {
 	return bc.AddBooklistIDs(ids...)
 }
 
+// SetStatusID sets the Status edge to Status by id.
+func (bc *BookCreate) SetStatusID(id int) *BookCreate {
+	bc.mutation.SetStatusID(id)
+	return bc
+}
+
+// SetNillableStatusID sets the Status edge to Status by id if the given value is not nil.
+func (bc *BookCreate) SetNillableStatusID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetStatusID(*id)
+	}
+	return bc
+}
+
+// SetStatus sets the Status edge to Status.
+func (bc *BookCreate) SetStatus(s *Status) *BookCreate {
+	return bc.SetStatusID(s.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bc *BookCreate) Mutation() *BookMutation {
 	return bc.mutation
@@ -68,11 +94,14 @@ func (bc *BookCreate) Save(ctx context.Context) (*Book, error) {
 			return nil, &ValidationError{Name: "BOOK_NAME", err: fmt.Errorf("ent: validator failed for field \"BOOK_NAME\": %w", err)}
 		}
 	}
+	if _, ok := bc.mutation.USERNAME(); !ok {
+		return nil, &ValidationError{Name: "USER_NAME", err: errors.New("ent: missing required field \"USER_NAME\"")}
+	}
+	if _, ok := bc.mutation.CATEGORY(); !ok {
+		return nil, &ValidationError{Name: "CATEGORY", err: errors.New("ent: missing required field \"CATEGORY\"")}
+	}
 	if _, ok := bc.mutation.Author(); !ok {
 		return nil, &ValidationError{Name: "Author", err: errors.New("ent: missing required field \"Author\"")}
-	}
-	if _, ok := bc.mutation.Status(); !ok {
-		return nil, &ValidationError{Name: "Status", err: errors.New("ent: missing required field \"Status\"")}
 	}
 	var (
 		err  error
@@ -142,6 +171,22 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		})
 		b.BOOKNAME = value
 	}
+	if value, ok := bc.mutation.USERNAME(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldUSERNAME,
+		})
+		b.USERNAME = value
+	}
+	if value, ok := bc.mutation.CATEGORY(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: book.FieldCATEGORY,
+		})
+		b.CATEGORY = value
+	}
 	if value, ok := bc.mutation.Author(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -149,14 +194,6 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			Column: book.FieldAuthor,
 		})
 		b.Author = value
-	}
-	if value, ok := bc.mutation.Status(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: book.FieldStatus,
-		})
-		b.Status = value
 	}
 	if nodes := bc.mutation.BooklistIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -169,6 +206,25 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: bookborrow.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.StatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.StatusTable,
+			Columns: []string{book.StatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: status.FieldID,
 				},
 			},
 		}
